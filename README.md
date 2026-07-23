@@ -1,4 +1,4 @@
-# AZ EduSmart v5.0
+# AZ EduSmart v5.1
 
 Aplikasi pembelajaran interaktif untuk pelajar Tingkatan 1 dan Tingkatan 2.
 
@@ -17,3 +17,11 @@ Ekstrak pakej v5.0, kemudian muat naik semua kandungan folder ini ke root reposi
 `AZ-EduSmart`. Pilih untuk menggantikan fail lama apabila diminta.
 
 Netlify yang telah disambungkan kepada GitHub akan melakukan deploy secara automatik.
+
+
+## Kemas kini v5.1
+
+- Sound effect jawapan betul, salah, klik dan tamat kuiz dipertingkatkan.
+- Muzik latar kekal lebih lembut supaya tidak mengganggu pembelajaran.
+- Kelantangan asal untuk pengguna baharu dinaikkan.
+- Pepijat `undefined modul selesai` telah dibaiki.
