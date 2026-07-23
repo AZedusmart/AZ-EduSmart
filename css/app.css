@@ -404,3 +404,15 @@ input,select,textarea{min-height:48px;font-size:16px}
 .similar-options{display:grid;gap:9px}.similar-options button{padding:12px 14px;text-align:left;border-radius:13px;border:1px solid var(--line);background:var(--soft);color:inherit}.similar-options button.correct{border-color:#22c55e;background:rgba(34,197,94,.12)}.similar-options button.wrong{border-color:#ef4444;background:rgba(239,68,68,.1)}
 .similar-feedback{margin-top:12px;padding:12px;border-radius:13px}.similar-feedback.ok{background:rgba(34,197,94,.08)}.similar-feedback.retry{background:rgba(245,158,11,.09)}
 @media(max-width:620px){.answer-compare{grid-template-columns:1fr}.answer-actions>*{flex:1}.similar-head{flex-direction:column}}
+
+
+/* v10.0 — Matematik utama & modul akan datang */
+.cards{align-items:stretch}
+.subject-active{position:relative;order:-10;border:2px solid rgba(34,197,94,.5);box-shadow:0 12px 28px rgba(34,197,94,.12)}
+.available-badge{position:absolute;top:12px;right:12px;padding:4px 8px;border-radius:999px;background:rgba(34,197,94,.14);color:#16a34a;font-size:.62rem;font-weight:900;letter-spacing:.06em}
+.subject-locked{position:relative;cursor:not-allowed!important;filter:grayscale(.7);opacity:.68;background:linear-gradient(145deg,var(--card),var(--soft));border-style:dashed!important}
+.subject-locked:disabled{color:inherit}
+.subject-locked h3{text-decoration:line-through;text-decoration-thickness:2px;text-decoration-color:rgba(239,68,68,.65)}
+.subject-locked small{display:block;color:var(--muted);margin-top:7px;font-size:.72rem}
+.subject-lock{position:absolute;top:12px;right:12px;width:30px;height:30px;display:grid;place-items:center;border-radius:50%;background:rgba(15,23,42,.1)}
+.coming-label{display:inline-block!important;margin:7px 0 0!important;padding:5px 10px;border-radius:999px;background:rgba(245,158,11,.16);color:#b45309!important;font-size:.7rem!important;font-weight:900;letter-spacing:.08em}

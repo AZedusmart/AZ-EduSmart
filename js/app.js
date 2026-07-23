@@ -45,7 +45,7 @@ let active="p1";localStorage.az3Active="p1";
 let S={view:"home",subject:null,module:null,mode:"Sederhana",quiz:[],i:0,correct:0,answered:false,start:0,timer:null};
 const P=()=>profiles.find(x=>x.id===active)||profiles[0];
 const k=(t,id="")=>`az3-${active}-${t}-${id}`;
-const all=()=>Object.values(DATA[P().level]).flatMap(s=>s.modules);
+const all=()=>{const m=DATA[P().level]&&DATA[P().level].matematik;return m?m.modules:[]};
 const done=id=>localStorage.getItem(k("done",id))==="1";
 const best=id=>Number(localStorage.getItem(k("best",id))||0);
 const xp=()=>Number(localStorage.getItem(k("xp"))||0);
@@ -85,8 +85,35 @@ ${dailyAvailable()?`<div class="daily-claim"><div><b>🎁 Ganjaran Hari Ini</b><
 </div>
 <div class="stats"><div class="stat"><b>${xp()}</b><span>Jumlah XP</span></div><div class="stat"><b>${streak()}</b><span>Streak</span></div><div class="stat"><b>${c.p}%</b><span>Selesai</span></div><div class="stat"><b>${coins()}</b><span>Syiling</span></div></div>
 <div class="sectionhead"><h2>Pilih subjek</h2><small>${c.d}/${c.total} modul selesai</small></div>
-<div class="cards">${Object.entries(DATA[p.level]).map(([key,s])=>{let d=s.modules.filter(m=>done(m.id)).length;return `<button class="card" onclick="openSubject('${key}')"><div class="subject-icon">${s.icon}</div><h3>${s.title}</h3><p>${d}/${s.modules.length} modul selesai</p><div class="bar"><i style="width:${d/s.modules.length*100}%"></i></div></button>`}).join("")}</div>`}
+<div class="cards">${subjectCards(p.level)}</div>`}
+const COMING_SUBJECTS=[
+ {key:"sains",icon:"🧪",title:"Sains"},
+ {key:"sejarah",icon:"🏛️",title:"Sejarah"},
+ {key:"bahasa-melayu",icon:"📘",title:"Bahasa Melayu"},
+ {key:"bahasa-inggeris",icon:"📗",title:"Bahasa Inggeris"},
+ {key:"pendidikan-islam",icon:"🕌",title:"Pendidikan Islam"},
+ {key:"geografi",icon:"🌍",title:"Geografi"},
+ {key:"reka-bentuk-teknologi",icon:"🛠️",title:"Reka Bentuk dan Teknologi"},
+ {key:"asas-sains-komputer",icon:"💻",title:"Asas Sains Komputer"},
+ {key:"pendidikan-seni-visual",icon:"🎨",title:"Pendidikan Seni Visual"},
+ {key:"pendidikan-jasmani-kesihatan",icon:"🏃",title:"Pendidikan Jasmani dan Kesihatan"},
+ {key:"pendidikan-muzik",icon:"🎵",title:"Pendidikan Muzik"}
+];
+function subjectCards(level){
+ const math=DATA[level]&&DATA[level].matematik;
+ let html="";
+ if(math){
+  const d=math.modules.filter(m=>done(m.id)).length;
+  html+=`<button class="card subject-active" onclick="openSubject('matematik')"><div class="subject-icon">${math.icon}</div><span class="available-badge">TERSEDIA</span><h3>${math.title}</h3><p>${d}/${math.modules.length} modul selesai</p><div class="bar"><i style="width:${math.modules.length?d/math.modules.length*100:0}%"></i></div></button>`;
+ }
+ html+=COMING_SUBJECTS.map(s=>`<button class="card subject-locked" type="button" disabled aria-disabled="true"><div class="subject-lock">🔒</div><div class="subject-icon">${s.icon}</div><h3>${s.title} Tingkatan ${level}</h3><p class="coming-label">AKAN DATANG</p><small>Modul masih dalam pembangunan</small></button>`).join("");
+ return html;
+}
 function openSubject(key){
+  if(key!=="matematik"){
+    toast("Modul ini akan datang dan belum boleh diakses");
+    return;
+  }
   const levelData = DATA[P().level];
   if(!levelData || !levelData[key]){
     toast("Subjek tidak dapat dibuka");

@@ -134,3 +134,9 @@ pada sistem operasi atau disediakan oleh pelayar pengguna.
 - Daily Challenge Framework.
 - Persediaan untuk bank soalan Matematik Tingkatan 1 & 2 yang lebih besar.
 - Infrastruktur untuk Adaptive Learning Engine.
+
+
+## Kemas kini paparan subjek
+- Matematik diletakkan sebagai modul pertama dan satu-satunya subjek aktif.
+- Sains, Sejarah, Bahasa Melayu, Bahasa Inggeris, Pendidikan Islam, Geografi, RBT, ASK, PSV, PJPK dan Pendidikan Muzik ditandakan **AKAN DATANG**.
+- Semua modul akan datang dikunci dan tidak boleh diakses.
