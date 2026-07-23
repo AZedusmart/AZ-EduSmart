@@ -100,8 +100,137 @@ function openSubject(key){
 }
 function subject(){let s=DATA[P().level][S.subject];app.innerHTML=`<div class="toolbar"><button class="back" onclick="nav('home')">← Utama</button><b>${s.icon} ${s.title}</b></div><div class="panel"><h1>${s.title}</h1><p style="color:var(--muted)">${s.theme}</p><div class="modulelist">${s.modules.map((m,i)=>`<div class="module"><div><h3>${done(m.id)?"✅ ":""}${i+1}. ${m.title}</h3><p>${m.summary}</p><span class="pill">Terbaik ${best(m.id)}%</span></div><button class="primary" onclick="openModule('${m.id}')">${done(m.id)?"Ulang":"Buka"}</button></div>`).join("")}</div></div>`}
 function openModule(id){S.module=id;S.view="module";render()}
-function moduleView(){let {m,s}=find(S.module);app.innerHTML=`<div class="toolbar"><button class="back" onclick="openSubject('${S.subject}')">← Modul</button><b>${s.icon} ${s.title}</b></div><div class="panel"><span class="pill">Nota pantas</span><h1>${m.title}</h1>${m.points.map((x,i)=>`<div class="note"><b>${i+1}.</b> ${x}</div>`).join("")}<div class="actions"><button class="secondary" onclick="speak()">🔊 Dengar nota</button><button class="primary" onclick="chooseMode()">⚔️ Mula kuiz</button></div></div>`}
-function speak(){let {m}=find(S.module);speechSynthesis.cancel();let u=new SpeechSynthesisUtterance(m.title+". "+m.points.join(". "));u.lang="ms-MY";speechSynthesis.speak(u)}
+function moduleView(){let {m,s}=find(S.module);app.innerHTML=`<div class="toolbar"><button class="back" onclick="openSubject('${S.subject}')">← Modul</button><b>${s.icon} ${s.title}</b></div><div class="panel"><span class="pill">Nota pantas</span><h1>${m.title}</h1>${m.points.map((x,i)=>`<div class="note"><b>${i+1}.</b> ${x}</div>`).join("")}<div class="actions"><button class="secondary" onclick="speak()">🔊 Dengar nota</button><button class="secondary" onclick="stopSpeak()">⏹ Henti suara</button><button class="primary" onclick="chooseMode()">⚔️ Mula kuiz</button></div></div>`}
+let AZMalayVoice=null;
+let AZSpeechQueue=[];
+let AZIsSpeaking=false;
+
+function normalizeMalaySpeech(text){
+ return String(text)
+  .replace(/°C/g," darjah Celsius ")
+  .replace(/cm²/g," sentimeter persegi ")
+  .replace(/m²/g," meter persegi ")
+  .replace(/cm³/g," sentimeter padu ")
+  .replace(/m³/g," meter padu ")
+  .replace(/km\/j/g," kilometer sejam ")
+  .replace(/m\/s²/g," meter sesaat kuasa dua ")
+  .replace(/m\/s/g," meter sesaat ")
+  .replace(/RM\s*/g," ringgit ")
+  .replace(/π/g," pai ")
+  .replace(/√/g," punca kuasa dua ")
+  .replace(/²/g," kuasa dua ")
+  .replace(/³/g," kuasa tiga ")
+  .replace(/×/g," darab ")
+  .replace(/÷/g," bahagi ")
+  .replace(/−|–/g," tolak ")
+  .replace(/\+/g," tambah ")
+  .replace(/=/g," sama dengan ")
+  .replace(/%/g," peratus ")
+  .replace(/\bGSTK\b/g," gandaan sepunya terkecil ")
+  .replace(/\bFSTB\b/g," faktor sepunya terbesar ")
+  .replace(/\bKBAT\b/g," kemahiran berfikir aras tinggi ")
+  .replace(/\bx\b/g," eks ")
+  .replace(/\by\b/g," wai ")
+  .replace(/\s+/g," ")
+  .trim();
+}
+
+function loadMalayVoice(){
+ const voices=window.speechSynthesis?speechSynthesis.getVoices():[];
+ if(!voices.length)return null;
+
+ const score=v=>{
+  const lang=(v.lang||"").toLowerCase();
+  const name=(v.name||"").toLowerCase();
+  let s=0;
+  if(lang==="ms-my")s+=100;
+  else if(lang.startsWith("ms"))s+=80;
+  if(name.includes("malay")||name.includes("melayu")||name.includes("malaysia"))s+=40;
+  if(name.includes("google")||name.includes("microsoft")||name.includes("natural"))s+=10;
+  if(v.localService)s+=3;
+  return s;
+ };
+
+ const ranked=voices
+  .map(v=>({v,s:score(v)}))
+  .filter(x=>x.s>0)
+  .sort((a,b)=>b.s-a.s);
+
+ AZMalayVoice=ranked.length?ranked[0].v:null;
+ return AZMalayVoice;
+}
+
+function speakNextMalayChunk(){
+ if(!AZSpeechQueue.length){
+  AZIsSpeaking=false;
+  return;
+ }
+ const text=AZSpeechQueue.shift();
+ const u=new SpeechSynthesisUtterance(normalizeMalaySpeech(text));
+ u.lang="ms-MY";
+ u.rate=0.82;
+ u.pitch=1;
+ u.volume=1;
+
+ const voice=AZMalayVoice||loadMalayVoice();
+ if(voice)u.voice=voice;
+
+ u.onend=()=>setTimeout(speakNextMalayChunk,180);
+ u.onerror=()=>setTimeout(speakNextMalayChunk,180);
+ AZIsSpeaking=true;
+ speechSynthesis.speak(u);
+}
+
+function stopSpeak(){
+ AZSpeechQueue=[];
+ AZIsSpeaking=false;
+ if(window.speechSynthesis)speechSynthesis.cancel();
+ toast("Bacaan dihentikan");
+}
+
+function speak(){
+ if(!("speechSynthesis" in window)){
+  toast("Peranti ini tidak menyokong fungsi suara");
+  return;
+ }
+
+ let {m}=find(S.module);
+ speechSynthesis.cancel();
+ AZSpeechQueue=[
+  `Tajuk. ${m.title}.`,
+  ...m.points.map((point,index)=>`Isi nombor ${index+1}. ${point}.`)
+ ];
+
+ const begin=()=>{
+  loadMalayVoice();
+  if(!AZMalayVoice){
+   toast("Suara Melayu tiada pada peranti. Menggunakan suara sistem.");
+  }else{
+   toast(`Suara Melayu: ${AZMalayVoice.name}`);
+  }
+  speakNextMalayChunk();
+ };
+
+ const voices=speechSynthesis.getVoices();
+ if(voices.length){
+  begin();
+ }else{
+  let started=false;
+  const handler=()=>{
+   if(started)return;
+   started=true;
+   speechSynthesis.removeEventListener("voiceschanged",handler);
+   begin();
+  };
+  speechSynthesis.addEventListener("voiceschanged",handler);
+  setTimeout(handler,800);
+ }
+}
+
+if("speechSynthesis" in window){
+ speechSynthesis.addEventListener("voiceschanged",loadMalayVoice);
+ loadMalayVoice();
+}
 function chooseMode(){S.view="mode";render()}
 const LEVEL_MAP={
  "Mudah":"Standard",

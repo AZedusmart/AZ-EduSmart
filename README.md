@@ -1,4 +1,4 @@
-# AZ EduSmart v7.0
+# AZ EduSmart v7.1
 
 Aplikasi pembelajaran interaktif untuk pelajar Tingkatan 1 dan Tingkatan 2.
 
@@ -86,3 +86,17 @@ Peningkatan utama:
 - Prestasi murid mengikut bentuk soalan disimpan dalam localStorage sebagai asas
   kepada ciri adaptif pada versi seterusnya.
 - Enjin lama kekal sebagai fallback sekiranya sesuatu template tidak tersedia.
+
+
+## v7.1 — Suara Melayu
+
+- Mengutamakan suara `ms-MY` yang tersedia pada telefon atau komputer.
+- Memilih suara Melayu terbaik secara automatik daripada senarai suara sistem.
+- Kadar bacaan diperlahankan kepada 0.82 untuk sebutan yang lebih jelas.
+- Nota dibaca satu isi pada satu masa dengan jeda pendek.
+- Simbol Matematik ditukar kepada sebutan Bahasa Melayu.
+- Menambah butang `Henti suara`.
+- Jika peranti tidak mempunyai suara Melayu, aplikasi memaklumkan bahawa suara sistem digunakan.
+
+Nota: kualiti suara sebenar masih bergantung pada suara Bahasa Melayu yang dipasang
+pada sistem operasi atau disediakan oleh pelayar pengguna.
