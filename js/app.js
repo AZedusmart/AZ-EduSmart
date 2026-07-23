@@ -1010,7 +1010,115 @@ function smartResultAnalysis(moduleId){
   <p class="smart-advice">🧠 ${advice}</p>
  </div>`;
 }
-function quiz(){let q=S.quiz[S.i];if(!q)return result();let secs=S.mode==="Mudah"?0:S.mode==="Sederhana"?45:S.mode==="Sukar"?60:75;app.innerHTML=`<div class="quiztop"><button class="back" onclick="nav('home')">✕ Keluar</button><span class="pill">${q.d||S.mode}</span><b class="timer" id="timer">${secs?secs+"s":"∞"}</b></div><div class="panel"><small style="color:var(--muted)">Soalan ${S.i+1}/${S.quiz.length}${q.module?" • "+q.module:""}</small><h2 class="question">${q.q}</h2>${q.o.map((x,i)=>`<button class="option" onclick="answer(${i})"><b>${String.fromCharCode(65+i)}.</b> ${x}</button>`).join("")}<div id="feedback"></div><div id="next"></div></div>`;clearInterval(S.timer);if(secs){let t=secs;S.timer=setInterval(()=>{t--;let e=$("#timer");if(e)e.textContent=t+"s";if(t<=5&&t>0)AudioEngine.tick();if(t<=0){clearInterval(S.timer);answer(-1)}},1000)}}
+
+// ==========================================================
+// AZ EduSmart v9.0.1 — Tutor Pintar & Explain Mode
+// ==========================================================
+let AZHintLevel=0;
+let AZSimilarQuestion=null;
+
+function tutorStyleName(q){
+ return STYLE_NAMES[q.style||"general"]||"Pemahaman konsep";
+}
+function buildHints(q){
+ const style=q.style||"general", hints=[];
+ if(style==="direct"){
+  hints.push("Kenal pasti operasi atau formula utama yang diperlukan.");
+  hints.push("Selesaikan satu operasi pada satu masa mengikut tertib yang betul.");
+  hints.push(q.e?`Langkah penting: ${q.e.split(".")[0]}.`:"Semak semula pengiraan.");
+ }else if(style==="context"){
+  hints.push("Cari maklumat penting dalam situasi.");
+  hints.push("Tentukan apa yang diketahui dan apa yang perlu dicari.");
+  hints.push(q.e?`Gunakan hubungan ini: ${q.e.split(".")[0]}.`:"Tukar cerita kepada ayat Matematik.");
+ }else if(style==="reverse"){
+  hints.push("Soalan meminta nilai asal, bukan hasil akhir.");
+  hints.push("Gunakan operasi songsang untuk kembali kepada nilai asal.");
+  hints.push(q.e?`Mulakan dengan: ${q.e.split(";")[0]}.`:"Buat operasi secara terbalik.");
+ }else if(style==="analysis"){
+  hints.push("Cari langkah atau kaedah yang salah dalam penyelesaian tersebut.");
+  hints.push("Semak formula, tertib operasi dan maksud simbol.");
+  hints.push(q.e?`Petunjuk utama: ${q.e.split(".")[0]}.`:"Bandingkan dengan peraturan sebenar.");
+ }else{
+  hints.push("Baca semula kata kunci dalam soalan.");
+  hints.push("Singkirkan pilihan yang jelas tidak tepat.");
+  hints.push(q.e?`Ingat konsep ini: ${q.e.split(".")[0]}.`:"Rujuk semula nota.");
+ }
+ return hints;
+}
+function showHint(){
+ if(S.answered){toast("Petunjuk digunakan sebelum menjawab.");return}
+ const q=S.quiz[S.i],hints=buildHints(q);
+ AZHintLevel=Math.min(AZHintLevel+1,hints.length);
+ const box=$("#hintBox");
+ if(box)box.innerHTML=`<div class="tutor-hint"><div class="tutor-avatar">💡</div><div><small>Petunjuk ${AZHintLevel}/${hints.length}</small><p>${hints[AZHintLevel-1]}</p></div></div>`;
+ const btn=$("#hintBtn");
+ if(btn){
+  btn.textContent=AZHintLevel<hints.length?`💡 Petunjuk seterusnya (${AZHintLevel+1})`:"💡 Semua petunjuk dibuka";
+  if(AZHintLevel>=hints.length)btn.disabled=true;
+ }
+}
+function diagnoseMistake(q,chosen){
+ if(chosen<0)return "Masa tamat sebelum jawapan dipilih.";
+ if(q.style==="analysis")return "Anda mungkin menerima kaedah dalam soalan tanpa menyemak sama ada kaedah itu betul.";
+ if(q.style==="reverse")return "Anda mungkin menggunakan operasi biasa sedangkan nilai asal perlu dicari menggunakan operasi songsang.";
+ if(q.style==="context")return "Anda mungkin tersalah menukar maklumat cerita kepada operasi Matematik.";
+ if(q.style==="direct")return "Anda mungkin tersilap tertib operasi, formula atau pengiraan.";
+ return "Pilihan tersebut belum sepadan dengan konsep yang sedang diuji.";
+}
+function explanationSteps(q){
+ const raw=String(q.e||"Gunakan konsep yang diterangkan dalam nota.");
+ let parts=raw.split(/[.;]\s+/).map(x=>x.trim()).filter(Boolean);
+ if(parts.length<2)parts=[`Kenal pasti konsep: ${tutorStyleName(q)}.`,raw,`Semak jawapan akhir: ${q.o[q.a]}.`];
+ else{
+  parts.unshift(`Kenal pasti konsep: ${tutorStyleName(q)}.`);
+  parts.push(`Maka jawapan yang tepat ialah ${q.o[q.a]}.`);
+ }
+ return parts.slice(0,5);
+}
+function explainCurrent(){
+ const q=S.quiz[S.i],chosen=Number.isInteger(S.lastAnswer)?S.lastAnswer:-1;
+ const correct=chosen===q.a,steps=explanationSteps(q),target=$("#tutorExplain");
+ if(!target)return;
+ target.innerHTML=`<div class="explain-card">
+  <div class="explain-title"><div class="tutor-avatar large">🤖</div><div><small>Tutor Pintar AZ</small><h3>${correct?"Mari kukuhkan kefahaman":"Mari fahami kesalahan ini"}</h3></div></div>
+  ${!correct?`<div class="mistake-diagnosis"><b>Kenapa anda mungkin tersilap?</b><p>${diagnoseMistake(q,chosen)}</p></div>`:""}
+  <div class="answer-compare"><div><span>Jawapan anda</span><b>${chosen>=0?q.o[chosen]:"Tiada jawapan"}</b></div><div class="correct-answer"><span>Jawapan tepat</span><b>${q.o[q.a]}</b></div></div>
+  <div class="step-list">${steps.map((step,i)=>`<div class="explain-step"><i>${i+1}</i><p>${step}</p></div>`).join("")}</div>
+  <div class="remember-box"><b>📘 Ingat</b><p>${q.style==="reverse"?"Gunakan operasi songsang apabila mencari nilai asal.":q.style==="analysis"?"Semak kaedah, bukan hanya jawapan akhir.":q.style==="context"?"Tukar cerita kepada operasi sebelum mengira.":"Buat satu langkah pada satu masa."}</p></div>
+  <div class="actions">${S.module&&S.module.includes("-matematik-")?`<button class="secondary" onclick="similarPractice()">🔄 Latihan serupa</button>`:""}<button class="primary" onclick="next()">Saya sudah faham</button></div>
+  <div id="similarArea"></div>
+ </div>`;
+ target.scrollIntoView({behavior:"smooth",block:"start"});
+}
+function similarPractice(){
+ if(!S.module||!S.module.includes("-matematik-")){toast("Latihan serupa dinamik tersedia untuk Matematik.");return}
+ const current=S.quiz[S.i];let tries=0,q=null;
+ while(tries<10){q=generateConceptMathQuestion(S.module,S.mode,current.style||"direct");if(q&&q.q!==current.q)break;tries++}
+ if(!q)return;
+ AZSimilarQuestion=q;
+ const area=$("#similarArea");if(!area)return;
+ area.innerHTML=`<div class="similar-practice"><div class="similar-head"><span>🔄 Latihan pengukuhan</span><small>Tidak dikira dalam markah utama</small></div><h3>${q.q}</h3><div class="similar-options">${q.o.map((x,i)=>`<button onclick="answerSimilar(${i},this)"><b>${String.fromCharCode(65+i)}.</b> ${x}</button>`).join("")}</div><div id="similarFeedback"></div></div>`;
+ area.scrollIntoView({behavior:"smooth",block:"nearest"});
+}
+function answerSimilar(i,button){
+ const q=AZSimilarQuestion;if(!q)return;
+ document.querySelectorAll(".similar-options button").forEach((b,n)=>{b.disabled=true;if(n===q.a)b.classList.add("correct");else if(n===i)b.classList.add("wrong")});
+ const ok=i===q.a,feedback=$("#similarFeedback");
+ feedback.innerHTML=`<div class="similar-feedback ${ok?"ok":"retry"}"><b>${ok?"✅ Bagus! Konsep semakin kukuh.":"💪 Hampir! Fahami langkah ini dahulu."}</b><p>${q.e}</p>${ok?"":`<button class="secondary" onclick="similarPractice()">Cuba contoh lain</button>`}</div>`;
+ if(ok)addCoins(5);
+}
+function quiz(){
+ let q=S.quiz[S.i];if(!q)return result();
+ AZHintLevel=0;AZSimilarQuestion=null;S.lastAnswer=null;
+ let secs=S.mode==="Mudah"?0:S.mode==="Sederhana"?45:S.mode==="Sukar"?60:75;
+ app.innerHTML=`<div class="quiztop"><button class="back" onclick="nav('home')">✕ Keluar</button><span class="pill">${q.d||S.mode}</span><b class="timer" id="timer">${secs?secs+"s":"∞"}</b></div>
+ <div class="panel"><small style="color:var(--muted)">Soalan ${S.i+1}/${S.quiz.length}${q.module?" • "+q.module:""}</small><h2 class="question">${q.q}</h2>
+ <div class="pre-answer-tools"><button id="hintBtn" class="hint-button" onclick="showHint()">💡 Petunjuk 1</button></div><div id="hintBox"></div>
+ ${q.o.map((x,i)=>`<button class="option" onclick="answer(${i})"><b>${String.fromCharCode(65+i)}.</b> ${x}</button>`).join("")}
+ <div id="feedback"></div><div id="next"></div><div id="tutorExplain"></div></div>`;
+ clearInterval(S.timer);
+ if(secs){let t=secs;S.timer=setInterval(()=>{t--;let e=$("#timer");if(e)e.textContent=t+"s";if(t<=5&&t>0)AudioEngine.tick();if(t<=0){clearInterval(S.timer);answer(-1)}},1000)}
+}
 function answer(i){if(S.answered)return;AudioEngine.start();S.answered=true;clearInterval(S.timer);let q=S.quiz[S.i];document.querySelectorAll(".option").forEach((b,n)=>{b.disabled=true;if(n===q.a)b.classList.add("correct");else if(n===i)b.classList.add("wrong")});if(i===q.a){S.correct++;AudioEngine.correct();addCoins(10)}else{AudioEngine.wrong()}
 if(S.module&&q.style){
  const key=k("conceptStats",S.module);
@@ -1020,8 +1128,11 @@ if(S.module&&q.style){
  if(i===q.a)stats[q.style].correct++;
  localStorage.setItem(key,JSON.stringify(stats));
 }
-recordQuestionIntel(S.module,q,i===q.a,S.mode);$("#feedback").innerHTML=`<div class="feedback"><b>${i===q.a?"✅ Tepat!":"❌ Belum tepat."}</b><br>${q.e}</div>`;$("#next").innerHTML=`<button class="primary" onclick="next()">Seterusnya</button>`}
-function next(){AudioEngine.next();S.i++;S.answered=false;render()}
+recordQuestionIntel(S.module,q,i===q.a,S.mode);
+S.lastAnswer=i;
+$("#feedback").innerHTML=`<div class="feedback"><b>${i===q.a?"✅ Tepat!":"❌ Belum tepat."}</b><br>${i===q.a?"Bagus! Teruskan atau buka penerangan untuk mengukuhkan konsep.":"Jangan risau. Tutor Pintar boleh menerangkan langkahnya."}</div>`;
+$("#next").innerHTML=`<div class="answer-actions"><button class="secondary tutor-button" onclick="explainCurrent()">🤖 Terangkan</button><button class="primary" onclick="next()">Seterusnya</button></div>`}
+function next(){AudioEngine.next();AZHintLevel=0;AZSimilarQuestion=null;S.lastAnswer=null;S.i++;S.answered=false;render()}
 function result(){
  let pct=Math.round(S.correct/S.quiz.length*100),
  gain=Math.round(S.correct*15*(S.mode==="Pakar"?1.5:S.mode==="Sukar"?1.25:1));

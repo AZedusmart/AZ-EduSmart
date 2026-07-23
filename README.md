@@ -1,4 +1,4 @@
-# AZ EduSmart v8.0
+# AZ EduSmart v9.0.1
 
 Aplikasi pembelajaran interaktif untuk pelajar Tingkatan 1 dan Tingkatan 2.
 
@@ -112,3 +112,15 @@ pada sistem operasi atau disediakan oleh pelayar pengguna.
 - Menunjukkan analisis selepas kuiz: penguasaan, ketepatan, percubaan dan perubahan markah.
 - Menyimpan sejarah 12 keputusan terakhir untuk setiap modul.
 - Semua data kekal disimpan secara setempat dalam pelayar pengguna.
+
+
+## v9.0.1 — Tutor Pintar & Explain Mode
+
+- Tiga tahap petunjuk sebelum menjawab.
+- Penerangan langkah demi langkah selepas menjawab.
+- Perbandingan jawapan pelajar dengan jawapan tepat.
+- Diagnosis kemungkinan punca kesalahan.
+- Kotak ringkasan `Ingat`.
+- Latihan Matematik serupa tanpa menjejaskan markah utama.
+- Ganjaran 5 syiling untuk latihan pengukuhan yang betul.
+- Berfungsi dalam pelayar tanpa API berbayar.
