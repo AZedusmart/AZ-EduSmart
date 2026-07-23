@@ -166,17 +166,270 @@ function variantQuestion(q,level,index,variant,moduleId){
  return {...q,q:prefix+q.q,d:LEVEL_LABEL[level],qid:questionKey(moduleId,level,index,variant)};
 }
 
-function buildQuestionBank(m,internalLevel){
- const originals=m.quiz
-  .map((q,index)=>({q,index}))
-  .filter(item=>item.q.d===internalLevel);
 
- let bank=[];
- originals.forEach(({q,index})=>{
-  const variants=internalLevel==="Standard"||internalLevel==="Sederhana"?4:6;
-  for(let v=0;v<variants;v++)bank.push(variantQuestion(q,internalLevel,index,v,m.id));
- });
+// ==========================================================
+// AZ EduSmart v6.5 — Dynamic Mathematics Question Engine
+// Generates genuinely different questions, values and answers.
+// ==========================================================
+function rnd(min,max){return Math.floor(Math.random()*(max-min+1))+min}
+function pick(arr){return arr[rnd(0,arr.length-1)]}
+function gcd(a,b){a=Math.abs(a);b=Math.abs(b);while(b){[a,b]=[b,a%b]}return a}
+function lcm(a,b){return Math.abs(a*b)/gcd(a,b)}
+function fmt(n){return Number.isInteger(n)?String(n):String(Math.round(n*100)/100)}
+function uniqueOptions(answer,candidates){
+ let vals=[answer,...candidates].map(fmt);
+ vals=[...new Set(vals)];
+ let step=Math.max(1,Math.abs(Number(answer))<10?1:Math.round(Math.abs(Number(answer))*.1));
+ while(vals.length<4){
+  let x=Number(answer)+pick([-3,-2,-1,1,2,3])*step;
+  vals.push(fmt(x));
+  vals=[...new Set(vals)];
+ }
+ vals=shuffle(vals.slice(0,4));
+ return {o:vals,a:vals.indexOf(fmt(answer))};
+}
+function makeQ(q,answer,distractors,e,level,id){
+ const ans=uniqueOptions(answer,distractors);
+ return {q,o:ans.o,a:ans.a,e,d:LEVEL_LABEL[level],qid:id+"-"+Date.now()+"-"+Math.random()};
+}
+function levelScale(level){
+ return level==="Standard"?1:level==="Sederhana"?2:level==="Sukar"?3:4;
+}
+
+function generateMathQuestion(moduleId,level){
+ const s=levelScale(level);
+ let a,b,c,n,ans,opts,q,e,r,x,y;
+
+ switch(moduleId){
+
+ case "1-matematik-1": // Nombor Nisbah
+  if(s===1){
+   a=rnd(10,80); b=rnd(5,40); ans=a+b;
+   return makeQ(`Hitungkan ${a} + ${b}.`,ans,[a-b,ans+10,ans-5],
+    `${a} + ${b} = ${ans}.`,level,moduleId);
+  }
+  if(s===2){
+   a=rnd(20,90); b=rnd(5,45); ans=a-b;
+   return makeQ(`Suhu bermula pada ${a}°C dan menurun ${b}°C. Berapakah suhu baharu?`,ans,[a+b,b-a,ans+5],
+    `Suhu baharu ialah ${a} - ${b} = ${ans}°C.`,level,moduleId);
+  }
+  if(s===3){
+   a=rnd(3,12); b=rnd(2,9); c=rnd(2,7); ans=a*b-c;
+   return makeQ(`Nilai bagi ${a} × ${b} − ${c} ialah...`,ans,[a*(b-c),ans+c,ans-b],
+    `Darab dahulu: ${a} × ${b} = ${a*b}, kemudian tolak ${c}.`,level,moduleId);
+  }
+  a=rnd(2,8); b=rnd(2,8); c=rnd(2,6); ans=(a+b)*c;
+  return makeQ(`Selesaikan (${a} + ${b}) × ${c}.`,ans,[a+b*c,a*c+b,ans-c],
+   `Operasi dalam kurungan dibuat dahulu: ${a+b} × ${c} = ${ans}.`,level,moduleId);
+
+ case "1-matematik-2": // Faktor dan Gandaan
+  if(s===1){
+   a=rnd(3,12); b=a*rnd(2,8); ans=a;
+   return makeQ(`Antara berikut, yang manakah faktor bagi ${b}?`,ans,[a+1,a+2,a+4],
+    `${b} boleh dibahagi tepat dengan ${a}.`,level,moduleId);
+  }
+  if(s===2){
+   a=rnd(2,9); b=rnd(2,9); ans=lcm(a,b);
+   return makeQ(`Cari gandaan sepunya terkecil bagi ${a} dan ${b}.`,ans,[a*b,gcd(a,b),ans+a],
+    `GSTK bagi ${a} dan ${b} ialah ${ans}.`,level,moduleId);
+  }
+  if(s===3){
+   a=rnd(4,12); b=rnd(4,12); ans=gcd(a*2,b*2);
+   return makeQ(`Cari faktor sepunya terbesar bagi ${a*2} dan ${b*2}.`,ans,[2,ans+2,ans*2],
+    `FSTB bagi kedua-dua nombor ialah ${ans}.`,level,moduleId);
+  }
+  a=rnd(3,8); b=rnd(4,9); c=lcm(a,b); n=rnd(2,5); ans=c*n;
+  return makeQ(`Dua lampu berkelip setiap ${a} saat dan ${b} saat. Jika berkelip bersama sekarang, selepas berapa saat mereka berkelip bersama untuk kali ke-${n+1}?`,ans,[c,ans+a,ans-b],
+   `Selang bersama ialah GSTK ${a} dan ${b}, iaitu ${c} saat. Untuk kali ke-${n+1}: ${c} × ${n} = ${ans}.`,level,moduleId);
+
+ case "1-matematik-3": // Kuasa dan Punca
+  if(s===1){
+   a=rnd(2,9); ans=a*a;
+   return makeQ(`Berapakah nilai ${a}²?`,ans,[a*2,ans+a,ans-1],
+    `${a}² = ${a} × ${a} = ${ans}.`,level,moduleId);
+  }
+  if(s===2){
+   a=rnd(2,12); ans=a;
+   return makeQ(`Hitungkan √${a*a}.`,ans,[a*a,a+2,a-1],
+    `√${a*a} = ${a}.`,level,moduleId);
+  }
+  if(s===3){
+   a=rnd(2,6); b=rnd(2,4); ans=a**b;
+   return makeQ(`Nilai bagi ${a}^${b} ialah...`,ans,[a*b,ans+a,ans-a],
+    `${a} didarab dengan dirinya sebanyak ${b} kali menghasilkan ${ans}.`,level,moduleId);
+  }
+  a=rnd(2,5); b=rnd(2,4); c=rnd(2,5); ans=a**b+c*c;
+  return makeQ(`Hitungkan ${a}^${b} + ${c}².`,ans,[a*b+c*c,a**b+c,ans-c],
+   `${a}^${b} = ${a**b} dan ${c}² = ${c*c}; jumlahnya ${ans}.`,level,moduleId);
+
+ case "1-matematik-4": // Nisbah kadar kadaran
+  if(s===1){
+   a=rnd(2,8); b=rnd(2,8); c=gcd(a,b); ans=`${a/c}:${b/c}`;
+   opts=[`${a}:${b}`,`${b/c}:${a/c}`,`${a/c+1}:${b/c}`];
+   q=`Permudahkan nisbah ${a}:${b}.`;
+   e=`Bahagikan kedua-dua sebutan dengan FSTB ${c}.`;
+   break;
+  }
+  if(s===2){
+   a=rnd(2,6); b=rnd(3,9); c=rnd(2,7); ans=b*c;
+   return makeQ(`${a} buah buku berharga RM${b*a}. Berapakah harga ${c} buah buku pada kadar yang sama?`,ans,[b*a,ans+b,ans-b],
+    `Harga sebuah buku ialah RM${b}; maka ${c} buah berharga RM${ans}.`,level,moduleId);
+  }
+  if(s===3){
+   a=rnd(2,5); b=rnd(3,8); c=rnd(4,10); ans=b*c/a;
+   return makeQ(`Jika ${a} kg buah berharga RM${b}, berapakah harga ${c} kg pada kadar yang sama?`,ans,[b*c,ans+a,ans-b],
+    `Harga sekilogram ialah RM${fmt(b/a)}. Jadi harga ${c} kg ialah RM${fmt(ans)}.`,level,moduleId);
+  }
+  a=rnd(2,5); b=rnd(3,7); c=rnd(6,12); ans=a*c/b;
+  return makeQ(`${a} pekerja menyiapkan tugas dalam ${b} hari. Dengan kadar kerja sama, berapa hari diperlukan oleh ${c} pekerja?`,ans,[b*c/a,b+ans,Math.abs(ans-1)],
+   `Bilangan pekerja dan masa berkadar songsang: ${a} × ${b} = ${c} × masa.`,level,moduleId);
+
+ case "1-matematik-5": // Ungkapan Algebra
+  if(s===1){
+   a=rnd(2,9); b=rnd(1,9); ans=a+b;
+   return makeQ(`Permudahkan ${a}x + ${b}x.`,`${ans}x`,[`${a*b}x`,`${ans}`,`${a-b}x`],
+    `Sebutan sejenis dijumlahkan: (${a}+${b})x = ${ans}x.`,level,moduleId);
+  }
+  if(s===2){
+   a=rnd(2,8); b=rnd(1,7); x=rnd(2,6); ans=a*x+b;
+   return makeQ(`Jika x = ${x}, cari nilai ${a}x + ${b}.`,ans,[a+b*x,a*x-b,ans+x],
+    `Gantikan x dengan ${x}: ${a}(${x}) + ${b} = ${ans}.`,level,moduleId);
+  }
+  if(s===3){
+   a=rnd(2,6); b=rnd(2,7); c=rnd(1,5); ans=a*b+a*c;
+   return makeQ(`Kembangkan ${a}(${b}x + ${c}) dan cari jumlah pekali apabila x = 1.`,ans,[a*(b+c+1),b+c,ans-a],
+    `Pada x=1: ${a}(${b}+${c}) = ${ans}.`,level,moduleId);
+  }
+  a=rnd(2,6); b=rnd(2,8); c=rnd(1,6); x=rnd(2,5); ans=a*(b*x-c);
+  return makeQ(`Jika x=${x}, hitungkan ${a}(${b}x − ${c}).`,ans,[a*b*x-c,b*x-a*c,ans+a],
+   `Dalam kurungan: ${b}(${x})−${c}=${b*x-c}; darab ${a} menghasilkan ${ans}.`,level,moduleId);
+
+ case "1-matematik-6": // Persamaan linear
+  if(s===1){
+   a=rnd(2,9); b=rnd(3,15); ans=rnd(2,10); c=a*ans+b;
+   return makeQ(`Cari x jika ${a}x + ${b} = ${c}.`,ans,[ans+1,ans-1,c-b],
+    `${a}x = ${c-b}; maka x = ${ans}.`,level,moduleId);
+  }
+  if(s===2){
+   a=rnd(2,8); ans=rnd(3,12); b=a*ans;
+   return makeQ(`${a}x = ${b}. Apakah nilai x?`,ans,[b-a,b+a,a],
+    `Bahagikan kedua-dua belah dengan ${a}: x=${ans}.`,level,moduleId);
+  }
+  if(s===3){
+   a=rnd(2,6); ans=rnd(3,10); b=rnd(1,8); c=a*ans-b;
+   return makeQ(`Selesaikan ${a}x − ${b} = ${c}.`,ans,[ans+b,ans-1,c+b],
+    `${a}x=${c+b}; x=${ans}.`,level,moduleId);
+  }
+  a=rnd(2,5); b=rnd(1,6); ans=rnd(3,9); c=a*(ans+b);
+  return makeQ(`Selesaikan ${a}(x + ${b}) = ${c}.`,ans,[ans+b,ans-b,c/a+b],
+   `Bahagikan dengan ${a}: x+${b}=${c/a}; maka x=${ans}.`,level,moduleId);
+
+ case "2-matematik-1": // Pola dan jujukan
+  a=rnd(2,10); b=rnd(2,8);
+  if(s<=2){
+   n=rnd(4,8); ans=a+(n-1)*b;
+   return makeQ(`Jujukan bermula ${a}, ${a+b}, ${a+2*b}, ... Apakah sebutan ke-${n}?`,ans,[a+n*b,ans-b,ans+b],
+    `Gunakan Tₙ = a + (n−1)d. Jawapannya ${ans}.`,level,moduleId);
+  }
+  n=rnd(6,12); ans=a+(n-1)*b;
+  return makeQ(`Diberi Tₙ = ${a} + (n−1)(${b}). Cari T${n}.`,ans,[a+n*b,ans+b,ans-b],
+   `Gantikan n=${n}: ${a}+${n-1}(${b})=${ans}.`,level,moduleId);
+
+ case "2-matematik-2": // Pemfaktoran
+  a=rnd(2,8); b=rnd(2,9);
+  if(s<=2){
+   ans=`${a}(x+${b})`;
+   opts=[`${a}x+${b}`,`${b}(x+${a})`,`x(${a+b})`];
+   q=`Faktorkan ${a}x + ${a*b}.`; e=`Faktor sepunya terbesar ialah ${a}.`; break;
+  }
+  c=rnd(2,6); ans=`${a}(x+${b})`;
+  opts=[`${a}(x-${b})`,`${b}(x+${a})`,`${a*b}(x+1)`];
+  q=`Apakah pemfaktoran lengkap bagi ${a}x + ${a*b}?`; e=`Keluarkan faktor sepunya ${a}.`; break;
+
+ case "2-matematik-3": // Rumus algebra
+  a=rnd(2,8); b=rnd(2,8); x=rnd(2,7);
+  if(s<=2){
+   ans=a*x+b;
+   return makeQ(`Diberi y = ${a}x + ${b}. Cari y apabila x=${x}.`,ans,[a+b*x,a*x-b,ans+x],
+    `Gantikan x=${x}: y=${a}(${x})+${b}=${ans}.`,level,moduleId);
+  }
+  c=rnd(2,7); ans=(c-b)/a;
+  return makeQ(`Diberi y=${a}x+${b}. Cari x apabila y=${c+b+a*rnd(1,5)}.`,ans,[ans+1,ans-1,c/a],
+   `Susun semula rumus dengan menolak ${b} dan membahagi dengan ${a}.`,level,moduleId);
+
+ case "2-matematik-4": // Bulatan
+  r=rnd(2,12);
+  if(s===1){
+   ans=2*r;
+   return makeQ(`Sebuah bulatan mempunyai jejari ${r} cm. Berapakah diameternya?`,ans,[r,ans+r,ans-2],
+    `Diameter = 2 × jejari = ${ans} cm.`,level,moduleId);
+  }
+  if(s===2){
+   ans=Math.round(2*Math.PI*r*100)/100;
+   return makeQ(`Cari lilitan bulatan berjari-jari ${r} cm. Gunakan π≈3.142.`,ans,[Math.round(Math.PI*r*r*100)/100,2*r,ans+r],
+    `Lilitan = 2πr ≈ ${ans} cm.`,level,moduleId);
+  }
+  ans=Math.round(Math.PI*r*r*100)/100;
+  return makeQ(`Cari luas bulatan berjari-jari ${r} cm. Gunakan π≈3.142.`,ans,[Math.round(2*Math.PI*r*100)/100,r*r,ans-r],
+   `Luas = πr² ≈ ${ans} cm².`,level,moduleId);
+
+ case "2-matematik-5": // Koordinat dan graf
+  x=rnd(-8,8); y=rnd(-8,8);
+  if(s===1){
+   ans=x;
+   return makeQ(`Titik P ialah (${x}, ${y}). Apakah koordinat-x bagi P?`,ans,[y,-x,-y],
+    `Koordinat pertama ialah koordinat-x.`,level,moduleId);
+  }
+  a=rnd(-5,5); b=rnd(-5,5); c=rnd(-5,5); n=rnd(-5,5); ans=Math.abs(c-a)+Math.abs(n-b);
+  return makeQ(`Bergerak dari A(${a},${b}) ke B(${c},${n}) mengikut garisan mendatar dan menegak. Berapakah jumlah unit pergerakan?`,ans,[Math.abs(c-a),Math.abs(n-b),ans+2],
+   `Jumlah pergerakan = |${c}-${a}| + |${n}-${b}| = ${ans}.`,level,moduleId);
+
+ case "2-matematik-6": // Laju dan pecutan
+  if(s<=2){
+   a=rnd(20,90); b=rnd(2,6); ans=a/b;
+   return makeQ(`Sebuah kenderaan bergerak sejauh ${a} km dalam ${b} jam. Berapakah laju purata?`,ans,[a*b,a-b,ans+b],
+    `Laju = jarak ÷ masa = ${a} ÷ ${b} = ${fmt(ans)} km/j.`,level,moduleId);
+  }
+  a=rnd(0,10); b=rnd(12,30); c=rnd(2,6); ans=(b-a)/c;
+  return makeQ(`Halaju berubah daripada ${a} m/s kepada ${b} m/s dalam ${c} saat. Cari pecutan.`,ans,[b/c,(b+a)/c,ans+c],
+   `Pecutan = perubahan halaju ÷ masa = (${b}-${a})/${c} = ${fmt(ans)} m/s².`,level,moduleId);
+ }
+
+ if(q){
+  let arr=[ans,...opts];
+  arr=[...new Set(arr.map(String))];
+  while(arr.length<4)arr.push(String(rnd(1,30)));
+  arr=shuffle(arr.slice(0,4));
+  return {q,o:arr,a:arr.indexOf(String(ans)),e,d:LEVEL_LABEL[level],qid:moduleId+"-"+Date.now()+"-"+Math.random()};
+ }
+ return null;
+}
+
+function buildDynamicMathBank(moduleId,level,count=24){
+ const bank=[];
+ let attempts=0;
+ while(bank.length<count && attempts<count*6){
+  attempts++;
+  const q=generateMathQuestion(moduleId,level);
+  if(q && !bank.some(x=>x.q===q.q && x.o.join("|")===q.o.join("|")))bank.push(q);
+ }
  return bank;
+}
+
+function buildQuestionBank(m,internalLevel){
+ // Mathematics uses a true dynamic generator: new values, answers and distractors.
+ if(m.id.includes("-matematik-")){
+  return buildDynamicMathBank(m.id,internalLevel,30);
+ }
+
+ // Science and History temporarily use the verified static bank.
+ // No fake rewording is added because factual accuracy is more important.
+ return m.quiz
+  .map((q,index)=>({...q,d:LEVEL_LABEL[q.d]||q.d,qid:`${m.id}-${q.d}-${index}`}))
+  .filter(q=>{
+    const original=Object.keys(LEVEL_LABEL).find(k=>LEVEL_LABEL[k]===q.d)||q.d;
+    return original===internalLevel;
+  });
 }
 
 function getRecentQuestionIds(moduleId,level){
@@ -209,9 +462,9 @@ function start(){
 
  const recent=getRecentQuestionIds(m.id,internalLevel);
  let fresh=bank.filter(q=>!recent.includes(q.qid));
- if(fresh.length<Math.min(5,bank.length))fresh=bank;
+ if(fresh.length<Math.min(10,bank.length))fresh=bank;
 
- const selected=shuffle(fresh).slice(0,Math.min(5,fresh.length));
+ const selected=shuffle(fresh).slice(0,Math.min(10,fresh.length));
  saveRecentQuestionIds(m.id,internalLevel,[...recent,...selected.map(q=>q.qid)]);
 
  S.quiz=prepare(selected);

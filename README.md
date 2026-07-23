@@ -1,4 +1,4 @@
-# AZ EduSmart v6.0
+# AZ EduSmart v6.5
 
 Aplikasi pembelajaran interaktif untuk pelajar Tingkatan 1 dan Tingkatan 2.
 
@@ -48,3 +48,21 @@ Netlify yang telah disambungkan kepada GitHub akan melakukan deploy secara autom
 
 Versi ini membaiki enjin pemilihan dan pengulangan soalan. Bank soalan baharu yang lebih besar
 akan ditambah secara berperingkat supaya setiap variasi mempunyai kandungan akademik yang benar-benar unik.
+
+
+## v6.5 — Dynamic Mathematics Engine
+
+Matematik Tingkatan 1 dan Tingkatan 2 kini menggunakan penjana soalan sebenar.
+
+- Nombor dan situasi berubah setiap sesi.
+- Jawapan betul dikira secara automatik.
+- Jawapan pengganggu turut dijana berdasarkan kesilapan lazim.
+- Sehingga 30 item baharu dibina untuk setiap tahap sebelum 10 dipilih.
+- Tahap Mudah, Sederhana, Sukar dan Pakar mempunyai bentuk pengiraan berbeza.
+- Sejarah dan Sains kekal dengan soalan fakta yang telah disemak; enjin dinamik tidak digunakan secara sembarangan pada fakta.
+
+Modul Matematik yang disokong:
+- Tingkatan 1: Nombor Nisbah, Faktor dan Gandaan, Kuasa dan Punca,
+  Nisbah/Kadar/Kadaran, Ungkapan Algebra dan Persamaan Linear.
+- Tingkatan 2: Pola dan Jujukan, Pemfaktoran, Rumus Algebra, Bulatan,
+  Koordinat dan Graf, serta Laju dan Pecutan.
