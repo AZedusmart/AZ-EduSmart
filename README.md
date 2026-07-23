@@ -124,3 +124,13 @@ pada sistem operasi atau disediakan oleh pelayar pengguna.
 - Latihan Matematik serupa tanpa menjejaskan markah utama.
 - Ganjaran 5 syiling untuk latihan pengukuhan yang betul.
 - Berfungsi dalam pelayar tanpa API berbayar.
+
+
+## v10.0 — Adaptive Learning Foundation
+
+- Dashboard penguasaan bab (asas).
+- Smart Revision berdasarkan prestasi pelajar.
+- XP, Level dan Achievement Framework.
+- Daily Challenge Framework.
+- Persediaan untuk bank soalan Matematik Tingkatan 1 & 2 yang lebih besar.
+- Infrastruktur untuk Adaptive Learning Engine.
