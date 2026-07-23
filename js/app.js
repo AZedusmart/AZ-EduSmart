@@ -405,15 +405,288 @@ function generateMathQuestion(moduleId,level){
  return null;
 }
 
-function buildDynamicMathBank(moduleId,level,count=24){
+
+// ==========================================================
+// AZ EduSmart v7.0 — Concept Variation Engine
+// Mixes direct, contextual, reverse and error-analysis items.
+// ==========================================================
+function makeTextQ(q,answer,options,e,level,id,style){
+ let vals=[String(answer),...options.map(String)];
+ vals=[...new Set(vals)];
+ while(vals.length<4)vals.push(String(rnd(1,50)));
+ vals=shuffle(vals.slice(0,4));
+ return {q,o:vals,a:vals.indexOf(String(answer)),e,d:LEVEL_LABEL[level],
+  qid:`${id}-${style}-${Date.now()}-${Math.random()}`,style};
+}
+function conceptStyle(){
+ return pick(["direct","context","reverse","analysis"]);
+}
+function generateConceptMathQuestion(moduleId,level,forcedStyle){
+ const s=levelScale(level), style=forcedStyle||conceptStyle();
+ let a,b,c,d,n,x,y,r,ans,q,e,opts;
+
+ switch(moduleId){
+
+ case "1-matematik-1":
+  if(style==="context"){
+   a=rnd(15,80); b=rnd(5,35);
+   if(s<=2){
+    ans=a-b;
+    return makeQ(`Aina mempunyai RM${a}. Dia membelanjakan RM${b}. Berapakah baki wang Aina?`,
+     ans,[a+b,b,ans+5],`Baki = RM${a} − RM${b} = RM${ans}.`,level,moduleId);
+   }
+   c=rnd(2,7); ans=(a-b)*c;
+   return makeQ(`${c} kumpulan masing-masing menerima baki daripada RM${a} selepas RM${b} digunakan. Berapakah jumlah baki semua kumpulan?`,
+    ans,[a-b,a*c-b,ans+c],`Baki satu kumpulan ialah ${a-b}; jumlah = ${a-b} × ${c} = ${ans}.`,level,moduleId);
+  }
+  if(style==="reverse"){
+   ans=rnd(10,60); b=rnd(5,30); a=ans+b;
+   return makeQ(`Suatu nombor ditolak ${b} menghasilkan ${ans}. Apakah nombor itu?`,
+    a,[ans-b,ans+b+5,b],`Nombor asal = ${ans} + ${b} = ${a}.`,level,moduleId);
+  }
+  if(style==="analysis"){
+   a=rnd(4,12); b=rnd(2,8); c=rnd(2,7); ans=a*b-c;
+   q=`Farid mengira ${a} × ${b} − ${c} sebagai ${a*(b-c)}. Apakah jawapan yang betul?`;
+   e=`Darab perlu dibuat dahulu: ${a}×${b}=${a*b}, kemudian tolak ${c}; jawapan ${ans}.`;
+   return makeQ(q,ans,[a*(b-c),a*b+c,ans+b],e,level,moduleId);
+  }
+  return generateMathQuestion(moduleId,level);
+
+ case "1-matematik-2":
+  if(style==="context"){
+   a=rnd(3,8); b=rnd(4,10); c=lcm(a,b);
+   return makeQ(`Bas A tiba setiap ${a} minit dan Bas B setiap ${b} minit. Jika tiba bersama sekarang, selepas berapa minit mereka tiba bersama lagi?`,
+    c,[a*b,gcd(a,b),c+a],`Masa bersama semula ialah GSTK(${a},${b}) = ${c} minit.`,level,moduleId);
+  }
+  if(style==="reverse"){
+   a=rnd(2,8); b=a*rnd(3,9); ans=b/a;
+   return makeQ(`${a} ialah faktor bagi ${b}. Apakah hasil bahagi ${b} ÷ ${a}?`,
+    ans,[b-a,a,b+a],`${b} ÷ ${a} = ${ans}.`,level,moduleId);
+  }
+  if(style==="analysis"){
+   a=rnd(3,8); b=rnd(4,9); ans=lcm(a,b);
+   return makeQ(`Sara menyatakan GSTK bagi ${a} dan ${b} ialah ${a*b}. Apakah nilai GSTK yang sebenar?`,
+    ans,[a*b,gcd(a,b),ans+a],`GSTK sebenar ialah ${ans}; hasil darab hanya sama dengan GSTK apabila kedua-duanya tiada faktor sepunya.`,level,moduleId);
+  }
+  return generateMathQuestion(moduleId,level);
+
+ case "1-matematik-3":
+  if(style==="context"){
+   a=rnd(2,8); ans=a*a;
+   return makeQ(`Sebuah petak mempunyai sisi ${a} cm. Berapakah luasnya?`,
+    ans,[a*2,ans+a,ans-1],`Luas petak = sisi² = ${a}² = ${ans} cm².`,level,moduleId);
+  }
+  if(style==="reverse"){
+   a=rnd(2,12); ans=a;
+   return makeQ(`Luas sebuah petak ialah ${a*a} cm². Berapakah panjang sisinya?`,
+    ans,[a*a,a+2,a-1],`Panjang sisi = √${a*a} = ${a} cm.`,level,moduleId);
+  }
+  if(style==="analysis"){
+   a=rnd(2,7); ans=a*a;
+   return makeQ(`Amir menyatakan ${a}² = ${a*2}. Apakah nilai yang betul?`,
+    ans,[a*2,a+2,ans+a],`${a}² bermaksud ${a}×${a}, iaitu ${ans}.`,level,moduleId);
+  }
+  return generateMathQuestion(moduleId,level);
+
+ case "1-matematik-4":
+  if(style==="context"){
+   a=rnd(2,6); b=rnd(3,9); c=rnd(2,8); ans=b*c;
+   return makeQ(`${a} botol minuman berharga RM${a*b}. Berapakah harga ${c} botol pada kadar yang sama?`,
+    ans,[a*b,ans+b,ans-b],`Harga sebotol RM${b}; ${c} botol = RM${ans}.`,level,moduleId);
+  }
+  if(style==="reverse"){
+   a=rnd(2,7); b=rnd(3,9); c=a*b; ans=b;
+   return makeQ(`${a} barang berharga RM${c}. Berapakah harga seunit?`,
+    ans,[c,a,c-a],`Harga seunit = RM${c} ÷ ${a} = RM${ans}.`,level,moduleId);
+  }
+  if(style==="analysis"){
+   a=rnd(2,7); b=rnd(2,7); c=gcd(a,b); ans=`${a/c}:${b/c}`;
+   return makeTextQ(`Nisbah ${a}:${b} hendak dipermudahkan. Pilih bentuk paling ringkas.`,
+    ans,[`${a}:${b}`,`${b/c}:${a/c}`,`${a/c+1}:${b/c}`],
+    `Bahagikan kedua-dua nilai dengan FSTB ${c}.`,level,moduleId,style);
+  }
+  return generateMathQuestion(moduleId,level);
+
+ case "1-matematik-5":
+  if(style==="context"){
+   a=rnd(2,7); b=rnd(1,8); x=rnd(2,6); ans=a*x+b;
+   return makeQ(`Harga satu buku ialah RM${x}. Faiz membeli ${a} buku dan membayar caj penghantaran RM${b}. Berapakah jumlah bayaran?`,
+    ans,[a+b*x,a*x-b,ans+x],`Jumlah = ${a}(${x}) + ${b} = RM${ans}.`,level,moduleId);
+  }
+  if(style==="reverse"){
+   a=rnd(2,7); b=rnd(1,8); ans=rnd(2,8); c=a*ans+b;
+   return makeQ(`Nilai ${a}x + ${b} ialah ${c}. Apakah nilai x?`,
+    ans,[ans+1,ans-1,c-b],`${a}x=${c-b}; x=${ans}.`,level,moduleId);
+  }
+  if(style==="analysis"){
+   a=rnd(2,8); b=rnd(1,8); ans=a+b;
+   return makeTextQ(`Hana menulis ${a}x + ${b}x = ${a*b}x. Apakah bentuk yang betul?`,
+    `${ans}x`,[`${a*b}x`,`${ans}`,`${a-b}x`],
+    `Pekali sebutan sejenis perlu dijumlahkan: ${a}+${b}=${ans}.`,level,moduleId,style);
+  }
+  return generateMathQuestion(moduleId,level);
+
+ case "1-matematik-6":
+  if(style==="context"){
+   a=rnd(2,6); b=rnd(2,10); ans=rnd(3,10); c=a*ans+b;
+   return makeQ(`Tambang tetap ialah RM${b} dan caj bagi setiap kilometer ialah RM${a}. Jumlah tambang RM${c}. Berapa kilometer perjalanan?`,
+    ans,[ans+1,ans-1,c-b],`${a}x+${b}=${c}; ${a}x=${c-b}; x=${ans}.`,level,moduleId);
+  }
+  if(style==="reverse"){
+   a=rnd(2,8); ans=rnd(3,12); b=a*ans;
+   return makeQ(`Apakah nilai yang perlu didarab dengan ${a} untuk mendapat ${b}?`,
+    ans,[b-a,b+a,a],`${b} ÷ ${a} = ${ans}.`,level,moduleId);
+  }
+  if(style==="analysis"){
+   a=rnd(2,6); b=rnd(1,8); ans=rnd(3,10); c=a*ans+b;
+   return makeQ(`Untuk ${a}x + ${b} = ${c}, seorang murid mendapat x=${c-b}. Apakah nilai x yang betul?`,
+    ans,[c-b,ans+1,ans-1],`Selepas menolak ${b}, masih perlu bahagi dengan ${a}.`,level,moduleId);
+  }
+  return generateMathQuestion(moduleId,level);
+
+ case "2-matematik-1":
+  if(style==="context"){
+   a=rnd(2,8); b=rnd(2,7); n=rnd(5,10); ans=a+(n-1)*b;
+   return makeQ(`Bilangan kerusi pada baris pertama ialah ${a} dan bertambah ${b} setiap baris. Berapakah kerusi pada baris ke-${n}?`,
+    ans,[a+n*b,ans-b,ans+b],`Tₙ=${a}+(${n}-1)(${b})=${ans}.`,level,moduleId);
+  }
+  if(style==="reverse"){
+   a=rnd(2,8); b=rnd(2,7); n=rnd(4,9); ans=a+(n-1)*b;
+   return makeQ(`Jujukan ${a}, ${a+b}, ${a+2*b}, ... mempunyai nilai ${ans} pada sebutan ke berapa?`,
+    n,[n+1,n-1,b],`${ans}=${a}+(n−1)${b}; maka n=${n}.`,level,moduleId);
+  }
+  if(style==="analysis"){
+   a=rnd(2,8); b=rnd(2,7); n=rnd(5,10); ans=a+(n-1)*b;
+   return makeQ(`Untuk mencari T${n}, Ali menggunakan ${a}+${n}(${b}). Apakah jawapan yang betul?`,
+    ans,[a+n*b,ans-b,ans+b],`Formula yang betul ialah a+(n−1)d.`,level,moduleId);
+  }
+  return generateMathQuestion(moduleId,level);
+
+ case "2-matematik-2":
+  if(style==="context"||style==="direct"){
+   a=rnd(2,8); b=rnd(2,9); ans=`${a}(x+${b})`;
+   return makeTextQ(`Pilih bentuk berfaktor bagi ${a}x + ${a*b}.`,
+    ans,[`${a}x+${b}`,`${b}(x+${a})`,`x(${a+b})`],
+    `Keluarkan faktor sepunya ${a}.`,level,moduleId,style);
+  }
+  if(style==="reverse"){
+   a=rnd(2,8); b=rnd(2,9); ans=`${a}x+${a*b}`;
+   return makeTextQ(`Kembangkan ${a}(x+${b}).`,
+    ans,[`${a}x+${b}`,`${a+b}x`,`${a*b}x`],
+    `${a} didarab dengan setiap sebutan dalam kurungan.`,level,moduleId,style);
+  }
+  a=rnd(2,8); b=rnd(2,9); ans=`${a}(x+${b})`;
+  return makeTextQ(`Murid memilih ${b}(x+${a}) sebagai faktor bagi ${a}x+${a*b}. Apakah jawapan sebenar?`,
+   ans,[`${b}(x+${a})`,`${a*b}(x+1)`,`x(${a+b})`],
+   `Faktor sepunya bagi kedua-dua sebutan ialah ${a}.`,level,moduleId,style);
+
+ case "2-matematik-3":
+  if(style==="context"){
+   a=rnd(2,8); b=rnd(2,8); x=rnd(2,7); ans=a*x+b;
+   return makeQ(`Kos keseluruhan diberi oleh C=${a}n+${b}. Jika n=${x}, berapakah C?`,
+    ans,[a+b*x,a*x-b,ans+x],`C=${a}(${x})+${b}=${ans}.`,level,moduleId);
+  }
+  if(style==="reverse"){
+   a=rnd(2,7); b=rnd(1,7); x=rnd(2,8); c=a*x+b; ans=x;
+   return makeQ(`Diberi y=${a}x+${b} dan y=${c}. Cari x.`,
+    ans,[ans+1,ans-1,c-b],`${a}x=${c-b}; x=${ans}.`,level,moduleId);
+  }
+  if(style==="analysis"){
+   a=rnd(2,8); b=rnd(2,8); x=rnd(2,7); ans=a*x+b;
+   return makeQ(`Apabila x=${x}, seorang murid mengira ${a}x+${b} sebagai ${a+x+b}. Apakah nilai sebenar?`,
+    ans,[a+x+b,a*x-b,ans+x],`Darab ${a} dengan ${x} dahulu, kemudian tambah ${b}.`,level,moduleId);
+  }
+  return generateMathQuestion(moduleId,level);
+
+ case "2-matematik-4":
+  if(style==="context"){
+   r=rnd(2,12); ans=2*r;
+   return makeQ(`Sebuah meja bulat mempunyai jejari ${r} cm. Berapakah diameternya?`,
+    ans,[r,ans+r,ans-2],`Diameter=2r=${ans} cm.`,level,moduleId);
+  }
+  if(style==="reverse"){
+   r=rnd(2,12); ans=r;
+   return makeQ(`Diameter sebuah bulatan ialah ${2*r} cm. Berapakah jejari?`,
+    ans,[2*r,r+2,r-1],`Jejari = diameter ÷ 2 = ${r} cm.`,level,moduleId);
+  }
+  if(style==="analysis"){
+   r=rnd(2,10); ans=Math.round(Math.PI*r*r*100)/100;
+   return makeQ(`Murid menggunakan 2πr untuk mencari luas bulatan berjari-jari ${r} cm. Apakah luas yang betul?`,
+    ans,[Math.round(2*Math.PI*r*100)/100,r*r,ans-r],`Luas menggunakan πr², bukan 2πr.`,level,moduleId);
+  }
+  return generateMathQuestion(moduleId,level);
+
+ case "2-matematik-5":
+  if(style==="context"){
+   x=rnd(-7,7); y=rnd(-7,7); ans=y;
+   return makeQ(`Lokasi sebuah objek ditandai pada titik (${x},${y}). Apakah koordinat-y?`,
+    ans,[x,-x,-y],`Koordinat kedua ialah koordinat-y.`,level,moduleId);
+  }
+  if(style==="reverse"){
+   x=rnd(-7,7); y=rnd(-7,7);
+   return makeTextQ(`Titik manakah mempunyai koordinat-x ${x} dan koordinat-y ${y}?`,
+    `(${x},${y})`,[`(${y},${x})`,`(${-x},${y})`,`(${x},${-y})`],
+    `Koordinat ditulis dalam susunan (x,y).`,level,moduleId,style);
+  }
+  if(style==="analysis"){
+   x=rnd(-7,7); y=rnd(-7,7);
+   return makeTextQ(`Ali membaca titik (${x},${y}) sebagai y=${x} dan x=${y}. Apakah bacaan yang betul?`,
+    `x=${x}, y=${y}`,[`x=${y}, y=${x}`,`x=${-x}, y=${y}`,`x=${x}, y=${-y}`],
+    `Nilai pertama ialah x dan nilai kedua ialah y.`,level,moduleId,style);
+  }
+  return generateMathQuestion(moduleId,level);
+
+ case "2-matematik-6":
+  if(style==="context"){
+   b=rnd(2,6); ans=rnd(20,80); a=ans*b;
+   return makeQ(`Sebuah bas bergerak sejauh ${a} km dalam ${b} jam. Berapakah laju purata?`,
+    ans,[a*b,a-b,ans+b],`Laju=jarak÷masa=${a}÷${b}=${ans} km/j.`,level,moduleId);
+  }
+  if(style==="reverse"){
+   ans=rnd(20,80); b=rnd(2,6); a=ans*b;
+   return makeQ(`Sebuah kenderaan bergerak pada ${ans} km/j selama ${b} jam. Berapakah jaraknya?`,
+    a,[ans/b,ans+b,a-b],`Jarak=laju×masa=${ans}×${b}=${a} km.`,level,moduleId);
+  }
+  if(style==="analysis"){
+   b=rnd(2,6); ans=rnd(20,70); a=ans*b;
+   return makeQ(`Murid mengira laju bagi ${a} km dalam ${b} jam dengan mendarab ${a}×${b}. Apakah laju yang betul?`,
+    ans,[a*b,a-b,ans+b],`Laju perlu dibahagi: ${a}÷${b}=${ans} km/j.`,level,moduleId);
+  }
+  return generateMathQuestion(moduleId,level);
+ }
+ return generateMathQuestion(moduleId,level);
+}
+
+function buildConceptMathBank(moduleId,level,count=32){
+ const styles=["direct","context","reverse","analysis"];
  const bank=[];
- let attempts=0;
- while(bank.length<count && attempts<count*6){
-  attempts++;
-  const q=generateMathQuestion(moduleId,level);
-  if(q && !bank.some(x=>x.q===q.q && x.o.join("|")===q.o.join("|")))bank.push(q);
+ let rounds=0;
+ while(bank.length<count && rounds<count*8){
+  const style=styles[rounds%styles.length];
+  const q=generateConceptMathQuestion(moduleId,level,style);
+  if(q && !bank.some(x=>x.q===q.q && x.o.join("|")===q.o.join("|"))){
+   q.style=style;
+   bank.push(q);
+  }
+  rounds++;
  }
  return bank;
+}
+
+function selectBalancedQuestions(bank,total=10){
+ const styles=["direct","context","reverse","analysis"];
+ const chosen=[];
+ styles.forEach(style=>{
+  const pool=shuffle(bank.filter(q=>q.style===style));
+  if(pool.length)chosen.push(pool[0]);
+ });
+ const remaining=shuffle(bank.filter(q=>!chosen.includes(q)));
+ while(chosen.length<Math.min(total,bank.length) && remaining.length)chosen.push(remaining.pop());
+ return shuffle(chosen);
+}
+
+function buildDynamicMathBank(moduleId,level,count=32){
+ return buildConceptMathBank(moduleId,level,count);
 }
 
 function buildQuestionBank(m,internalLevel){
@@ -464,7 +737,9 @@ function start(){
  let fresh=bank.filter(q=>!recent.includes(q.qid));
  if(fresh.length<Math.min(10,bank.length))fresh=bank;
 
- const selected=shuffle(fresh).slice(0,Math.min(10,fresh.length));
+ const selected=m.id.includes("-matematik-")
+  ? selectBalancedQuestions(fresh,10)
+  : shuffle(fresh).slice(0,Math.min(10,fresh.length));
  saveRecentQuestionIds(m.id,internalLevel,[...recent,...selected.map(q=>q.qid)]);
 
  S.quiz=prepare(selected);
@@ -477,7 +752,15 @@ function start(){
 }
 function daily(){let qs=all().flatMap(m=>m.quiz.map(q=>({...q,module:m.title}))).filter(q=>q.d!=="Standard");S.module=null;S.mode="Cabaran";S.quiz=prepare(shuffle(qs).slice(0,10).map(q=>({...q,d:LEVEL_LABEL[q.d]||q.d})));S.i=0;S.correct=0;S.answered=false;S.view="quiz";updateStreak();render()}
 function quiz(){let q=S.quiz[S.i];if(!q)return result();let secs=S.mode==="Mudah"?0:S.mode==="Sederhana"?45:S.mode==="Sukar"?60:75;app.innerHTML=`<div class="quiztop"><button class="back" onclick="nav('home')">✕ Keluar</button><span class="pill">${q.d||S.mode}</span><b class="timer" id="timer">${secs?secs+"s":"∞"}</b></div><div class="panel"><small style="color:var(--muted)">Soalan ${S.i+1}/${S.quiz.length}${q.module?" • "+q.module:""}</small><h2 class="question">${q.q}</h2>${q.o.map((x,i)=>`<button class="option" onclick="answer(${i})"><b>${String.fromCharCode(65+i)}.</b> ${x}</button>`).join("")}<div id="feedback"></div><div id="next"></div></div>`;clearInterval(S.timer);if(secs){let t=secs;S.timer=setInterval(()=>{t--;let e=$("#timer");if(e)e.textContent=t+"s";if(t<=5&&t>0)AudioEngine.tick();if(t<=0){clearInterval(S.timer);answer(-1)}},1000)}}
-function answer(i){if(S.answered)return;AudioEngine.start();S.answered=true;clearInterval(S.timer);let q=S.quiz[S.i];document.querySelectorAll(".option").forEach((b,n)=>{b.disabled=true;if(n===q.a)b.classList.add("correct");else if(n===i)b.classList.add("wrong")});if(i===q.a){S.correct++;AudioEngine.correct();addCoins(10)}else{AudioEngine.wrong()}$("#feedback").innerHTML=`<div class="feedback"><b>${i===q.a?"✅ Tepat!":"❌ Belum tepat."}</b><br>${q.e}</div>`;$("#next").innerHTML=`<button class="primary" onclick="next()">Seterusnya</button>`}
+function answer(i){if(S.answered)return;AudioEngine.start();S.answered=true;clearInterval(S.timer);let q=S.quiz[S.i];document.querySelectorAll(".option").forEach((b,n)=>{b.disabled=true;if(n===q.a)b.classList.add("correct");else if(n===i)b.classList.add("wrong")});if(i===q.a){S.correct++;AudioEngine.correct();addCoins(10)}else{AudioEngine.wrong()}
+if(S.module&&q.style){
+ const key=k("conceptStats",S.module);
+ let stats={};try{stats=JSON.parse(localStorage.getItem(key)||"{}")}catch(e){}
+ stats[q.style]=stats[q.style]||{correct:0,total:0};
+ stats[q.style].total++;
+ if(i===q.a)stats[q.style].correct++;
+ localStorage.setItem(key,JSON.stringify(stats));
+}$("#feedback").innerHTML=`<div class="feedback"><b>${i===q.a?"✅ Tepat!":"❌ Belum tepat."}</b><br>${q.e}</div>`;$("#next").innerHTML=`<button class="primary" onclick="next()">Seterusnya</button>`}
 function next(){AudioEngine.next();S.i++;S.answered=false;render()}
 function result(){let pct=Math.round(S.correct/S.quiz.length*100),gain=Math.round(S.correct*15*(S.mode==="Pakar"?1.5:S.mode==="Sukar"?1.25:1));AudioEngine.finish(pct);addXP(gain);if(pct>=60)addCoins(100);if(S.module){let b=Math.max(best(S.module),pct);localStorage.setItem(k("best",S.module),b);if(pct>=60)localStorage.setItem(k("done",S.module),"1")}app.innerHTML=`<div class="panel"><div class="score">${pct}%</div><h2 style="text-align:center">${pct>=85?"Legend! 🔥":pct>=65?"Mantap! ⚡":"Belum kalah—cuba lagi 💪"}</h2><p style="text-align:center;color:var(--muted)">${S.correct}/${S.quiz.length} betul • +${gain} XP</p><div class="actions" style="justify-content:center"><button class="secondary" onclick="nav('home')">Utama</button>${S.module?`<button class="primary" onclick="chooseMode()">Cuba tahap lain</button>`:`<button class="primary" onclick="daily()">Cabaran baharu</button>`}</div></div>`}
 function progressView(){

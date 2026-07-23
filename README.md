@@ -1,4 +1,4 @@
-# AZ EduSmart v6.5
+# AZ EduSmart v7.0
 
 Aplikasi pembelajaran interaktif untuk pelajar Tingkatan 1 dan Tingkatan 2.
 
@@ -66,3 +66,23 @@ Modul Matematik yang disokong:
   Nisbah/Kadar/Kadaran, Ungkapan Algebra dan Persamaan Linear.
 - Tingkatan 2: Pola dan Jujukan, Pemfaktoran, Rumus Algebra, Bulatan,
   Koordinat dan Graf, serta Laju dan Pecutan.
+
+
+## v7.0 — Concept Variation Engine
+
+Matematik kini menggunakan empat keluarga soalan:
+
+1. Pengiraan terus.
+2. Situasi kehidupan sebenar.
+3. Soalan songsang untuk mencari nilai asal.
+4. Analisis kesilapan dan salah faham lazim.
+
+Peningkatan utama:
+
+- Setiap sesi Matematik cuba memasukkan semua jenis soalan.
+- Enjin menjana soalan, jawapan betul dan pilihan pengganggu yang berlainan.
+- Pilihan pengganggu dibina daripada kesilapan lazim seperti salah tertib operasi,
+  terlupa membahagi, tertukar koordinat dan menggunakan formula yang salah.
+- Prestasi murid mengikut bentuk soalan disimpan dalam localStorage sebagai asas
+  kepada ciri adaptif pada versi seterusnya.
+- Enjin lama kekal sebagai fallback sekiranya sesuatu template tidak tersedia.
