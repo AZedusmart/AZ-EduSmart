@@ -1,4 +1,4 @@
-# AZ EduSmart v7.1
+# AZ EduSmart v8.0
 
 Aplikasi pembelajaran interaktif untuk pelajar Tingkatan 1 dan Tingkatan 2.
 
@@ -100,3 +100,15 @@ Peningkatan utama:
 
 Nota: kualiti suara sebenar masih bergantung pada suara Bahasa Melayu yang dipasang
 pada sistem operasi atau disediakan oleh pelayar pengguna.
+
+
+## v8.0 — Student Intelligence System
+
+- Merekod ketepatan setiap jawapan mengikut modul, tahap dan bentuk soalan.
+- Mengira skor penguasaan berdasarkan ketepatan, keputusan terkini dan konsistensi.
+- Menentukan status: Belum Dinilai, Perlu Bimbingan, Sedang Berkembang, Baik atau Dikuasai.
+- Mengenal pasti bentuk soalan paling lemah.
+- Memaparkan tiga cadangan ulang kaji utama secara automatik.
+- Menunjukkan analisis selepas kuiz: penguasaan, ketepatan, percubaan dan perubahan markah.
+- Menyimpan sejarah 12 keputusan terakhir untuk setiap modul.
+- Semua data kekal disimpan secara setempat dalam pelayar pengguna.

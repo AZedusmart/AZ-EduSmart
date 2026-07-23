@@ -356,3 +356,32 @@ input,select,textarea{min-height:48px;font-size:16px}
   vertical-align:middle;box-shadow:0 4px 14px #7c5cff44
 }
 .splash-version{margin-top:9px;font-size:.72rem;color:#c8d7f2;letter-spacing:.12em}
+
+
+/* AZ EduSmart v8.0 — Student Intelligence System */
+.intel-result{margin:22px 0;padding:18px;border:1px solid var(--line);border-radius:20px;background:linear-gradient(145deg,rgba(79,70,229,.08),rgba(14,165,233,.05))}
+.intel-head{display:flex;justify-content:space-between;align-items:center;gap:16px}
+.intel-head small{color:var(--muted)}
+.intel-head h3{margin:4px 0 0}
+.mastery-ring{width:68px;height:68px;border-radius:50%;display:grid;place-items:center;font-weight:900;border:6px solid rgba(99,102,241,.25);background:var(--card)}
+.mastery-ring.mastered{border-color:#22c55e}.mastery-ring.good{border-color:#3b82f6}.mastery-ring.developing{border-color:#f59e0b}.mastery-ring.weak{border-color:#ef4444}
+.mastery-track{height:9px;background:var(--soft);border-radius:999px;overflow:hidden;margin:14px 0}
+.mastery-track i{display:block;height:100%;background:linear-gradient(90deg,#6366f1,#06b6d4);border-radius:999px}
+.intel-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+.intel-grid div{padding:11px;border-radius:14px;background:var(--card);text-align:center}
+.intel-grid span{display:block;font-size:.76rem;color:var(--muted);margin-bottom:4px}
+.smart-advice{margin:14px 0 0;padding:12px;border-radius:14px;background:rgba(99,102,241,.08);line-height:1.5}
+.smart-coach{margin:18px 0 28px;padding:20px;border-radius:24px;background:linear-gradient(135deg,rgba(79,70,229,.12),rgba(6,182,212,.08));border:1px solid var(--line)}
+.coach-title{display:flex;align-items:center;gap:13px;margin-bottom:16px}
+.coach-title h2,.coach-title p{margin:0}.coach-title p{color:var(--muted);margin-top:3px}
+.coach-icon{font-size:2.2rem}
+.recommend-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
+.recommend-card{padding:16px;border-radius:18px;background:var(--card);border:1px solid var(--line)}
+.recommend-card h3{margin:8px 0;min-height:46px}
+.recommend-card p{font-size:.88rem;color:var(--muted);min-height:42px}
+.priority{display:inline-block;font-size:.72rem;font-weight:800;padding:5px 9px;border-radius:999px;background:rgba(239,68,68,.1);color:#dc2626}
+.recommend-score{display:flex;align-items:baseline;gap:6px}.recommend-score b{font-size:1.5rem}.recommend-score span{font-size:.78rem;color:var(--muted)}
+.record-insight{font-size:.78rem;color:var(--muted);min-height:38px;margin:8px 0}
+.record-card.mastered{box-shadow:inset 0 0 0 1px rgba(34,197,94,.3)}
+.record-card.weak{box-shadow:inset 0 0 0 1px rgba(239,68,68,.25)}
+@media(max-width:780px){.recommend-grid{grid-template-columns:1fr}.intel-grid{grid-template-columns:1fr}.recommend-card h3,.recommend-card p{min-height:0}}

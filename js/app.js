@@ -880,6 +880,136 @@ function start(){
  render()
 }
 function daily(){let qs=all().flatMap(m=>m.quiz.map(q=>({...q,module:m.title}))).filter(q=>q.d!=="Standard");S.module=null;S.mode="Cabaran";S.quiz=prepare(shuffle(qs).slice(0,10).map(q=>({...q,d:LEVEL_LABEL[q.d]||q.d})));S.i=0;S.correct=0;S.answered=false;S.view="quiz";updateStreak();render()}
+
+// ==========================================================
+// AZ EduSmart v8.0 — Student Intelligence System
+// Tracks attempts, mastery, weaknesses and revision priorities.
+// ==========================================================
+const STYLE_NAMES={
+ direct:"Pengiraan terus",
+ context:"Soalan situasi",
+ reverse:"Soalan songsang",
+ analysis:"Analisis kesilapan",
+ general:"Pemahaman umum"
+};
+
+function readJSON(key,fallback={}){
+ try{return JSON.parse(localStorage.getItem(key)||JSON.stringify(fallback))}
+ catch(e){return fallback}
+}
+function moduleIntelKey(moduleId){return k("moduleIntel",moduleId)}
+function getModuleIntel(moduleId){
+ return readJSON(moduleIntelKey(moduleId),{
+  attempts:0,total:0,correct:0,lastScore:0,bestScore:0,
+  levels:{},styles:{},history:[],lastPlayed:null
+ });
+}
+function saveModuleIntel(moduleId,data){
+ localStorage.setItem(moduleIntelKey(moduleId),JSON.stringify(data));
+}
+function recordQuestionIntel(moduleId,q,isCorrect,mode){
+ if(!moduleId)return;
+ const data=getModuleIntel(moduleId);
+ const style=q.style||"general";
+ data.total++;
+ if(isCorrect)data.correct++;
+ data.styles[style]=data.styles[style]||{total:0,correct:0};
+ data.styles[style].total++;
+ if(isCorrect)data.styles[style].correct++;
+ data.levels[mode]=data.levels[mode]||{total:0,correct:0};
+ data.levels[mode].total++;
+ if(isCorrect)data.levels[mode].correct++;
+ saveModuleIntel(moduleId,data);
+}
+function finishModuleIntel(moduleId,pct,mode){
+ if(!moduleId)return;
+ const data=getModuleIntel(moduleId);
+ data.attempts++;
+ data.lastScore=pct;
+ data.bestScore=Math.max(data.bestScore||0,pct);
+ data.lastPlayed=new Date().toISOString();
+ data.history=(data.history||[]).concat([{date:data.lastPlayed,score:pct,mode}]).slice(-12);
+ saveModuleIntel(moduleId,data);
+}
+function accuracy(stat){
+ return stat&&stat.total?Math.round(stat.correct/stat.total*100):0;
+}
+function masteryScore(moduleId){
+ const data=getModuleIntel(moduleId);
+ if(!data.attempts)return best(moduleId)||0;
+ const overall=accuracy(data);
+ const recent=(data.history||[]).slice(-3);
+ const recentAvg=recent.length?recent.reduce((s,x)=>s+x.score,0)/recent.length:data.lastScore;
+ const consistency=Math.min(100,data.attempts*12);
+ return Math.round(overall*.4+recentAvg*.4+consistency*.2);
+}
+function masteryLabel(score){
+ if(score>=85)return ["Dikuasai","mastered"];
+ if(score>=65)return ["Baik","good"];
+ if(score>=45)return ["Sedang berkembang","developing"];
+ if(score>0)return ["Perlu bimbingan","weak"];
+ return ["Belum dinilai","new"];
+}
+function weakestStyle(moduleId){
+ const data=getModuleIntel(moduleId);
+ const rows=Object.entries(data.styles||{})
+  .filter(([,v])=>v.total>=1)
+  .map(([key,v])=>({key,pct:accuracy(v),total:v.total}))
+  .sort((a,b)=>a.pct-b.pct||b.total-a.total);
+ return rows[0]||null;
+}
+function improvement(moduleId){
+ const h=getModuleIntel(moduleId).history||[];
+ if(h.length<2)return 0;
+ return h[h.length-1].score-h[h.length-2].score;
+}
+function revisionPriority(moduleId){
+ const data=getModuleIntel(moduleId);
+ if(!data.attempts)return 35;
+ const master=masteryScore(moduleId);
+ const weak=weakestStyle(moduleId);
+ const weakness=weak?100-weak.pct:100-accuracy(data);
+ const age=data.lastPlayed?Math.min(30,Math.floor((Date.now()-new Date(data.lastPlayed))/86400000)*3):20;
+ return Math.round((100-master)*.55+weakness*.3+age*.15);
+}
+function getSmartRecommendations(limit=3){
+ return all().map(m=>{
+  const master=masteryScore(m.id);
+  const weak=weakestStyle(m.id);
+  const intel=getModuleIntel(m.id);
+  return {m,master,weak,intel,priority:revisionPriority(m.id)};
+ }).sort((a,b)=>b.priority-a.priority).slice(0,limit);
+}
+function recommendationReason(item){
+ if(!item.intel.attempts)return "Modul ini belum pernah dicuba.";
+ if(item.weak)return `${STYLE_NAMES[item.weak.key]||item.weak.key} masih pada ${item.weak.pct}%.`;
+ if(item.master<60)return `Tahap penguasaan masih ${item.master}%.`;
+ return "Sesuai untuk ulang kaji pengukuhan.";
+}
+function smartResultAnalysis(moduleId){
+ if(!moduleId)return "";
+ const data=getModuleIntel(moduleId);
+ const master=masteryScore(moduleId);
+ const [label,cls]=masteryLabel(master);
+ const weak=weakestStyle(moduleId);
+ const imp=improvement(moduleId);
+ let advice=master>=85
+  ?"Tahniah! Cuba tahap lebih tinggi untuk mengekalkan penguasaan."
+  :master>=65
+   ?"Prestasi baik. Fokus pada bahagian yang paling lemah."
+   :"Ulang nota dan cuba latihan khusus sekali lagi.";
+ if(weak)advice+=` Keutamaan: ${STYLE_NAMES[weak.key]||weak.key}.`;
+ return `<div class="intel-result">
+  <div class="intel-head"><div><small>Tahap penguasaan</small><h3>${label}</h3></div><div class="mastery-ring ${cls}">${master}%</div></div>
+  <div class="mastery-track"><i style="width:${master}%"></i></div>
+  <div class="intel-grid">
+   <div><span>Jumlah percubaan</span><b>${data.attempts}</b></div>
+   <div><span>Ketepatan keseluruhan</span><b>${accuracy(data)}%</b></div>
+   <div><span>Perubahan terkini</span><b>${imp>0?"+":""}${imp}%</b></div>
+  </div>
+  <p class="smart-advice">🧠 ${advice}</p>
+ </div>`;
+}
 function quiz(){let q=S.quiz[S.i];if(!q)return result();let secs=S.mode==="Mudah"?0:S.mode==="Sederhana"?45:S.mode==="Sukar"?60:75;app.innerHTML=`<div class="quiztop"><button class="back" onclick="nav('home')">✕ Keluar</button><span class="pill">${q.d||S.mode}</span><b class="timer" id="timer">${secs?secs+"s":"∞"}</b></div><div class="panel"><small style="color:var(--muted)">Soalan ${S.i+1}/${S.quiz.length}${q.module?" • "+q.module:""}</small><h2 class="question">${q.q}</h2>${q.o.map((x,i)=>`<button class="option" onclick="answer(${i})"><b>${String.fromCharCode(65+i)}.</b> ${x}</button>`).join("")}<div id="feedback"></div><div id="next"></div></div>`;clearInterval(S.timer);if(secs){let t=secs;S.timer=setInterval(()=>{t--;let e=$("#timer");if(e)e.textContent=t+"s";if(t<=5&&t>0)AudioEngine.tick();if(t<=0){clearInterval(S.timer);answer(-1)}},1000)}}
 function answer(i){if(S.answered)return;AudioEngine.start();S.answered=true;clearInterval(S.timer);let q=S.quiz[S.i];document.querySelectorAll(".option").forEach((b,n)=>{b.disabled=true;if(n===q.a)b.classList.add("correct");else if(n===i)b.classList.add("wrong")});if(i===q.a){S.correct++;AudioEngine.correct();addCoins(10)}else{AudioEngine.wrong()}
 if(S.module&&q.style){
@@ -889,11 +1019,37 @@ if(S.module&&q.style){
  stats[q.style].total++;
  if(i===q.a)stats[q.style].correct++;
  localStorage.setItem(key,JSON.stringify(stats));
-}$("#feedback").innerHTML=`<div class="feedback"><b>${i===q.a?"✅ Tepat!":"❌ Belum tepat."}</b><br>${q.e}</div>`;$("#next").innerHTML=`<button class="primary" onclick="next()">Seterusnya</button>`}
+}
+recordQuestionIntel(S.module,q,i===q.a,S.mode);$("#feedback").innerHTML=`<div class="feedback"><b>${i===q.a?"✅ Tepat!":"❌ Belum tepat."}</b><br>${q.e}</div>`;$("#next").innerHTML=`<button class="primary" onclick="next()">Seterusnya</button>`}
 function next(){AudioEngine.next();S.i++;S.answered=false;render()}
-function result(){let pct=Math.round(S.correct/S.quiz.length*100),gain=Math.round(S.correct*15*(S.mode==="Pakar"?1.5:S.mode==="Sukar"?1.25:1));AudioEngine.finish(pct);addXP(gain);if(pct>=60)addCoins(100);if(S.module){let b=Math.max(best(S.module),pct);localStorage.setItem(k("best",S.module),b);if(pct>=60)localStorage.setItem(k("done",S.module),"1")}app.innerHTML=`<div class="panel"><div class="score">${pct}%</div><h2 style="text-align:center">${pct>=85?"Legend! 🔥":pct>=65?"Mantap! ⚡":"Belum kalah—cuba lagi 💪"}</h2><p style="text-align:center;color:var(--muted)">${S.correct}/${S.quiz.length} betul • +${gain} XP</p><div class="actions" style="justify-content:center"><button class="secondary" onclick="nav('home')">Utama</button>${S.module?`<button class="primary" onclick="chooseMode()">Cuba tahap lain</button>`:`<button class="primary" onclick="daily()">Cabaran baharu</button>`}</div></div>`}
+function result(){
+ let pct=Math.round(S.correct/S.quiz.length*100),
+ gain=Math.round(S.correct*15*(S.mode==="Pakar"?1.5:S.mode==="Sukar"?1.25:1));
+ AudioEngine.finish(pct);
+ addXP(gain);
+ if(pct>=60)addCoins(100);
+ if(S.module){
+  let b=Math.max(best(S.module),pct);
+  localStorage.setItem(k("best",S.module),b);
+  if(pct>=60)localStorage.setItem(k("done",S.module),"1");
+  finishModuleIntel(S.module,pct,S.mode);
+ }
+ app.innerHTML=`<div class="panel result-panel">
+  <div class="score">${pct}%</div>
+  <h2 style="text-align:center">${pct>=85?"Legend! 🔥":pct>=65?"Mantap! ⚡":"Belum kalah—cuba lagi 💪"}</h2>
+  <p style="text-align:center;color:var(--muted)">${S.correct}/${S.quiz.length} betul • +${gain} XP</p>
+  ${smartResultAnalysis(S.module)}
+  <div class="actions" style="justify-content:center">
+   <button class="secondary" onclick="nav('home')">Utama</button>
+   ${S.module?`<button class="secondary" onclick="nav('progress')">Lihat analitik</button><button class="primary" onclick="chooseMode()">Latihan semula</button>`:`<button class="primary" onclick="daily()">Cabaran baharu</button>`}
+  </div>
+ </div>`;
+}
 function progressView(){
 let ms=all(),c=progress(),scores=ms.map(m=>best(m.id)).filter(Boolean),avg=scores.length?Math.round(scores.reduce((a,b)=>a+b,0)/scores.length):0;
+let recommendations=getSmartRecommendations(3);
+let mastered=ms.filter(m=>masteryScore(m.id)>=85).length;
+let overallMastery=ms.length?Math.round(ms.reduce((s,m)=>s+masteryScore(m.id),0)/ms.length):0;
 let badges=[["🌱","Langkah Pertama",c.d>=1],["🔥","Streak 3 Hari",streak()>=3],["🧠","10 Modul",c.d>=10],["🏆","Purata 80%",avg>=80]];
 let subjectBlocks=Object.entries(DATA[P().level]).map(([sk,s])=>{
  let mods=s.modules, completed=mods.filter(m=>done(m.id)).length;
@@ -907,16 +1063,28 @@ let subjectBlocks=Object.entries(DATA[P().level]).map(([sk,s])=>{
    <div class="subject-score"><b>${subAvg}%</b><span>Purata subjek</span></div>
  </div>
  <div class="record-grid">${mods.map((m,i)=>{
-   let score=best(m.id), status=done(m.id)?"Selesai":score>0?"Sedang belajar":"Belum mula", cls=done(m.id)?"done":score>0?"started":"";
+   let score=best(m.id), mastery=masteryScore(m.id), label=masteryLabel(mastery), weak=weakestStyle(m.id);
+   let status=label[0], cls=label[1];
    return `<div class="record-card ${cls}">
     <div class="record-top"><h4>${i+1}. ${m.title}</h4><span class="record-status">${status}</span></div>
-    <div class="mini-bar"><i style="width:${score}%"></i></div>
-    <div class="record-meta"><span>Markah terbaik</span><b>${score}%</b></div>
-    <button class="secondary record-btn" onclick="openDirect('${m.id}')">Buka modul</button>
+    <div class="mini-bar"><i style="width:${mastery}%"></i></div>
+    <div class="record-meta"><span>Penguasaan</span><b>${mastery}%</b></div>
+    <div class="record-insight">${weak?`⚠️ Fokus: ${STYLE_NAMES[weak.key]||weak.key} (${weak.pct}%)`:`${score?`Markah terbaik ${score}%`:"Belum mempunyai data latihan"}`}</div>
+    <button class="secondary record-btn" onclick="openDirect('${m.id}')">${mastery<65?"Latihan disyorkan":"Buka modul"}</button>
    </div>`}).join("")}</div>
  </section>`}).join("");
 app.innerHTML=`<div class="sectionhead"><h2>Prestasi ${P().name}</h2><small>Tingkatan ${P().level}${P().school?` • ${P().school}`:""}</small></div>
-<div class="stats"><div class="stat"><b>${xp()}</b><span>XP</span></div><div class="stat"><b>${streak()}</b><span>Streak</span></div><div class="stat"><b>${c.p}%</b><span>Selesai</span></div><div class="stat"><b>${avg}%</b><span>Purata</span></div></div>
+<div class="stats"><div class="stat"><b>${xp()}</b><span>XP</span></div><div class="stat"><b>${streak()}</b><span>Streak</span></div><div class="stat"><b>${overallMastery}%</b><span>Penguasaan</span></div><div class="stat"><b>${mastered}</b><span>Modul dikuasai</span></div></div>
+<div class="smart-coach">
+ <div class="coach-title"><div class="coach-icon">🧠</div><div><h2>Cadangan Guru Pintar</h2><p>Disusun berdasarkan kelemahan dan rekod latihan.</p></div></div>
+ <div class="recommend-grid">${recommendations.map((x,i)=>`<div class="recommend-card">
+  <span class="priority">Keutamaan ${i+1}</span>
+  <h3>${x.m.title}</h3>
+  <div class="recommend-score"><b>${x.master}%</b><span>penguasaan</span></div>
+  <p>${recommendationReason(x)}</p>
+  <button class="primary" onclick="openDirect('${x.m.id}')">${x.intel.attempts?"Mulakan ulang kaji":"Cuba modul"}</button>
+ </div>`).join("")}</div>
+</div>
 <div class="sectionhead"><h2>Lencana</h2></div><div class="badges">${badges.map(b=>`<div class="badge ${b[2]?'':'locked'}"><div style="font-size:2rem">${b[0]}</div><strong>${b[1]}</strong></div>`).join("")}</div>
 <div class="sectionhead"><h2>Rekod Modul Mengikut Subjek</h2><small>Infografik kemajuan</small></div>${subjectBlocks}`}
 function openDirect(id){let x=find(id);S.subject=x.sk;openModule(id)}
