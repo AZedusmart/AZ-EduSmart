@@ -1,0 +1,15 @@
+{
+  "name": "AZ EduSmart",
+  "short_name": "AZ EduSmart",
+  "description": "Aplikasi pembelajaran interaktif Matematik, Sains dan Sejarah untuk pelajar Malaysia.",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "any",
+  "background_color": "#07111f",
+  "theme_color": "#7c5cff",
+  "lang": "ms",
+  "categories": [
+    "education"
+  ]
+}

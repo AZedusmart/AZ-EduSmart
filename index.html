@@ -1,0 +1,566 @@
+<!doctype html><html lang="ms"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover,maximum-scale=1"><meta name="theme-color" content="#07111f"><meta name="description" content="AZ EduSmart — pembelajaran interaktif untuk remaja Tingkatan 1 dan 2."><title>AZ EduSmart v4.0 -  v3</title><style>
+:root{--bg:#07111f;--panel:#0e1c2f;--panel2:#142842;--text:#f7f9fc;--muted:#a9b8cd;--accent:#70e1f5;--accent2:#ffd166;--good:#4ade80;--bad:#fb7185;--line:#29415e;--shadow:0 18px 45px #0008;font-size:16px}
+*{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;background:radial-gradient(circle at 20% 0,#183b60 0,transparent 34%),linear-gradient(160deg,#07111f,#0b1627 70%);color:var(--text);font-family:Inter,system-ui,-apple-system,Segoe UI,Arial,sans-serif;min-height:100vh;padding-bottom:88px}
+button,input,select{font:inherit}button{cursor:pointer}header{height:70px;display:flex;align-items:center;justify-content:space-between;padding:10px 18px;background:#07111fd9;backdrop-filter:blur(16px);position:sticky;top:0;z-index:30;border-bottom:1px solid #ffffff12}
+.brand{border:0;background:none;color:var(--text);display:flex;align-items:center;gap:10px}.brandmark{width:42px;height:42px;border-radius:15px;background:linear-gradient(135deg,var(--accent),#7c5cff);display:grid;place-items:center;color:#06111e;font-weight:1000;box-shadow:0 0 28px #70e1f555}.brand b{font-size:1.1rem}.brand small{display:block;color:var(--muted);font-size:.68rem;text-align:left}
+.header-actions{display:flex;gap:8px}.iconbtn{width:42px;height:42px;border:1px solid #ffffff18;border-radius:14px;background:#ffffff0b;color:var(--text)}
+main{max-width:1100px;margin:auto;padding:20px 16px}.hero{background:linear-gradient(135deg,#152c49,#1b3b60 60%,#234a72);border:1px solid #ffffff18;border-radius:28px;padding:26px;box-shadow:var(--shadow);position:relative;overflow:hidden}.hero:after{content:"";position:absolute;width:280px;height:280px;border-radius:50%;background:radial-gradient(circle,#70e1f533,transparent 65%);right:-70px;top:-100px}.hero h1{font-size:clamp(1.7rem,5vw,2.5rem);margin:0 0 8px;max-width:720px}.hero p{color:#d2dceb;max-width:720px;line-height:1.6}.chips{display:flex;gap:8px;flex-wrap:wrap;margin-top:16px}.chip{border:1px solid #ffffff22;background:#ffffff0c;color:var(--text);padding:9px 13px;border-radius:999px}.chip.active{background:var(--accent);color:#07111f;font-weight:900}
+.xpbar{margin-top:20px;display:grid;grid-template-columns:auto 1fr auto;gap:10px;align-items:center}.bar{height:12px;background:#ffffff18;border-radius:999px;overflow:hidden}.bar i{display:block;height:100%;background:linear-gradient(90deg,var(--accent),#7c5cff);border-radius:999px}
+.sectionhead{display:flex;align-items:end;justify-content:space-between;margin:25px 2px 12px}.sectionhead h2{margin:0;font-size:1.18rem}.sectionhead small{color:var(--muted)}
+.grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}.card,.panel{background:linear-gradient(145deg,var(--panel),var(--panel2));border:1px solid #ffffff14;border-radius:22px;box-shadow:var(--shadow);color:var(--text)}.card{padding:20px;text-align:left;transition:.2s}.card:hover{transform:translateY(-4px);border-color:#70e1f555}.emoji{font-size:2.15rem}.card h3{margin:12px 0 6px}.card p{margin:0;color:var(--muted);line-height:1.45}.pill{display:inline-flex;gap:5px;align-items:center;background:#ffffff0c;border:1px solid #ffffff12;border-radius:999px;padding:5px 9px;font-size:.74rem;margin-top:11px;color:#dce7f5}
+.panel{padding:21px}.toolbar{display:flex;align-items:center;justify-content:space-between;margin-bottom:14px}.back{border:0;background:none;color:var(--accent);font-weight:900}.modulelist{display:grid;gap:11px}.module{display:flex;align-items:center;justify-content:space-between;gap:14px;padding:15px;border:1px solid #ffffff12;background:#ffffff07;border-radius:17px}.module h3{margin:0 0 5px;font-size:1rem}.module p{margin:0;color:var(--muted);font-size:.84rem}.primary,.secondary,.danger{border:0;border-radius:13px;padding:11px 15px;font-weight:900}.primary{background:linear-gradient(135deg,var(--accent),#7c5cff);color:#06111e}.secondary{background:#ffffff11;color:var(--text);border:1px solid #ffffff18}.danger{background:var(--bad);color:#fff}
+.note{border-left:5px solid var(--accent);background:#ffffff08;padding:14px;border-radius:13px;margin:11px 0;line-height:1.6}.actions{display:flex;gap:9px;flex-wrap:wrap;margin-top:17px}
+.modegrid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}.mode{padding:16px;border:1px solid #ffffff16;border-radius:18px;background:#ffffff08;color:var(--text);text-align:left}.mode.active{border-color:var(--accent);box-shadow:0 0 0 2px #70e1f522}.mode b{display:block;margin-bottom:4px}.mode small{color:var(--muted)}
+.quiztop{display:flex;justify-content:space-between;gap:10px;align-items:center}.timer{font-weight:1000;color:var(--accent2)}.question{font-size:1.3rem;line-height:1.5}.option{width:100%;text-align:left;border:1px solid #ffffff18;background:#ffffff08;color:var(--text);padding:15px;border-radius:15px;margin:8px 0}.option:hover{border-color:#70e1f566}.option.correct{border-color:var(--good);background:#4ade8018}.option.wrong{border-color:var(--bad);background:#fb718518}.feedback{margin:15px 0;padding:14px;border-radius:14px;background:#ffffff08;line-height:1.5}.score{font-size:4rem;font-weight:1000;text-align:center;background:linear-gradient(135deg,var(--accent),var(--accent2));-webkit-background-clip:text;color:transparent}
+.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:11px}.stat{padding:17px;text-align:center;background:#ffffff08;border:1px solid #ffffff12;border-radius:17px}.stat b{display:block;font-size:1.7rem;color:var(--accent)}.stat span{font-size:.75rem;color:var(--muted)}
+.badges{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}.badge{padding:14px;border-radius:17px;background:#ffffff08;border:1px solid #ffffff12;text-align:center}.badge.locked{opacity:.35;filter:grayscale(1)}.badge strong{display:block;margin-top:5px;font-size:.8rem}.formrow{display:grid;gap:7px;margin:13px 0}.formrow input,.formrow select{background:#ffffff08;color:var(--text);border:1px solid #ffffff18;padding:12px;border-radius:13px}.bottomnav{position:fixed;left:0;right:0;bottom:0;height:74px;background:#07111feb;backdrop-filter:blur(15px);border-top:1px solid #ffffff14;display:flex;z-index:40}.bottomnav button{flex:1;border:0;background:none;color:var(--muted);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px}.bottomnav button.active{color:var(--accent)}.bottomnav span{font-size:.7rem;font-weight:800}
+#toast{position:fixed;bottom:91px;left:50%;transform:translateX(-50%);padding:11px 16px;background:#f8fafc;color:#07111f;border-radius:12px;opacity:0;pointer-events:none;transition:.2s;z-index:99;font-weight:800}#toast.show{opacity:1}
+body.light{--bg:#edf3fa;--panel:#fff;--panel2:#f6f9fd;--text:#122036;--muted:#65748b;--line:#d5dfeb;--shadow:0 14px 35px #18385d1c;background:linear-gradient(160deg,#eaf4ff,#f7f9fc)}
+body.light header,body.light .bottomnav{background:#ffffffdf;border-color:#dce5ef}body.light .card,body.light .panel{border-color:#dbe4ef}body.light .module,body.light .note,body.light .option,body.light .stat,body.light .badge,body.light .mode{background:#f5f8fc;border-color:#dbe4ef}
+@media(max-width:760px){.grid{grid-template-columns:1fr}.modegrid{grid-template-columns:1fr}.stats,.badges{grid-template-columns:1fr 1fr}.module{align-items:flex-start;flex-direction:column}.module button{width:100%}.brand small{display:none}}
+
+.audio-panel{display:flex;align-items:center;gap:8px}.audio-toggle{width:42px;height:42px;border:1px solid #ffffff18;border-radius:14px;background:#ffffff0b;color:var(--text);font-size:1.05rem}.volume-wrap{display:none;align-items:center;gap:7px;background:#07111fd9;border:1px solid #ffffff18;border-radius:14px;padding:8px 10px;position:absolute;right:18px;top:62px;z-index:50}.volume-wrap.show{display:flex}.volume-wrap input{width:120px}.audio-label{font-size:.75rem;color:var(--muted)}
+
+.subject-record{margin-top:22px}
+.subject-summary{display:grid;grid-template-columns:auto 1fr auto;gap:14px;align-items:center;padding:18px;border-radius:20px;background:linear-gradient(135deg,#ffffff0d,#ffffff05);border:1px solid #ffffff16;margin-bottom:12px}
+.subject-icon{width:54px;height:54px;border-radius:17px;display:grid;place-items:center;font-size:2rem;background:#ffffff10}
+.subject-summary h3{margin:0 0 5px}.subject-summary p{margin:0;color:var(--muted);font-size:.82rem}
+.subject-score{text-align:right}.subject-score b{display:block;font-size:1.5rem;color:var(--accent)}.subject-score span{font-size:.72rem;color:var(--muted)}
+.subject-progress{height:10px;background:#ffffff14;border-radius:999px;overflow:hidden;margin-top:10px}.subject-progress i{display:block;height:100%;border-radius:999px;background:linear-gradient(90deg,var(--accent),#7c5cff)}
+.record-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:12px}
+.record-card{padding:16px;border-radius:18px;background:#ffffff08;border:1px solid #ffffff12;position:relative;overflow:hidden}
+.record-card:before{content:"";position:absolute;left:0;top:0;bottom:0;width:5px;background:#64748b}.record-card.done:before{background:var(--good)}.record-card.started:before{background:var(--accent2)}
+.record-top{display:flex;justify-content:space-between;gap:10px}.record-top h4{margin:0;font-size:.95rem}.record-status{font-size:.72rem;padding:5px 8px;border-radius:999px;background:#ffffff0d;color:var(--muted)}
+.mini-bar{height:8px;background:#ffffff12;border-radius:999px;overflow:hidden;margin:12px 0 8px}.mini-bar i{display:block;height:100%;background:linear-gradient(90deg,var(--accent),var(--accent2));border-radius:999px}
+.record-meta{display:flex;justify-content:space-between;align-items:center;color:var(--muted);font-size:.78rem}
+.record-btn{margin-top:10px;width:100%}
+@media(max-width:760px){.record-grid{grid-template-columns:1fr}.subject-summary{grid-template-columns:auto 1fr}.subject-score{grid-column:2;text-align:left}}
+
+:root{
+  --math:#7c5cff;
+  --science:#22c55e;
+  --history:#f59e0b;
+  --pink:#ec4899;
+  --cyan:#22d3ee;
+}
+body{
+  background:
+    radial-gradient(circle at 10% 10%,#7c5cff22 0,transparent 30%),
+    radial-gradient(circle at 90% 8%,#22d3ee1f 0,transparent 28%),
+    radial-gradient(circle at 80% 80%,#ec48991a 0,transparent 30%),
+    linear-gradient(160deg,#07111f,#0b1627 72%);
+}
+.hero{
+  background:
+    linear-gradient(135deg,#14213d 0%,#1f3b64 45%,#553c9a 100%);
+  border:1px solid #ffffff24;
+}
+.hero:before{
+  content:"";
+  position:absolute;
+  inset:auto auto -80px -60px;
+  width:220px;height:220px;border-radius:50%;
+  background:radial-gradient(circle,#22d3ee33,transparent 65%);
+}
+.card{
+  position:relative;
+  overflow:hidden;
+}
+.card:after{
+  content:"";
+  position:absolute;
+  width:140px;height:140px;border-radius:50%;
+  right:-55px;top:-55px;
+  background:radial-gradient(circle,#ffffff12,transparent 70%);
+}
+.card:nth-child(1){
+  background:linear-gradient(145deg,#24194a,#38206f);
+  border-color:#7c5cff66;
+}
+.card:nth-child(2){
+  background:linear-gradient(145deg,#123528,#1b5f43);
+  border-color:#22c55e66;
+}
+.card:nth-child(3){
+  background:linear-gradient(145deg,#4a2a11,#744519);
+  border-color:#f59e0b66;
+}
+.card:nth-child(1):hover{box-shadow:0 18px 42px #7c5cff33}
+.card:nth-child(2):hover{box-shadow:0 18px 42px #22c55e33}
+.card:nth-child(3):hover{box-shadow:0 18px 42px #f59e0b33}
+
+.primary{
+  background:linear-gradient(135deg,#22d3ee,#7c5cff 55%,#ec4899);
+  color:#06111e;
+  box-shadow:0 8px 24px #7c5cff33;
+  transition:.2s;
+}
+.primary:hover{transform:translateY(-2px) scale(1.01)}
+.secondary:hover{border-color:var(--accent);background:#ffffff18}
+.chip.active{
+  background:linear-gradient(135deg,#22d3ee,#7c5cff);
+  color:white;
+}
+.stat:nth-child(1) b{color:#22d3ee}
+.stat:nth-child(2) b{color:#f59e0b}
+.stat:nth-child(3) b{color:#22c55e}
+.stat:nth-child(4) b{color:#ec4899}
+.badge:nth-child(1){background:linear-gradient(145deg,#143329,#1c513b)}
+.badge:nth-child(2){background:linear-gradient(145deg,#4b2b12,#6e3e17)}
+.badge:nth-child(3){background:linear-gradient(145deg,#1e2d50,#2d4f87)}
+.badge:nth-child(4){background:linear-gradient(145deg,#4b1e3e,#732e61)}
+
+.subject-record:nth-of-type(1) .subject-summary{
+  background:linear-gradient(135deg,#281d55,#4a2a88);
+  border-color:#7c5cff66;
+}
+.subject-record:nth-of-type(2) .subject-summary{
+  background:linear-gradient(135deg,#123a2a,#1d6b49);
+  border-color:#22c55e66;
+}
+.subject-record:nth-of-type(3) .subject-summary{
+  background:linear-gradient(135deg,#4d2d13,#7a4b1d);
+  border-color:#f59e0b66;
+}
+.subject-record:nth-of-type(1) .subject-progress i,
+.subject-record:nth-of-type(1) .mini-bar i{
+  background:linear-gradient(90deg,#a78bfa,#7c5cff,#ec4899);
+}
+.subject-record:nth-of-type(2) .subject-progress i,
+.subject-record:nth-of-type(2) .mini-bar i{
+  background:linear-gradient(90deg,#86efac,#22c55e,#14b8a6);
+}
+.subject-record:nth-of-type(3) .subject-progress i,
+.subject-record:nth-of-type(3) .mini-bar i{
+  background:linear-gradient(90deg,#fde68a,#f59e0b,#fb7185);
+}
+.record-card{
+  transition:.2s;
+}
+.record-card:hover{
+  transform:translateY(-3px);
+  border-color:#ffffff2d;
+  box-shadow:0 14px 30px #0005;
+}
+.mode:nth-child(1){border-color:#22d3ee55}
+.mode:nth-child(2){border-color:#7c5cff55}
+.mode:nth-child(3){border-color:#f59e0b55}
+.mode:nth-child(4){border-color:#ec489955}
+.mode:nth-child(1).active{background:#22d3ee18;box-shadow:0 0 0 2px #22d3ee33}
+.mode:nth-child(2).active{background:#7c5cff18;box-shadow:0 0 0 2px #7c5cff33}
+.mode:nth-child(3).active{background:#f59e0b18;box-shadow:0 0 0 2px #f59e0b33}
+.mode:nth-child(4).active{background:#ec489918;box-shadow:0 0 0 2px #ec489933}
+.option{
+  transition:.18s;
+}
+.option:hover{
+  transform:translateX(4px);
+  background:linear-gradient(90deg,#ffffff0b,#7c5cff14);
+}
+.score{
+  background:linear-gradient(135deg,#22d3ee,#7c5cff,#ec4899,#f59e0b);
+  -webkit-background-clip:text;
+}
+.bottomnav button.active{
+  color:#ffffff;
+  text-shadow:0 0 16px #22d3ee;
+}
+.audio-toggle:hover,.iconbtn:hover{
+  background:linear-gradient(135deg,#22d3ee22,#7c5cff22);
+  border-color:#7c5cff55;
+}
+body.light{
+  background:
+    radial-gradient(circle at 10% 10%,#7c5cff12 0,transparent 30%),
+    radial-gradient(circle at 90% 8%,#22d3ee12 0,transparent 28%),
+    linear-gradient(160deg,#edf4ff,#f9fbff);
+}
+body.light .card:nth-child(1){background:linear-gradient(145deg,#f4f0ff,#e9ddff)}
+body.light .card:nth-child(2){background:linear-gradient(145deg,#eefcf4,#dff8e9)}
+body.light .card:nth-child(3){background:linear-gradient(145deg,#fff8ea,#fff0cf)}
+body.light .subject-record:nth-of-type(1) .subject-summary{background:linear-gradient(135deg,#f4f0ff,#eadfff)}
+body.light .subject-record:nth-of-type(2) .subject-summary{background:linear-gradient(135deg,#effcf4,#def8e9)}
+body.light .subject-record:nth-of-type(3) .subject-summary{background:linear-gradient(135deg,#fff8ea,#ffefcf)}
+
+/* AZ EduSmart v3.5 - Mobile & Tablet App Layout */
+html,body{min-height:100%;overscroll-behavior-y:none}
+body{padding-bottom:92px}
+.app-shell{max-width:1180px;margin:auto}
+header{
+  position:sticky;top:0;z-index:80;
+  backdrop-filter:blur(18px);
+  background:linear-gradient(180deg,#07111ff2,#07111fd8);
+  border-bottom:1px solid #ffffff14;
+  padding-top:max(8px,env(safe-area-inset-top));
+}
+main{padding:16px 16px 24px}
+.bottomnav{
+  position:fixed;
+  left:50%;bottom:0;transform:translateX(-50%);
+  width:min(100%,1180px);
+  z-index:100;
+  padding:8px 10px calc(8px + env(safe-area-inset-bottom));
+  background:#081321f2;
+  border-top:1px solid #ffffff18;
+  backdrop-filter:blur(20px);
+  display:grid;
+  grid-template-columns:repeat(4,1fr);
+  gap:6px;
+}
+.bottomnav button{
+  min-height:58px;
+  border-radius:16px;
+  font-size:.78rem;
+  display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;
+}
+.bottomnav button::first-line{font-size:1.2rem}
+.hero{border-radius:24px;padding:22px;min-height:180px}
+.hero h1{font-size:clamp(1.7rem,6vw,2.8rem)}
+.cards{grid-template-columns:1fr;gap:14px}
+.card{min-height:150px;border-radius:22px;padding:20px}
+.stats{grid-template-columns:repeat(2,1fr);gap:10px}
+.stat{padding:16px;border-radius:18px}
+.panel{border-radius:22px;padding:18px}
+.sectionhead{margin-top:22px}
+.primary,.secondary,.danger{min-height:48px;border-radius:15px}
+input,select,textarea{min-height:48px;font-size:16px}
+.option{min-height:54px;padding:15px;border-radius:16px}
+.quizbox{border-radius:24px;padding:18px}
+.modegrid{grid-template-columns:repeat(2,1fr)}
+.badges{grid-template-columns:repeat(2,1fr)}
+.record-grid{grid-template-columns:1fr}
+.subject-summary{grid-template-columns:auto 1fr;gap:12px}
+.subject-score{grid-column:2;text-align:left}
+.subject-icon{width:48px;height:48px}
+.audio-panel{gap:6px}
+.audio-toggle,.iconbtn{width:40px;height:40px;border-radius:13px}
+.volume-wrap{right:10px;top:58px}
+.toast{bottom:100px}
+@media(min-width:700px){
+  body{padding-bottom:96px}
+  main{padding:22px 24px 32px}
+  .hero{padding:30px;min-height:220px}
+  .cards{grid-template-columns:repeat(3,1fr)}
+  .card{min-height:190px}
+  .stats{grid-template-columns:repeat(4,1fr)}
+  .badges{grid-template-columns:repeat(4,1fr)}
+  .record-grid{grid-template-columns:repeat(2,1fr)}
+  .subject-summary{grid-template-columns:auto 1fr auto}
+  .subject-score{grid-column:auto;text-align:right}
+  .quizbox{max-width:860px;margin:auto;padding:28px}
+  .panel{padding:24px}
+  .bottomnav{
+    width:min(calc(100% - 32px),760px);
+    bottom:12px;border:1px solid #ffffff18;
+    border-radius:24px;
+    box-shadow:0 18px 50px #0008;
+  }
+}
+@media(min-width:1024px){
+  main{padding:28px 34px 120px}
+  .hero{min-height:240px}
+  .record-grid{grid-template-columns:repeat(3,1fr)}
+  .quizbox{max-width:920px}
+}
+@media(display-mode:standalone){
+  header{padding-top:max(12px,env(safe-area-inset-top))}
+  body{user-select:none;-webkit-user-select:none}
+  input,textarea{user-select:text;-webkit-user-select:text}
+}
+
+/* AZ EduSmart v4.0 */
+.splash-screen{
+ position:fixed;inset:0;z-index:9999;display:grid;place-items:center;text-align:center;
+ background:
+ radial-gradient(circle at 25% 20%,#22d3ee35,transparent 30%),
+ radial-gradient(circle at 80% 78%,#ec489935,transparent 32%),
+ linear-gradient(145deg,#07111f,#241455 62%,#102b4d);
+ transition:opacity .5s,visibility .5s;
+}
+.splash-screen.hide{opacity:0;visibility:hidden}
+.splash-logo{
+ width:104px;height:104px;border-radius:30px;display:grid;place-items:center;
+ font-size:2.5rem;font-weight:950;color:#07111f;
+ background:linear-gradient(135deg,#22d3ee,#a78bfa 55%,#fbbf24);
+ box-shadow:0 20px 60px #7c5cff66;animation:splashPulse 1.5s infinite alternate
+}
+.splash-screen h1{font-size:2.3rem;margin:18px 0 4px}
+.splash-screen p{color:#d8e5ff;margin:0}
+.loader{width:150px;height:7px;background:#ffffff18;border-radius:999px;overflow:hidden;margin:25px auto 0}
+.loader i{display:block;height:100%;width:42%;border-radius:999px;background:linear-gradient(90deg,#22d3ee,#fbbf24);animation:loadMove 1.1s infinite}
+@keyframes splashPulse{to{transform:translateY(-5px) scale(1.03)}}
+@keyframes loadMove{from{transform:translateX(-110%)}to{transform:translateX(350%)}}
+
+.onboarding{
+ position:fixed;inset:0;z-index:9000;display:none;align-items:center;justify-content:center;
+ padding:18px;background:#050b14e8;backdrop-filter:blur(16px)
+}
+.onboarding.show{display:flex}
+.onboard-card{
+ width:min(100%,620px);max-height:94vh;overflow:auto;padding:24px;border-radius:28px;
+ background:linear-gradient(155deg,#111d32,#231950);
+ border:1px solid #ffffff22;box-shadow:0 30px 90px #000b
+}
+.onboard-card h2{font-size:1.8rem;margin:0 0 6px}
+.onboard-card>p{color:var(--muted);margin:0 0 20px}
+.avatar-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin:10px 0 20px}
+.avatar-choice{
+ min-height:70px;border:2px solid transparent;border-radius:18px;background:#ffffff0a;
+ font-size:2rem;cursor:pointer;transition:.18s
+}
+.avatar-choice:hover,.avatar-choice.active{transform:translateY(-3px);border-color:#22d3ee;background:#22d3ee18;box-shadow:0 10px 25px #22d3ee22}
+.app-profile{display:flex;align-items:center;gap:12px;margin:16px 0}
+.avatar-main{
+ width:68px;height:68px;border-radius:22px;display:grid;place-items:center;font-size:2.2rem;
+ background:linear-gradient(135deg,#22d3ee25,#7c5cff44);border:1px solid #ffffff22
+}
+.welcome-title{margin:0;font-size:1.5rem}
+.school-line{color:#cfddf6;font-size:.86rem;margin-top:4px}
+.reward-strip{
+ display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin:18px 0
+}
+.reward-card{
+ padding:14px 10px;text-align:center;border-radius:18px;background:#ffffff0b;border:1px solid #ffffff14
+}
+.reward-card b{display:block;font-size:1.25rem}.reward-card span{font-size:.72rem;color:var(--muted)}
+.coin-card b{color:#fbbf24}.heart-card b{color:#fb7185}.level-card b{color:#a78bfa}
+.home-actions{display:grid;grid-template-columns:1.4fr 1fr;gap:12px;margin:16px 0}
+.action-card{
+ min-height:110px;padding:18px;border:0;border-radius:22px;text-align:left;color:white;cursor:pointer;
+ box-shadow:0 14px 30px #0005;transition:.2s
+}
+.action-card:hover{transform:translateY(-3px)}
+.action-card strong{display:block;font-size:1.08rem;margin-bottom:4px}.action-card span{font-size:.78rem;opacity:.84}
+.action-main{background:linear-gradient(135deg,#7c5cff,#4933a5)}
+.action-daily{background:linear-gradient(135deg,#e87916,#f59e0b)}
+.daily-claim{
+ display:flex;align-items:center;justify-content:space-between;gap:12px;padding:16px;border-radius:20px;
+ background:linear-gradient(100deg,#2c1b56,#5f2778);border:1px solid #ec489955;margin:16px 0
+}
+.daily-claim button{width:auto;min-width:118px}
+.coin-pop{position:fixed;z-index:9998;pointer-events:none;font-size:1.25rem;font-weight:900;color:#fbbf24;animation:coinRise 1s forwards}
+@keyframes coinRise{to{transform:translateY(-70px) scale(1.25);opacity:0}}
+.form-help{font-size:.75rem;color:var(--muted);margin-top:5px}
+@media(max-width:480px){
+ .avatar-grid{grid-template-columns:repeat(4,1fr)}
+ .home-actions{grid-template-columns:1fr}
+ .reward-strip{gap:7px}.reward-card{padding:12px 6px}
+ .onboard-card{padding:20px}
+}
+</style><meta name="theme-color" content="#7c5cff"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"><meta name="apple-mobile-web-app-title" content="AZ EduSmart"><link rel="manifest" href="manifest.webmanifest"></head><body>
+<div class="splash-screen" id="splashScreen">
+  <div>
+    <div class="splash-logo">AZ</div>
+    <h1>AZ EduSmart</h1>
+    <p>Learn • Challenge • Grow</p>
+    <div class="loader"><i></i></div>
+  </div>
+</div>
+<div class="onboarding" id="onboarding">
+  <div class="onboard-card">
+    <h2>Selamat datang! 👋</h2>
+    <p>Sediakan profil pelajar sekali sahaja sebelum memulakan pembelajaran.</p>
+    <div class="formrow"><label>Nama pelajar</label><input id="onboardName" placeholder="Contoh: Ahmad Danish"></div>
+    <div class="formrow"><label>Nama sekolah</label><input id="onboardSchool" placeholder="Contoh: SMK Raja Permaisuri Bainun"><div class="form-help">Maklumat ini hanya disimpan pada peranti ini.</div></div>
+    <div class="formrow"><label>Tingkatan</label><select id="onboardLevel"><option value="1">Tingkatan 1</option><option value="2">Tingkatan 2</option></select></div>
+    <label>Pilih avatar</label>
+    <div class="avatar-grid" id="avatarGrid">
+      <button class="avatar-choice active" data-avatar="🧑‍🎓">🧑‍🎓</button>
+      <button class="avatar-choice" data-avatar="👦">👦</button>
+      <button class="avatar-choice" data-avatar="👧">👧</button>
+      <button class="avatar-choice" data-avatar="🧕">🧕</button>
+      <button class="avatar-choice" data-avatar="🧑‍🚀">🧑‍🚀</button>
+      <button class="avatar-choice" data-avatar="🦸">🦸</button>
+      <button class="avatar-choice" data-avatar="🥷">🥷</button>
+      <button class="avatar-choice" data-avatar="🤓">🤓</button>
+    </div>
+    <button class="primary" onclick="completeOnboarding()">Mula Perjalanan Saya 🚀</button>
+  </div>
+</div>
+<div id="toast"></div><header><button class="brand" id="brand"><span class="brandmark">AZ</span><span><b>EduSmart</b><small>Learn • Challenge • Level Up</small></span></button><div class="header-actions audio-panel"><button class="iconbtn" id="installAppBtn" onclick="installAZApp()" style="display:none" aria-label="Pasang aplikasi">⬇️</button>
+<button class="audio-toggle" id="audioBtn" aria-label="Hidupkan atau matikan audio">🔊</button>
+<button class="iconbtn" id="theme" aria-label="Tukar tema">◐</button>
+<div class="volume-wrap" id="volumeWrap"><span class="audio-label">Kelantangan</span><input id="volumeSlider" type="range" min="0" max="100" value="35"></div>
+</div></header><main id="app"></main><nav class="bottomnav"><button data-v="home">🏠<span>Utama</span></button><button data-v="progress">📊<span>Prestasi</span></button><button data-v="settings">⚙️<span>Tetapan</span></button></nav><script>
+const DATA={"1":{"sejarah":{"title":"Sejarah Tingkatan 1","icon":"🏛️","modules":[{"id":"1-sejarah-1","title":"Mengenali Sejarah","summary":"Sejarah mengkaji peristiwa masa lalu berdasarkan sumber dan bukti.","points":["Sumber primer ialah bahan asal seperti artifak dan dokumen.","Sumber sekunder ialah hasil kajian atau tafsiran.","Kronologi menyusun peristiwa mengikut urutan masa."],"quiz":[{"q":"Bahan manakah merupakan sumber primer?","o":["Buku rujukan moden","Artifak yang ditemui di tapak kajian","Artikel ulasan","Dokumentari baharu"],"a":1,"e":"Artifak ialah bahan asal yang berkaitan secara langsung dengan zaman yang dikaji.","d":"Standard"},{"q":"Apakah fungsi kronologi dalam kajian sejarah?","o":["Menghias penulisan","Menyusun peristiwa mengikut urutan masa","Menghapuskan bukti","Menggantikan sumber"],"a":1,"e":"Kronologi membantu memahami urutan dan hubungan antara peristiwa.","d":"Standard"},{"q":"Seorang murid membaca surat asal seorang tokoh. Surat itu dikategorikan sebagai...","o":["sumber primer","sumber sekunder","cerita rekaan","rumusan moden"],"a":0,"e":"Surat asal ialah dokumen yang wujud daripada masa atau individu yang dikaji.","d":"Sederhana"},{"q":"Mengapakah ahli sejarah membandingkan beberapa sumber?","o":["Untuk mencari cerita paling panjang","Untuk menilai kesahihan maklumat","Untuk mengelakkan tarikh","Untuk menolak semua bukti"],"a":1,"e":"Perbandingan sumber membantu mengesan persamaan, perbezaan dan kebolehpercayaan maklumat.","d":"Sederhana"},{"q":"Dua sumber memberikan tarikh yang berbeza bagi peristiwa yang sama. Apakah tindakan paling wajar oleh ahli sejarah?","o":["Memilih tarikh yang paling awal","Menolak kedua-dua sumber","Menilai asal, tujuan dan bukti sokongan setiap sumber","Menggabungkan kedua-dua tarikh tanpa semakan"],"a":2,"e":"Ahli sejarah perlu menilai konteks, pengarang, tujuan dan bukti sokongan sebelum membuat kesimpulan.","d":"KBAT"},{"q":"Sebuah catatan ditulis 50 tahun selepas sesuatu peristiwa berdasarkan temu bual saksi. Bagaimanakah catatan itu patut dinilai?","o":["Pasti sumber primer","Pasti palsu","Sumber sekunder yang masih perlu disemak dengan bukti lain","Tidak boleh digunakan langsung"],"a":2,"e":"Catatan kemudian ialah sumber sekunder; temu bual boleh bernilai tetapi perlu triangulasi.","d":"Sukar"}]},{"id":"1-sejarah-2","title":"Zaman Air Batu","summary":"Perubahan iklim mempengaruhi bumi dan kehidupan manusia.","points":["Suhu bumi berubah dalam tempoh panjang.","Paras laut dan bentuk muka bumi turut berubah.","Manusia menyesuaikan kehidupan dengan alam sekitar."],"quiz":[{"q":"Apakah perubahan yang berlaku apabila ais dunia mencair?","o":["Paras laut menurun","Paras laut meningkat","Semua sungai kering","Bumi berhenti berputar"],"a":1,"e":"Pencairan ais menambah jumlah air laut dan meningkatkan paras laut.","d":"Standard"},{"q":"Mengapakah bentuk muka bumi berubah pada Zaman Air Batu?","o":["Perubahan suhu dan paras laut","Tulisan manusia","Perdagangan moden","Pembinaan lebuh raya"],"a":0,"e":"Perubahan iklim dan paras laut membentuk semula kawasan daratan dan lautan.","d":"Standard"},{"q":"Bagaimanakah manusia awal menyesuaikan diri dengan cuaca sejuk?","o":["Mengabaikan persekitaran","Menggunakan pakaian dan tempat perlindungan","Membina kapal terbang","Menghentikan semua kegiatan"],"a":1,"e":"Pakaian, api dan tempat perlindungan membantu manusia menghadapi suhu rendah.","d":"Sederhana"},{"q":"Apakah hubungan utama antara iklim dan kehidupan manusia?","o":["Iklim tidak memberi kesan","Iklim mempengaruhi petempatan dan kegiatan harian","Iklim hanya mempengaruhi warna pakaian","Iklim menghapuskan semua haiwan"],"a":1,"e":"Keadaan iklim menentukan sumber makanan, pergerakan dan cara hidup manusia.","d":"Sederhana"},{"q":"Jika suhu global meningkat selepas tempoh glasier, perubahan manakah paling munasabah berlaku serentak?","o":["Daratan bertambah luas dan paras laut turun","Paras laut naik dan beberapa jambatan darat tenggelam","Semua sungai membeku","Manusia tidak perlu berpindah"],"a":1,"e":"Pencairan ais menaikkan paras laut dan boleh menenggelamkan kawasan daratan rendah.","d":"KBAT"},{"q":"Penemuan alat batu di kawasan yang kini berada di bawah laut paling kuat menyokong kesimpulan bahawa...","o":["alat itu dibuang dari kapal moden","kawasan tersebut pernah menjadi daratan ketika paras laut lebih rendah","manusia awal hidup hanya di laut","arus laut menghasilkan alat batu"],"a":1,"e":"Paras laut lebih rendah pada zaman tertentu menjadikan kawasan itu daratan yang boleh dihuni.","d":"Sukar"}]},{"id":"1-sejarah-3","title":"Zaman Prasejarah","summary":"Zaman sebelum manusia mengenal tulisan.","points":["Tahap utama termasuk Paleolitik, Mesolitik, Neolitik dan Zaman Logam.","Peralatan menjadi semakin baik.","Kegiatan ekonomi dan petempatan berkembang."],"quiz":[{"q":"Zaman Prasejarah merujuk zaman...","o":["selepas internet dicipta","sebelum manusia mengenal tulisan","selepas semua kerajaan terbentuk","ketika buku dicetak"],"a":1,"e":"Zaman Prasejarah berlaku sebelum wujudnya rekod tulisan.","d":"Standard"},{"q":"Tahap manakah dikaitkan dengan perkembangan pertanian dan petempatan tetap?","o":["Paleolitik","Neolitik","Zaman moden","Zaman digital"],"a":1,"e":"Pada Zaman Neolitik, pertanian dan kehidupan menetap semakin berkembang.","d":"Standard"},{"q":"Apakah perubahan penting apabila peralatan manusia semakin baik?","o":["Kegiatan harian menjadi lebih berkesan","Manusia berhenti bekerja","Semua haiwan pupus","Tulisan terus hilang"],"a":0,"e":"Peralatan yang lebih baik membantu memburu, bertani dan membina petempatan.","d":"Sederhana"},{"q":"Susunan yang betul ialah...","o":["Neolitik, Paleolitik, Logam","Paleolitik, Mesolitik, Neolitik, Logam","Logam, Mesolitik, Paleolitik","Mesolitik, Moden, Neolitik"],"a":1,"e":"Urutan umum perkembangan ialah Paleolitik, Mesolitik, Neolitik dan Zaman Logam.","d":"Sederhana"},{"q":"Sebuah tapak mempunyai tembikar, bijirin tersimpan dan rumah kekal. Tahap prasejarah yang paling sesuai ialah...","o":["Paleolitik","Mesolitik awal","Neolitik","Zaman tanpa kegiatan ekonomi"],"a":2,"e":"Pertanian, penyimpanan makanan, tembikar dan petempatan kekal ialah ciri Neolitik.","d":"Sukar"},{"q":"Apakah kesan paling besar pengeluaran makanan berlebihan terhadap masyarakat prasejarah?","o":["Semua orang terus berpindah","Muncul pengkhususan kerja dan pertukaran barangan","Penggunaan alat terus berhenti","Petempatan menjadi lebih kecil"],"a":1,"e":"Lebihan makanan membolehkan sebahagian ahli masyarakat menjalankan tugas selain pertanian.","d":"KBAT"}]},{"id":"1-sejarah-4","title":"Mengenali Tamadun","summary":"Tamadun ialah pencapaian tinggi sesuatu masyarakat.","points":["Petempatan kekal menyokong perkembangan masyarakat.","Pemerintahan, tulisan dan pengkhususan kerja ialah ciri penting.","Sungai membantu pertanian dan pengangkutan."],"quiz":[{"q":"Yang manakah ciri sebuah tamadun?","o":["Petempatan kekal","Tiada organisasi","Tiada kegiatan ekonomi","Hidup tanpa peraturan"],"a":0,"e":"Petempatan kekal merupakan antara ciri asas perkembangan tamadun.","d":"Standard"},{"q":"Mengapakah sungai penting kepada tamadun awal?","o":["Menyukarkan pertanian","Membekalkan air dan laluan pengangkutan","Menghalang petempatan","Menghapuskan perdagangan"],"a":1,"e":"Sungai menyokong pertanian, bekalan air dan perhubungan.","d":"Standard"},{"q":"Apakah maksud pengkhususan kerja?","o":["Semua orang melakukan kerja sama","Individu menjalankan tugas tertentu mengikut kemahiran","Tiada siapa bekerja","Kerja dilakukan tanpa kemahiran"],"a":1,"e":"Pengkhususan kerja membahagikan peranan dalam masyarakat.","d":"Sederhana"},{"q":"Tulisan membantu tamadun dalam bidang...","o":["rekod dan pentadbiran","menghapuskan undang-undang","mengurangkan komunikasi","menghentikan pendidikan"],"a":0,"e":"Tulisan membolehkan rekod, arahan dan ilmu disimpan.","d":"Sederhana"},{"q":"Sebuah masyarakat mempunyai bandar dan pertanian tetapi tiada sistem pentadbiran yang stabil. Apakah masalah paling mungkin berlaku?","o":["Rekod dan penyelarasan masyarakat menjadi lemah","Hasil pertanian pasti meningkat","Konflik tidak mungkin berlaku","Tulisan tidak lagi diperlukan"],"a":0,"e":"Masyarakat kompleks memerlukan pentadbiran untuk menyelaras undang-undang, cukai dan sumber.","d":"KBAT"},{"q":"Mengapakah penciptaan tulisan dianggap titik penting perkembangan tamadun?","o":["Ia hanya digunakan untuk seni","Ia membolehkan pentadbiran, undang-undang dan ilmu diwariskan","Ia menghapuskan tradisi lisan serta-merta","Ia menjadikan semua masyarakat sama"],"a":1,"e":"Tulisan menyimpan maklumat merentas masa dan menyokong organisasi masyarakat kompleks.","d":"Sukar"}]},{"id":"1-sejarah-5","title":"Tamadun Awal Dunia","summary":"Tamadun awal berkembang di lembah sungai.","points":["Mesopotamia, Mesir Purba, Indus dan Huang He ialah contoh utama.","Tulisan membantu pentadbiran.","Teknologi dan perdagangan mengembangkan masyarakat."],"quiz":[{"q":"Tamadun Mesopotamia berkembang berhampiran sungai...","o":["Tigris dan Euphrates","Nil sahaja","Ganges sahaja","Amazon"],"a":0,"e":"Mesopotamia berkembang di lembah Sungai Tigris dan Euphrates.","d":"Standard"},{"q":"Antara berikut, yang manakah tamadun awal dunia?","o":["Mesir Purba","Malaysia moden","Kesatuan Eropah","Empayar digital"],"a":0,"e":"Mesir Purba ialah salah satu tamadun awal yang terkenal.","d":"Standard"},{"q":"Apakah manfaat tulisan kepada pemerintah tamadun awal?","o":["Menyimpan rekod cukai dan undang-undang","Menghapuskan pentadbiran","Menghalang perdagangan","Mengurangkan hasil pertanian"],"a":0,"e":"Tulisan memudahkan penyimpanan rekod dan pengurusan kerajaan.","d":"Sederhana"},{"q":"Mengapakah lembah sungai sesuai menjadi pusat tamadun?","o":["Tanah subur dan bekalan air","Tiada sumber makanan","Sukar dihubungi","Sentiasa kering"],"a":0,"e":"Tanah subur dan air menyokong pertanian serta pertumbuhan penduduk.","d":"Sederhana"},{"q":"Apakah persamaan paling penting antara Mesopotamia, Mesir Purba, Indus dan Huang He?","o":["Semua menggunakan bahasa yang sama","Semua berkembang berhampiran sungai yang menyokong pertanian","Semua mempunyai pemerintah yang sama","Semua wujud pada abad yang sama tepat"],"a":1,"e":"Lembah sungai menyediakan air, tanah subur dan laluan perhubungan.","d":"Sukar"},{"q":"Jika sistem pengairan sebuah tamadun gagal selama beberapa tahun, kesan berantai paling munasabah ialah...","o":["Lebihan makanan meningkat","Hasil pertanian merosot, penduduk berpindah dan kuasa pemerintah terjejas","Tulisan berkembang lebih cepat","Perdagangan tidak terkesan"],"a":1,"e":"Kegagalan pengairan menjejaskan makanan, kestabilan penduduk dan legitimasi pemerintahan.","d":"KBAT"}]},{"id":"1-sejarah-6","title":"Tamadun Islam","summary":"Ilmu menjadi asas penting perkembangan tamadun Islam.","points":["Ilmuwan menyumbang dalam matematik, perubatan dan astronomi.","Perdagangan menghubungkan wilayah.","Pendidikan mengembangkan masyarakat."],"quiz":[{"q":"Bidang manakah menerima sumbangan ilmuwan Islam?","o":["Perubatan dan astronomi","Hanya hiburan","Tiada bidang ilmu","Hanya sukan"],"a":0,"e":"Ilmuwan Islam menghasilkan karya penting dalam perubatan, matematik dan astronomi.","d":"Standard"},{"q":"Apakah kesan perdagangan terhadap tamadun Islam?","o":["Menghubungkan wilayah dan pertukaran ilmu","Mengasingkan masyarakat","Menghapuskan bandar","Menghentikan pendidikan"],"a":0,"e":"Perdagangan membawa barangan, idea dan ilmu antara wilayah.","d":"Standard"},{"q":"Mengapakah pendidikan penting dalam perkembangan tamadun?","o":["Mengembangkan ilmu dan kemahiran","Mengurangkan pemikiran","Menghapuskan penulisan","Menghalang penyelidikan"],"a":0,"e":"Pendidikan melahirkan ilmuwan dan menyebarkan pengetahuan.","d":"Sederhana"},{"q":"Pusat ilmu berperanan untuk...","o":["menyimpan dan mengembangkan pengetahuan","menghapuskan buku","menghalang perbincangan","menutup hubungan luar"],"a":0,"e":"Pusat ilmu menjadi tempat pembelajaran, penterjemahan dan penyelidikan.","d":"Sederhana"},{"q":"Mengapakah kegiatan penterjemahan penting kepada perkembangan ilmu dalam tamadun Islam?","o":["Menggantikan semua bahasa dengan satu bahasa","Membolehkan ilmu lama dipelajari, dikritik dan dikembangkan","Menghalang kajian baharu","Menjadikan ilmu hanya untuk pedagang"],"a":1,"e":"Penterjemahan membolehkan pengetahuan dari pelbagai tamadun diserap dan ditambah baik.","d":"Sukar"},{"q":"Sebuah bandar terletak di laluan perdagangan dan mempunyai pusat pengajian. Apakah kesan gabungan paling mungkin?","o":["Pertukaran barangan sahaja","Pertukaran barangan, idea dan kepakaran","Pengasingan budaya","Kemerosotan komunikasi"],"a":1,"e":"Perdagangan dan pendidikan bersama-sama mempercepat penyebaran ilmu serta teknologi.","d":"KBAT"}]}]},"matematik":{"title":"Matematik Tingkatan 1","icon":"➗","modules":[{"id":"1-matematik-1","title":"Nombor Nisbah","summary":"Nombor nisbah boleh ditulis sebagai pecahan a/b.","points":["Integer merangkumi nombor negatif, sifar dan positif.","Perhatikan tanda ketika melakukan operasi.","Gunakan tertib operasi dengan betul."],"quiz":[{"q":"Berapakah 7 + (−12)?","o":["19","−19","−5","5"],"a":2,"e":"7 ditolak 12 menghasilkan −5.","d":"Standard"},{"q":"Berapakah −6 × 4?","o":["−24","24","−10","10"],"a":0,"e":"Nombor negatif didarab nombor positif menghasilkan nombor negatif.","d":"Standard"},{"q":"Hitung 18 ÷ (−3).","o":["6","−6","15","−15"],"a":1,"e":"Nombor positif dibahagi nombor negatif menghasilkan −6.","d":"Sederhana"},{"q":"Nilai 3 + 2 × 5 ialah...","o":["25","13","17","10"],"a":1,"e":"Darab dilakukan dahulu: 2 × 5 = 10, kemudian tambah 3.","d":"Sederhana"},{"q":"Nilai −18 − [6 ÷ (−3)] × 4 ialah...","o":["−26","−10","10","26"],"a":1,"e":"6 ÷ (−3)=−2; −2×4=−8; maka −18−(−8)=−10.","d":"Sukar"},{"q":"Suhu ialah −4°C. Ia turun 7°C, kemudian meningkat 12°C. Suhu akhir ialah...","o":["−23°C","−9°C","1°C","15°C"],"a":2,"e":"−4−7+12=1°C.","d":"KBAT"}]},{"id":"1-matematik-2","title":"Faktor dan Gandaan","summary":"Faktor membahagi nombor tanpa baki.","points":["Gandaan ialah hasil darab nombor dengan integer.","FSTB ialah faktor sepunya terbesar.","GSTK ialah gandaan sepunya terkecil."],"quiz":[{"q":"Yang manakah faktor bagi 18?","o":["5","7","9","11"],"a":2,"e":"18 boleh dibahagi 9 tanpa baki.","d":"Standard"},{"q":"Apakah GSTK bagi 4 dan 6?","o":["2","8","12","24"],"a":2,"e":"Gandaan sepunya terkecil bagi 4 dan 6 ialah 12.","d":"Standard"},{"q":"Apakah FSTB bagi 12 dan 18?","o":["2","3","6","9"],"a":2,"e":"Faktor sepunya terbesar ialah 6.","d":"Sederhana"},{"q":"Yang manakah gandaan 7?","o":["20","21","25","30"],"a":1,"e":"21 = 7 × 3.","d":"Sederhana"},{"q":"Tiga lampu berkelip setiap 12, 18 dan 30 saat. Jika berkelip serentak sekarang, selepas berapa saat semuanya berkelip serentak lagi?","o":["60","90","180","360"],"a":2,"e":"GSTK bagi 12, 18 dan 30 ialah 180.","d":"KBAT"},{"q":"Sebanyak 84 pensel dan 126 pemadam hendak dibahagi kepada bilangan set maksimum yang sama. Berapa set boleh dibuat?","o":["14","21","42","63"],"a":2,"e":"FSTB bagi 84 dan 126 ialah 42.","d":"Sukar"}]},{"id":"1-matematik-3","title":"Kuasa dan Punca","summary":"Kuasa dua dan kuasa tiga mempunyai operasi songsang.","points":["Punca kuasa dua songsang kepada kuasa dua.","Punca kuasa tiga songsang kepada kuasa tiga.","Anggaran membantu apabila nilai bukan kuasa sempurna."],"quiz":[{"q":"Berapakah 8²?","o":["16","64","24","80"],"a":1,"e":"8² bermaksud 8 × 8 = 64.","d":"Standard"},{"q":"Berapakah √81?","o":["7","8","9","10"],"a":2,"e":"9 × 9 = 81.","d":"Standard"},{"q":"Berapakah 4³?","o":["12","16","64","81"],"a":2,"e":"4³ = 4 × 4 × 4 = 64.","d":"Sederhana"},{"q":"Berapakah ∛125?","o":["4","5","15","25"],"a":1,"e":"5 × 5 × 5 = 125.","d":"Sederhana"},{"q":"Sebuah kubus mempunyai isi padu 729 cm³. Panjang sisinya ialah...","o":["9 cm","18 cm","27 cm","81 cm"],"a":0,"e":"Panjang sisi ialah ∛729 = 9 cm.","d":"Sukar"},{"q":"Antara 15² dan 16², nombor 250 lebih hampir kepada kuasa dua yang mana?","o":["15² kerana beza 25","15² kerana beza 10","16² kerana beza 6","16² kerana beza 16"],"a":2,"e":"15²=225 dan 16²=256; 250 hanya beza 6 daripada 256.","d":"KBAT"}]},{"id":"1-matematik-4","title":"Nisbah, Kadar dan Kadaran","summary":"Nisbah membandingkan dua kuantiti.","points":["Kadar membandingkan kuantiti dengan unit berbeza.","Kadaran menunjukkan nisbah setara.","Unit perlu diperhatikan."],"quiz":[{"q":"Nisbah 6 kepada 9 dalam bentuk termudah ialah...","o":["2:3","3:2","6:3","9:6"],"a":0,"e":"Bahagikan kedua-dua nombor dengan 3.","d":"Standard"},{"q":"Sebuah kereta bergerak 120 km dalam 2 jam. Kadarnya ialah...","o":["60 km/j","120 km/j","240 km/j","30 km/j"],"a":0,"e":"120 ÷ 2 = 60 km/j.","d":"Standard"},{"q":"Jika 3 buku berharga RM15, harga sebuah buku ialah...","o":["RM3","RM5","RM12","RM18"],"a":1,"e":"RM15 ÷ 3 = RM5.","d":"Sederhana"},{"q":"Nisbah 4:6 setara dengan...","o":["2:3","3:2","4:3","8:6"],"a":0,"e":"4:6 dipermudah dengan membahagi 2.","d":"Sederhana"},{"q":"Nisbah murid lelaki kepada perempuan ialah 3:5. Jika jumlah murid 64, bilangan perempuan ialah...","o":["24","32","40","48"],"a":2,"e":"Jumlah bahagian 8; setiap bahagian 8; perempuan 5×8=40.","d":"Sukar"},{"q":"Cat dicampur dalam nisbah merah:putih = 2:7. Jika cat putih 21 L, jumlah campuran ialah...","o":["23 L","27 L","30 L","63 L"],"a":1,"e":"7 bahagian=21 L, satu bahagian=3 L; jumlah 9 bahagian=27 L.","d":"KBAT"}]},{"id":"1-matematik-5","title":"Ungkapan Algebra","summary":"Pemboleh ubah mewakili nilai tidak diketahui.","points":["Pekali ialah nombor yang mendarab pemboleh ubah.","Sebutan serupa mempunyai pemboleh ubah yang sama.","Hanya sebutan serupa boleh digabungkan."],"quiz":[{"q":"Permudahkan 3x + 5x.","o":["8","8x","15x","2x"],"a":1,"e":"Sebutan serupa digabungkan: 3x + 5x = 8x.","d":"Standard"},{"q":"Dalam 7y − 4, pekali y ialah...","o":["y","7","−4","4"],"a":1,"e":"Pekali ialah nombor yang mendarab pemboleh ubah.","d":"Standard"},{"q":"Permudahkan 6a + 3 − 2a.","o":["4a + 3","8a + 3","4a","8a"],"a":0,"e":"6a − 2a = 4a dan pemalar 3 dikekalkan.","d":"Sederhana"},{"q":"Yang manakah sebutan serupa dengan 5m?","o":["5n","2m","m²","5"],"a":1,"e":"2m mempunyai pemboleh ubah dan kuasa yang sama.","d":"Sederhana"},{"q":"Permudahkan 4(2x−3)−3(x+5).","o":["5x−27","5x+3","11x−18","x−27"],"a":0,"e":"8x−12−3x−15 = 5x−27.","d":"Sukar"},{"q":"Jika 3a+2b=19 dan a=5, nilai b ialah...","o":["1","2","4","7"],"a":1,"e":"15+2b=19, jadi 2b=4 dan b=2.","d":"KBAT"}]},{"id":"1-matematik-6","title":"Persamaan Linear","summary":"Persamaan mempunyai dua ungkapan yang setara.","points":["Lakukan operasi sama pada kedua-dua belah.","Gunakan operasi songsang untuk mengasingkan pemboleh ubah.","Semak jawapan dalam persamaan asal."],"quiz":[{"q":"Selesaikan x + 5 = 12.","o":["5","7","12","17"],"a":1,"e":"Tolak 5 pada kedua-dua belah: x = 7.","d":"Standard"},{"q":"Selesaikan 3y = 21.","o":["6","7","18","24"],"a":1,"e":"Bahagi kedua-dua belah dengan 3.","d":"Standard"},{"q":"Selesaikan 2a − 4 = 10.","o":["3","5","7","14"],"a":2,"e":"Tambah 4 menjadi 14, kemudian bahagi 2: a = 7.","d":"Sederhana"},{"q":"Apakah tujuan menggantikan jawapan ke persamaan asal?","o":["Membuat semakan","Menukar soalan","Menghapuskan pemboleh ubah","Membina graf"],"a":0,"e":"Penggantian memastikan nilai yang diperoleh memenuhi persamaan.","d":"Sederhana"},{"q":"Selesaikan 4(2x−1)=3x+21.","o":["3","4","5","7"],"a":2,"e":"8x−4=3x+21; 5x=25; x=5.","d":"Sukar"},{"q":"Harga 3 buku sama dan satu pen RM4 berjumlah RM31. Harga sebuah buku ialah...","o":["RM7","RM8","RM9","RM11"],"a":2,"e":"3b+4=31; 3b=27; b=9.","d":"KBAT"}]}]},"sains":{"title":"Sains Tingkatan 1","icon":"🔬","modules":[{"id":"1-sains-1","title":"Penyiasatan Saintifik","summary":"Kaedah saintifik menjawab persoalan melalui bukti.","points":["Bina hipotesis yang boleh diuji.","Kenal pasti pemboleh ubah dimanipulasikan, bergerak balas dan dimalarkan.","Analisis data sebelum membuat kesimpulan."],"quiz":[{"q":"Apakah hipotesis?","o":["Jangkaan yang boleh diuji","Keputusan yang telah pasti","Nama alat makmal","Jadual kosong"],"a":0,"e":"Hipotesis ialah jangkaan awal yang boleh diuji melalui eksperimen.","d":"Standard"},{"q":"Pemboleh ubah yang sengaja diubah dipanggil...","o":["dimalarkan","bergerak balas","dimanipulasikan","rawak"],"a":2,"e":"Pemboleh ubah dimanipulasikan ialah faktor yang diubah oleh penyiasat.","d":"Standard"},{"q":"Mengapakah pemboleh ubah dimalarkan?","o":["Untuk memastikan ujian adil","Untuk mengubah semua faktor","Untuk membuang data","Untuk menukar hipotesis"],"a":0,"e":"Faktor lain dikekalkan supaya kesan pemboleh ubah yang diuji dapat dikenal pasti.","d":"Sederhana"},{"q":"Kesimpulan dibuat berdasarkan...","o":["tekaan sahaja","data dan pemerhatian","pendapat rakan","tajuk eksperimen"],"a":1,"e":"Kesimpulan yang baik disokong oleh data.","d":"Sederhana"},{"q":"Dalam eksperimen kadar pelarutan gula, suhu air diubah. Jisim gula dan isipadu air dikekalkan. Pemboleh ubah bergerak balas ialah...","o":["suhu air","masa gula larut","jisim gula","isipadu air"],"a":1,"e":"Masa pelarutan ialah hasil yang diukur apabila suhu diubah.","d":"Sukar"},{"q":"Keputusan eksperimen tidak menyokong hipotesis. Apakah tindakan saintifik terbaik?","o":["Mengubah data","Mengulangi eksperimen dan menilai hipotesis","Mengabaikan keputusan","Memilih bacaan yang sesuai sahaja"],"a":1,"e":"Hipotesis boleh ditolak atau diubah berdasarkan data yang sah.","d":"KBAT"}]},{"id":"1-sains-2","title":"Sel","summary":"Sel ialah unit asas hidupan.","points":["Sel tumbuhan dan haiwan mempunyai persamaan dan perbezaan.","Sel membentuk tisu, organ dan sistem.","Struktur sel mempunyai fungsi tertentu."],"quiz":[{"q":"Apakah unit asas semua hidupan?","o":["Organ","Sel","Tisu","Sistem"],"a":1,"e":"Sel ialah unit struktur dan fungsi asas hidupan.","d":"Standard"},{"q":"Struktur manakah biasanya terdapat pada sel tumbuhan tetapi tidak pada sel haiwan?","o":["Dinding sel","Membran sel","Sitoplasma","Nukleus"],"a":0,"e":"Sel tumbuhan mempunyai dinding sel.","d":"Standard"},{"q":"Susunan organisasi yang betul ialah...","o":["organ, sel, tisu","sel, tisu, organ, sistem","tisu, sistem, sel","sistem, organ, sel"],"a":1,"e":"Sel membentuk tisu, tisu membentuk organ, dan organ membentuk sistem.","d":"Sederhana"},{"q":"Apakah fungsi nukleus?","o":["Mengawal aktiviti sel","Menghasilkan bunyi","Menggerakkan seluruh badan","Menyimpan udara"],"a":0,"e":"Nukleus mengawal aktiviti sel dan mengandungi bahan genetik.","d":"Sederhana"},{"q":"Sel tumbuhan diletakkan dalam larutan sangat pekat lalu mengecut. Penjelasan paling tepat ialah...","o":["Air masuk ke dalam sel","Air keluar daripada sel melalui osmosis","Dinding sel larut","Nukleus menghasilkan udara"],"a":1,"e":"Air bergerak keluar ke larutan yang lebih pekat, menyebabkan kandungan sel mengecut.","d":"Sukar"},{"q":"Satu tisu rosak menyebabkan organ tidak berfungsi dengan baik. Mengapakah ini berlaku?","o":["Organ terdiri daripada beberapa tisu yang bekerjasama","Tisu tidak berkaitan dengan organ","Organ hanya terdiri daripada satu sel","Semua tisu mempunyai fungsi sama"],"a":0,"e":"Organ bergantung pada gabungan tisu khusus untuk menjalankan fungsi.","d":"KBAT"}]},{"id":"1-sains-3","title":"Koordinasi dan Gerak Balas","summary":"Organisma mengesan rangsangan dan bertindak balas.","points":["Organ deria mengesan rangsangan.","Sistem saraf membantu koordinasi.","Homeostasis mengekalkan keadaan dalaman stabil."],"quiz":[{"q":"Perubahan persekitaran yang dikesan organisma disebut...","o":["rangsangan","pencernaan","pembiakan","penyejatan"],"a":0,"e":"Rangsangan ialah perubahan yang boleh dikesan oleh organisma.","d":"Standard"},{"q":"Menarik tangan apabila tersentuh objek panas ialah contoh...","o":["gerak balas","fotosintesis","pertumbuhan","peneutralan"],"a":0,"e":"Tubuh bertindak balas untuk melindungi diri daripada haba.","d":"Standard"},{"q":"Homeostasis bermaksud...","o":["mengekalkan keadaan dalaman stabil","meningkatkan suhu tanpa kawalan","menghentikan pernafasan","menghapuskan deria"],"a":0,"e":"Homeostasis mengekalkan keadaan dalaman dalam julat sesuai.","d":"Sederhana"},{"q":"Organ deria membantu manusia untuk...","o":["mengesan rangsangan","menghasilkan makanan","mengubah unsur","membina sel baharu sahaja"],"a":0,"e":"Organ deria menerima maklumat daripada persekitaran.","d":"Sederhana"},{"q":"Apabila cuaca panas, badan berpeluh. Bagaimanakah tindakan ini membantu homeostasis?","o":["Menghasilkan lebih banyak haba","Penyejatan peluh menyingkirkan haba","Menghentikan aliran darah","Meningkatkan suhu teras"],"a":1,"e":"Penyejatan memerlukan tenaga haba dan menyejukkan permukaan badan.","d":"Sukar"},{"q":"Kerosakan pada saraf deria tangan paling mungkin menyebabkan...","o":["otot tidak wujud","rangsangan sentuhan sukar dihantar ke pusat kawalan","darah tidak mengalir","tulang terus mengecut"],"a":1,"e":"Saraf deria membawa impuls daripada reseptor ke sistem saraf pusat.","d":"KBAT"}]},{"id":"1-sains-4","title":"Pembiakan","summary":"Pembiakan memastikan kesinambungan spesies.","points":["Pembiakan seks melibatkan gamet.","Persenyawaan menghasilkan zigot.","Kesihatan reproduktif memerlukan pengetahuan dan tanggungjawab."],"quiz":[{"q":"Apakah tujuan utama pembiakan?","o":["Memastikan kesinambungan spesies","Menghentikan pertumbuhan","Mengurangkan semua populasi","Menghasilkan tenaga"],"a":0,"e":"Pembiakan menghasilkan generasi baharu.","d":"Standard"},{"q":"Pembiakan seks melibatkan...","o":["gamet jantan dan betina","satu sel tanpa perubahan","air sahaja","cahaya sahaja"],"a":0,"e":"Gamet jantan dan betina bergabung dalam pembiakan seks.","d":"Standard"},{"q":"Yang manakah contoh pembiakan aseks?","o":["Pembentukan anak pokok melalui batang","Persenyawaan manusia","Percantuman gamet","Pembentukan zigot"],"a":0,"e":"Pembiakan melalui bahagian tumbuhan tidak melibatkan percantuman gamet.","d":"Sederhana"},{"q":"Mengapa kesihatan reproduktif penting?","o":["Membantu membuat keputusan bertanggungjawab","Mengelakkan semua pembelajaran","Menghapuskan perubahan badan","Menggantikan rawatan perubatan"],"a":0,"e":"Pengetahuan yang tepat menyokong penjagaan diri dan keputusan selamat.","d":"Sederhana"},{"q":"Mengapakah variasi genetik lebih tinggi dalam pembiakan seks berbanding aseks?","o":["Anak menerima gabungan bahan genetik daripada dua induk","Semua anak serupa sepenuhnya","Tiada gamet terbentuk","Hanya satu sel terlibat"],"a":0,"e":"Gabungan bahan genetik menghasilkan keturunan yang lebih pelbagai.","d":"Sukar"},{"q":"Jika sesuatu spesies hanya membiak sangat perlahan ketika habitatnya berubah pantas, risiko utamanya ialah...","o":["adaptasi lebih cepat","populasi sukar pulih dan boleh pupus","semua individu menjadi sama kuat","habitat akan pulih sendiri"],"a":1,"e":"Kadar pembiakan rendah mengehadkan pemulihan populasi.","d":"KBAT"}]},{"id":"1-sains-5","title":"Jirim","summary":"Jirim mempunyai jisim dan memenuhi ruang.","points":["Pepejal, cecair dan gas mempunyai susunan zarah berbeza.","Zarah sentiasa bergerak.","Pemanasan dan penyejukan mengubah keadaan jirim."],"quiz":[{"q":"Jirim ialah sesuatu yang...","o":["mempunyai jisim dan memenuhi ruang","tidak mempunyai jisim","hanya boleh dilihat","sentiasa berbentuk pepejal"],"a":0,"e":"Semua jirim mempunyai jisim dan menempati ruang.","d":"Standard"},{"q":"Dalam keadaan manakah zarah paling berjauhan?","o":["Pepejal","Cecair","Gas","Semua sama"],"a":2,"e":"Zarah gas tersusun jauh dan bergerak bebas.","d":"Standard"},{"q":"Pencairan berlaku apabila...","o":["pepejal menerima haba","cecair kehilangan semua jisim","gas menjadi cahaya","suhu tidak berubah"],"a":0,"e":"Pemanasan boleh menukar pepejal kepada cecair.","d":"Sederhana"},{"q":"Apakah berlaku kepada pergerakan zarah apabila suhu meningkat?","o":["Zarah bergerak lebih cepat","Zarah berhenti","Zarah hilang","Jisim menjadi sifar"],"a":0,"e":"Tenaga kinetik zarah bertambah apabila dipanaskan.","d":"Sederhana"},{"q":"Mengapakah gas boleh dimampatkan lebih mudah daripada cecair?","o":["Zarah gas mempunyai ruang kosong yang besar","Zarah gas tiada jisim","Zarah cecair tidak bergerak","Gas sentiasa sejuk"],"a":0,"e":"Ruang antara zarah gas membolehkan zarah dirapatkan.","d":"Sukar"},{"q":"Apabila wap air memeluwap, apakah perubahan pada zarah?","o":["Zarah mendapat tenaga dan berjauhan","Zarah kehilangan tenaga dan menjadi lebih rapat","Zarah bertukar menjadi atom lain","Jisim hilang"],"a":1,"e":"Penyejukan mengurangkan tenaga kinetik lalu zarah berkumpul sebagai cecair.","d":"KBAT"}]},{"id":"1-sains-6","title":"Cahaya dan Optik","summary":"Cahaya bergerak dalam garis lurus.","points":["Pantulan berlaku apabila cahaya kembali daripada permukaan.","Pembiasan berlaku apabila cahaya melalui medium berbeza.","Cermin dan kanta mengubah laluan cahaya."],"quiz":[{"q":"Bagaimanakah cahaya bergerak dalam medium seragam?","o":["Dalam garis lurus","Secara rawak","Dalam bulatan sahaja","Tidak bergerak"],"a":0,"e":"Cahaya bergerak lurus dalam medium yang seragam.","d":"Standard"},{"q":"Pantulan berlaku apabila cahaya...","o":["kembali daripada permukaan","berhenti sepenuhnya","bertukar menjadi bunyi","menghilangkan objek"],"a":0,"e":"Pantulan ialah perubahan arah cahaya selepas mengenai permukaan.","d":"Standard"},{"q":"Pembiasan berlaku apabila cahaya...","o":["berubah arah melalui medium berbeza","bergerak dalam vakum sahaja","tidak mempunyai kelajuan","menjadi jirim"],"a":0,"e":"Kelajuan cahaya berubah apabila memasuki medium lain, lalu arahnya boleh berubah.","d":"Sederhana"},{"q":"Cermin satah menghasilkan imej yang...","o":["tegak dan sama saiz","terbalik dan sangat kecil","sentiasa kabur","tidak dapat dilihat"],"a":0,"e":"Imej cermin satah adalah maya, tegak dan sama saiz.","d":"Sederhana"},{"q":"Pensel kelihatan bengkok di dalam air kerana...","o":["cahaya dipantulkan sepenuhnya","cahaya dibiaskan ketika bergerak antara air dan udara","air menghasilkan bayang-bayang palsu","pensel berubah bentuk"],"a":1,"e":"Pembiasan mengubah arah sinar cahaya pada sempadan dua medium.","d":"Sukar"},{"q":"Sebuah cermin diputar 10°. Berapakah perubahan arah sinar pantulan?","o":["5°","10°","20°","40°"],"a":2,"e":"Apabila cermin diputar θ, arah sinar pantulan berubah 2θ.","d":"KBAT"}]}]}},"2":{"sejarah":{"title":"Sejarah Tingkatan 2","icon":"🏛️","modules":[{"id":"2-sejarah-1","title":"Kerajaan Alam Melayu","summary":"Kerajaan Alam Melayu berkembang di lokasi strategik.","points":["Perdagangan menghubungkan kerajaan dengan dunia luar.","Pelabuhan menyokong kemajuan ekonomi.","Geografi mempengaruhi perkembangan kerajaan."],"quiz":[{"q":"Apakah faktor penting perkembangan kerajaan Alam Melayu?","o":["Kedudukan strategik","Tiada perdagangan","Ketiadaan sumber","Pengasingan sepenuhnya"],"a":0,"e":"Kedudukan strategik memudahkan hubungan dan perdagangan.","d":"Standard"},{"q":"Mengapakah pelabuhan penting?","o":["Menjadi pusat pertukaran barangan","Menghalang kapal","Menghapuskan hubungan luar","Mengurangkan penduduk"],"a":0,"e":"Pelabuhan menghubungkan pedagang dan barangan dari pelbagai kawasan.","d":"Standard"},{"q":"Hubungan luar membawa kesan seperti...","o":["pertukaran budaya dan ilmu","penghapusan semua bahasa","tiada perubahan","penutupan ekonomi"],"a":0,"e":"Interaksi perdagangan membawa idea, budaya dan teknologi.","d":"Sederhana"},{"q":"Bentuk muka bumi mempengaruhi kerajaan melalui...","o":["lokasi petempatan dan kegiatan ekonomi","warna bendera sahaja","nama pemerintah sahaja","jumlah tulisan sahaja"],"a":0,"e":"Geografi menentukan sumber, laluan dan kegiatan penduduk.","d":"Sederhana"},{"q":"Sebuah kerajaan menguasai selat sempit yang dilalui kapal dagang. Kelebihan strategik utamanya ialah...","o":["boleh mengawal laluan dan mengenakan cukai","tidak perlu berhubung dengan pedagang","pertanian pasti gagal","semua kapal mengelak kawasan itu"],"a":0,"e":"Kawalan laluan perdagangan memberi pengaruh ekonomi dan politik.","d":"KBAT"},{"q":"Mengapakah kerajaan pelabuhan perlu menjaga keselamatan pedagang?","o":["Keselamatan meningkatkan keyakinan dan kunjungan pedagang","Supaya perdagangan dihentikan","Agar cukai tidak dikutip","Supaya pelabuhan menjadi kecil"],"a":0,"e":"Pedagang memilih pelabuhan yang selamat dan terurus.","d":"Sukar"}]},{"id":"2-sejarah-2","title":"Pemerintahan dan Ekonomi","summary":"Pentadbiran tersusun membantu kestabilan.","points":["Raja menjadi tonggak pemerintahan.","Pertanian dan perdagangan menyokong ekonomi.","Hasil hutan dan laut menjadi sumber penting."],"quiz":[{"q":"Siapakah tonggak utama pemerintahan kerajaan Alam Melayu?","o":["Raja","Pedagang asing","Petani sahaja","Pengembara"],"a":0,"e":"Raja menjadi pusat pemerintahan dan simbol kerajaan.","d":"Standard"},{"q":"Kegiatan manakah menyokong ekonomi kerajaan?","o":["Pertanian dan perdagangan","Tiada pekerjaan","Hanya hiburan","Menghapuskan hasil hutan"],"a":0,"e":"Pertanian, perdagangan dan hasil alam membekalkan pendapatan.","d":"Standard"},{"q":"Mengapakah pentadbiran tersusun diperlukan?","o":["Menjaga keamanan dan kemakmuran","Menghapuskan undang-undang","Menghentikan perdagangan","Mengurangkan komunikasi"],"a":0,"e":"Pentadbiran membahagikan tugas dan melaksanakan peraturan.","d":"Sederhana"},{"q":"Hasil hutan digunakan sebagai...","o":["barangan dagangan","bahan yang tidak bernilai","penghalang ekonomi","alat menghapuskan pelabuhan"],"a":0,"e":"Hasil hutan merupakan sumber ekonomi dan perdagangan.","d":"Sederhana"},{"q":"Jika hasil pertanian merosot tetapi cukai terus dinaikkan, kesan paling mungkin ialah...","o":["sokongan rakyat meningkat","ketidakpuasan rakyat dan ekonomi melemah","perdagangan berkembang tanpa had","pentadbiran menjadi tidak perlu"],"a":1,"e":"Tekanan ekonomi dan cukai tinggi boleh menggugat kestabilan.","d":"KBAT"},{"q":"Apakah hubungan antara pentadbiran tersusun dengan kemakmuran ekonomi?","o":["Pentadbiran menjamin peraturan, keselamatan dan kutipan hasil yang teratur","Pentadbiran menghapuskan semua perdagangan","Tiada hubungan","Kemakmuran hanya bergantung pada cuaca"],"a":0,"e":"Institusi yang stabil menyokong kegiatan ekonomi.","d":"Sukar"}]},{"id":"2-sejarah-3","title":"Sosiobudaya","summary":"Bahasa, tulisan dan seni mencerminkan identiti.","points":["Pendidikan berlaku secara formal dan tidak formal.","Seni bina menunjukkan kemahiran masyarakat.","Interaksi luar mempengaruhi budaya."],"quiz":[{"q":"Apakah yang mencerminkan identiti masyarakat?","o":["Bahasa dan tulisan","Tiada adat","Tiada seni","Pengasingan ilmu"],"a":0,"e":"Bahasa, tulisan dan seni menggambarkan budaya masyarakat.","d":"Standard"},{"q":"Pendidikan tidak formal biasanya berlaku melalui...","o":["keluarga dan masyarakat","universiti sahaja","internet sahaja","peperiksaan sahaja"],"a":0,"e":"Kemahiran dan nilai diwarisi melalui kehidupan harian.","d":"Standard"},{"q":"Persuratan merujuk kepada...","o":["hasil penulisan dan karya","kegiatan pertanian","pembinaan kapal sahaja","sistem cukai"],"a":0,"e":"Persuratan merangkumi karya bertulis dan tradisi ilmu.","d":"Sederhana"},{"q":"Interaksi dengan masyarakat luar boleh...","o":["memperkaya kebudayaan","menghapuskan semua identiti","menghentikan bahasa","menghalang seni bina"],"a":0,"e":"Pertemuan budaya boleh menghasilkan penyesuaian dan perkembangan baharu.","d":"Sederhana"},{"q":"Bahasa tempatan meminjam istilah asing tetapi mengekalkan tatabahasa sendiri. Keadaan ini menunjukkan...","o":["budaya tempatan hilang sepenuhnya","interaksi budaya dan penyesuaian setempat","tiada hubungan luar","semua masyarakat menjadi sama"],"a":1,"e":"Budaya boleh menerima unsur luar secara selektif.","d":"KBAT"},{"q":"Mengapakah karya persuratan penting untuk mengkaji masyarakat lampau?","o":["Merekod nilai, bahasa dan pandangan masyarakat","Hanya mengandungi hiburan","Tidak berkaitan dengan sejarah","Menggantikan semua bukti arkeologi"],"a":0,"e":"Karya memberikan gambaran pemikiran dan budaya, tetapi tetap perlu dibandingkan dengan sumber lain.","d":"Sukar"}]},{"id":"2-sejarah-4","title":"Kesultanan Melayu Melaka","summary":"Melaka berkembang sebagai pusat perdagangan.","points":["Lokasi strategik menarik pedagang.","Pentadbiran dan undang-undang mengatur masyarakat.","Kepimpinan menyokong kegemilangan."],"quiz":[{"q":"Mengapakah Melaka berkembang sebagai pusat perdagangan?","o":["Lokasi strategik dan pentadbiran cekap","Jauh daripada laluan laut","Tiada pelabuhan","Tiada hubungan luar"],"a":0,"e":"Lokasi di laluan perdagangan dan pengurusan pelabuhan menyokong kemajuan.","d":"Standard"},{"q":"Apakah fungsi undang-undang di Melaka?","o":["Mengatur pemerintahan dan masyarakat","Menghapuskan pentadbiran","Menghalang semua pedagang","Menggantikan bahasa"],"a":0,"e":"Undang-undang menjelaskan peraturan dan tanggungjawab.","d":"Standard"},{"q":"Pelabuhan Melaka menarik pedagang kerana...","o":["kemudahan dan keselamatan","tiada barangan","cukai tidak teratur","laluan sukar"],"a":0,"e":"Kemudahan, keselamatan dan pengurusan membantu perdagangan.","d":"Sederhana"},{"q":"Kepimpinan yang baik memberi kesan kepada...","o":["kestabilan kerajaan","kehilangan semua sumber","penutupan pelabuhan","penghapusan undang-undang"],"a":0,"e":"Pemimpin yang cekap dapat mengurus pentadbiran dan hubungan luar.","d":"Sederhana"},{"q":"Pelabuhan Melaka menawarkan gudang, sistem timbang dan undang-undang laut. Apakah kesan gabungan kemudahan ini?","o":["Meningkatkan kecekapan dan keyakinan pedagang","Mengurangkan perdagangan","Menghapuskan cukai","Menutup hubungan antarabangsa"],"a":0,"e":"Kemudahan dan peraturan mengurangkan risiko urus niaga.","d":"KBAT"},{"q":"Mengapakah lokasi strategik sahaja tidak mencukupi untuk menjamin kegemilangan Melaka?","o":["Kemajuan juga memerlukan kepimpinan, keselamatan dan pentadbiran","Lokasi tidak pernah penting","Pedagang tidak memerlukan kemudahan","Undang-undang menghalang kemajuan"],"a":0,"e":"Geografi memberi peluang, tetapi institusi menentukan bagaimana peluang dimanfaatkan.","d":"Sukar"}]},{"id":"2-sejarah-5","title":"Kesultanan Johor Riau","summary":"Johor Riau meneruskan warisan Melaka.","points":["Perdagangan menjadi sumber kekuatan.","Persuratan berkembang.","Strategi politik diperlukan menghadapi cabaran."],"quiz":[{"q":"Kesultanan Johor Riau meneruskan warisan kerajaan...","o":["Melaka","Rom","Mesir","Indus"],"a":0,"e":"Johor Riau meneruskan kesinambungan Kesultanan Melayu Melaka.","d":"Standard"},{"q":"Johor Riau terkenal sebagai pusat...","o":["perdagangan dan persuratan","perlombongan moden sahaja","penerbangan","industri digital"],"a":0,"e":"Kerajaan ini berkembang dalam perdagangan dan karya persuratan.","d":"Standard"},{"q":"Apakah cabaran yang memerlukan strategi pemerintahan?","o":["Persaingan politik dan ancaman luar","Tiada musuh sama sekali","Ketiadaan penduduk","Tiada hubungan laut"],"a":0,"e":"Ancaman dan persaingan memerlukan pakatan serta strategi.","d":"Sederhana"},{"q":"Karya persuratan membantu...","o":["memelihara bahasa dan ilmu","menghapuskan sejarah","menghentikan pendidikan","mengurangkan komunikasi"],"a":0,"e":"Karya bertulis merekod dan menyebarkan ilmu.","d":"Sederhana"},{"q":"Johor Riau membina semula jaringan perdagangan selepas kejatuhan Melaka. Tindakan ini menunjukkan...","o":["kesinambungan politik dan ekonomi","penghapusan warisan Melaka","pengasingan daripada laut","tiada strategi kerajaan"],"a":0,"e":"Johor Riau meneruskan warisan dan jaringan Kesultanan Melayu Melaka.","d":"Sukar"},{"q":"Mengapakah pusat persuratan boleh menguatkan sebuah kerajaan?","o":["Membentuk identiti, bahasa pentadbiran dan legitimasi","Mengurangkan pendidikan","Menghalang komunikasi","Menghapuskan sejarah"],"a":0,"e":"Bahasa dan karya menyatukan budaya serta menyokong kewibawaan kerajaan.","d":"KBAT"}]},{"id":"2-sejarah-6","title":"Warisan Kerajaan Melayu","summary":"Warisan membentuk identiti masyarakat hari ini.","points":["Adat dan undang-undang diwarisi.","Bahasa dan seni perlu dipelihara.","Generasi muda berperanan menjaga warisan."],"quiz":[{"q":"Yang manakah contoh warisan kerajaan Melayu?","o":["Adat dan bahasa","Tiada undang-undang","Penghapusan seni","Tiada institusi"],"a":0,"e":"Adat, bahasa, seni dan institusi ialah warisan penting.","d":"Standard"},{"q":"Mengapakah warisan perlu dipelihara?","o":["Membantu memahami identiti dan sejarah","Untuk dilupakan","Untuk menghapuskan budaya","Untuk menghentikan kajian"],"a":0,"e":"Warisan menghubungkan generasi kini dengan sejarah.","d":"Standard"},{"q":"Siapakah yang berperanan memelihara warisan?","o":["Semua lapisan masyarakat","Ahli sejarah sahaja","Pelancong sahaja","Tiada sesiapa"],"a":0,"e":"Pemeliharaan memerlukan kerjasama masyarakat dan institusi.","d":"Sederhana"},{"q":"Bangunan bersejarah boleh menjadi sumber...","o":["pendidikan dan penyelidikan","maklumat palsu sahaja","halangan mutlak","tiada nilai"],"a":0,"e":"Bangunan bersejarah memberi bukti fizikal tentang masa lalu.","d":"Sederhana"},{"q":"Sebuah bangunan lama dipulihkan tetapi semua ciri asal diganti. Apakah isu utama pemuliharaan itu?","o":["Keaslian warisan berkurang","Kos pasti rendah","Bangunan menjadi sumber primer lebih baik","Sejarah tidak terjejas"],"a":0,"e":"Pemuliharaan perlu mengekalkan sebanyak mungkin nilai dan ciri asal.","d":"KBAT"},{"q":"Apakah pendekatan terbaik untuk memastikan warisan terus relevan kepada remaja?","o":["Melarang akses","Menggabungkan pendidikan digital dengan perlindungan fizikal tapak","Menyimpan semua bahan tanpa penerangan","Menghapuskan konteks sejarah"],"a":1,"e":"Akses pendidikan yang menarik boleh berjalan bersama pemeliharaan.","d":"Sukar"}]}]},"matematik":{"title":"Matematik Tingkatan 2","icon":"➗","modules":[{"id":"2-matematik-1","title":"Pola dan Jujukan","summary":"Pola menunjukkan aturan yang konsisten.","points":["Jujukan ialah senarai nombor mengikut aturan.","Hubungan antara sebutan membantu ramalan.","Pola boleh diterangkan dengan ungkapan."],"quiz":[{"q":"Apakah sebutan seterusnya bagi 3, 6, 9, 12, ...?","o":["13","14","15","18"],"a":2,"e":"Pola bertambah 3 setiap kali.","d":"Standard"},{"q":"Cari sebutan seterusnya: 2, 4, 8, 16, ...","o":["18","24","32","64"],"a":2,"e":"Setiap sebutan didarab 2.","d":"Standard"},{"q":"Apakah beza sepunya bagi 10, 7, 4, 1?","o":["−3","3","−2","2"],"a":0,"e":"Setiap sebutan berkurang 3.","d":"Sederhana"},{"q":"Jujukan 5, 10, 15, 20 ialah pola...","o":["tambah 5","darab 5","tolak 5","bahagi 5"],"a":0,"e":"Nilai bertambah 5 secara tetap.","d":"Sederhana"},{"q":"Jujukan 2, 6, 12, 20, 30, ... mempunyai sebutan seterusnya...","o":["36","40","42","44"],"a":2,"e":"Bezanya ialah 4,6,8,10; beza seterusnya 12, jadi 30+12=42.","d":"Sukar"},{"q":"Diberi jujukan 5, 9, 13, ... Apakah sebutan ke-20?","o":["77","81","85","89"],"a":1,"e":"aₙ=5+(n−1)4; a₂₀=5+76=81.","d":"KBAT"}]},{"id":"2-matematik-2","title":"Pemfaktoran","summary":"Pemfaktoran menulis ungkapan sebagai hasil darab.","points":["Kenal pasti faktor sepunya.","Semak dengan mengembangkan semula.","Pecahan algebra dipermudah menggunakan faktor."],"quiz":[{"q":"Faktorkan 6x + 12.","o":["6(x + 2)","3(x + 4)","6x(12)","2(3x + 12)"],"a":0,"e":"Faktor sepunya terbesar ialah 6.","d":"Standard"},{"q":"Faktorkan 5a − 15.","o":["5(a − 3)","5(a + 3)","15(a − 1)","a(5 − 15)"],"a":0,"e":"Keluarkan faktor sepunya 5.","d":"Standard"},{"q":"Permudahkan (4x)/(8).","o":["x/2","2x","x/4","4x"],"a":0,"e":"Bahagi pengangka dan penyebut dengan 4.","d":"Sederhana"},{"q":"Apakah langkah pertama dalam pemfaktoran?","o":["Kenal pasti faktor sepunya","Tambah semua sebutan","Buang pemboleh ubah","Tukar kepada perpuluhan"],"a":0,"e":"Faktor sepunya perlu dikenal pasti sebelum dikeluarkan.","d":"Sederhana"},{"q":"Permudahkan (x²−9)/(x−3), dengan x≠3.","o":["x−3","x+3","x²+3","1"],"a":1,"e":"x²−9=(x−3)(x+3); batalkan faktor x−3.","d":"Sukar"},{"q":"Faktorkan sepenuhnya 6x²−15x.","o":["3x(2x−5)","3(2x²−5x)","x(6x−15) sahaja","6x(x−15)"],"a":0,"e":"Faktor sepunya terbesar ialah 3x.","d":"KBAT"}]},{"id":"2-matematik-3","title":"Rumus Algebra","summary":"Rumus menghubungkan beberapa kuantiti.","points":["Gantikan nilai dengan unit yang betul.","Operasi songsang mengubah perkara rumus.","Semak pengiraan langkah demi langkah."],"quiz":[{"q":"Jika P = 2l + 2w, cari P apabila l=5 dan w=3.","o":["8","16","20","30"],"a":1,"e":"P = 2(5)+2(3)=16.","d":"Standard"},{"q":"Jika v = u + at, cari v apabila u=4, a=2, t=3.","o":["9","10","12","14"],"a":1,"e":"v = 4 + 2(3) = 10.","d":"Standard"},{"q":"Dalam rumus A = bh, jadikan h sebagai subjek.","o":["h=A/b","h=Ab","h=b/A","h=A−b"],"a":0,"e":"Bahagi kedua-dua belah dengan b.","d":"Sederhana"},{"q":"Apakah maksud menggantikan nilai dalam rumus?","o":["Memasukkan nilai pemboleh ubah yang diketahui","Menghapuskan semua simbol","Menukar rumus kepada ayat","Membina jadual sahaja"],"a":0,"e":"Nilai yang diberi digunakan untuk mengira kuantiti lain.","d":"Sederhana"},{"q":"Rumus C=5/9(F−32). Jika C=20, nilai F ialah...","o":["52","64","68","72"],"a":2,"e":"20×9/5=36; F−32=36; F=68.","d":"Sukar"},{"q":"Isi padu kon V=1/3πr²h. Jadikan h sebagai subjek.","o":["h=3V/(πr²)","h=V/(3πr²)","h=3πr²V","h=πr²/(3V)"],"a":0,"e":"Darab 3 dan bahagi πr².","d":"KBAT"}]},{"id":"2-matematik-4","title":"Bulatan","summary":"Bulatan mempunyai pusat, jejari dan diameter.","points":["Diameter ialah dua kali jejari.","Lilitan mengukur sempadan bulatan.","Luas mengukur kawasan dalam bulatan."],"quiz":[{"q":"Diameter sebuah bulatan ialah 14 cm. Jejarinya ialah...","o":["7 cm","14 cm","28 cm","3.5 cm"],"a":0,"e":"Jejari ialah separuh diameter.","d":"Standard"},{"q":"Jika jejari 5 cm, diameternya ialah...","o":["2.5 cm","5 cm","10 cm","25 cm"],"a":2,"e":"Diameter = 2 × jejari.","d":"Standard"},{"q":"Formula lilitan bulatan ialah...","o":["2πr","πr²","r²","2r²"],"a":0,"e":"Lilitan boleh dikira menggunakan 2πr.","d":"Sederhana"},{"q":"Formula luas bulatan ialah...","o":["πr²","2πr","πd","r+r"],"a":0,"e":"Luas bulatan ialah π darab kuasa dua jejari.","d":"Sederhana"},{"q":"Sebuah bulatan mempunyai lilitan 44 cm. Guna π=22/7. Jejarinya ialah...","o":["3.5 cm","7 cm","14 cm","22 cm"],"a":1,"e":"44=2×22/7×r, maka r=7.","d":"Sukar"},{"q":"Luas gelang antara dua bulatan sepusat berjari-jari 10 cm dan 6 cm ialah...","o":["16π cm²","36π cm²","64π cm²","100π cm²"],"a":2,"e":"Luas gelang=π(10²−6²)=64π.","d":"KBAT"}]},{"id":"2-matematik-5","title":"Koordinat dan Graf","summary":"Titik ditulis sebagai pasangan tertib (x,y).","points":["Paksi-x mengufuk dan paksi-y menegak.","Jadual nilai membantu memplot graf.","Graf menunjukkan hubungan pemboleh ubah."],"quiz":[{"q":"Titik (3,−2) mempunyai koordinat x...","o":["−2","3","1","5"],"a":1,"e":"Nilai pertama dalam pasangan tertib ialah koordinat x.","d":"Standard"},{"q":"Paksi-y ialah paksi yang...","o":["menegak","mengufuk","membulat","condong sentiasa"],"a":0,"e":"Paksi-y dilukis secara menegak.","d":"Standard"},{"q":"Titik asal mempunyai koordinat...","o":["(0,0)","(1,1)","(0,1)","(1,0)"],"a":0,"e":"Persilangan kedua-dua paksi ialah (0,0).","d":"Sederhana"},{"q":"Graf fungsi menunjukkan hubungan antara...","o":["input dan output","warna dan bunyi","masa lalu sahaja","dua tajuk rawak"],"a":0,"e":"Fungsi memetakan nilai input kepada output.","d":"Sederhana"},{"q":"Titik tengah bagi A(−4,6) dan B(8,−2) ialah...","o":["(2,2)","(4,4)","(2,4)","(−2,2)"],"a":0,"e":"((−4+8)/2,(6−2)/2)=(2,2).","d":"Sukar"},{"q":"Garis melalui (1,3) dan (5,11). Kecerunannya ialah...","o":["1/2","2","4","8"],"a":1,"e":"m=(11−3)/(5−1)=8/4=2.","d":"KBAT"}]},{"id":"2-matematik-6","title":"Laju dan Pecutan","summary":"Laju ialah jarak dibahagi masa.","points":["Pecutan ialah perubahan laju per masa.","Unit mesti diseragamkan.","Graf gerakan membantu mentafsir perubahan."],"quiz":[{"q":"Sebuah bas bergerak 150 km dalam 3 jam. Lajunya ialah...","o":["30 km/j","50 km/j","75 km/j","450 km/j"],"a":1,"e":"Laju = jarak ÷ masa = 150 ÷ 3.","d":"Standard"},{"q":"Seorang pelari bergerak pada 8 m/s selama 5 s. Jaraknya ialah...","o":["13 m","40 m","3 m","80 m"],"a":1,"e":"Jarak = laju × masa = 8 × 5.","d":"Standard"},{"q":"Laju berubah daripada 4 m/s kepada 10 m/s dalam 3 s. Pecutan ialah...","o":["2 m/s²","3 m/s²","6 m/s²","14 m/s²"],"a":0,"e":"Pecutan = perubahan laju ÷ masa = 6 ÷ 3.","d":"Sederhana"},{"q":"Mengapa unit perlu diseragamkan sebelum mengira?","o":["Untuk memastikan nilai dan unit jawapan betul","Untuk menjadikan nombor lebih besar","Untuk menghapuskan masa","Untuk mengubah formula"],"a":0,"e":"Unit yang konsisten mengelakkan kesilapan pengiraan.","d":"Sederhana"},{"q":"Sebuah kereta memecut dari 12 m/s ke 24 m/s dalam 4 s. Pecutannya ialah...","o":["3 m/s²","6 m/s²","9 m/s²","12 m/s²"],"a":0,"e":"(24−12)/4=3 m/s².","d":"Sukar"},{"q":"Bas bergerak 60 km/j selama 45 minit, kemudian 80 km/j selama 30 minit. Jumlah jarak ialah...","o":["70 km","75 km","85 km","100 km"],"a":2,"e":"60×0.75=45 km dan 80×0.5=40 km; jumlah 85 km.","d":"KBAT"}]}]},"sains":{"title":"Sains Tingkatan 2","icon":"🔬","modules":[{"id":"2-sains-1","title":"Biodiversiti","summary":"Biodiversiti ialah kepelbagaian organisma.","points":["Pengelasan membantu mengenal pasti organisma.","Kepelbagaian menyokong kestabilan ekosistem.","Pemuliharaan mengurangkan kehilangan spesies."],"quiz":[{"q":"Biodiversiti bermaksud...","o":["kepelbagaian organisma hidup","satu jenis organisma sahaja","tiada habitat","semua benda bukan hidup"],"a":0,"e":"Biodiversiti merangkumi variasi hidupan.","d":"Standard"},{"q":"Mengapakah organisma dikelaskan?","o":["Memudahkan pengenalpastian dan kajian","Menghapuskan spesies","Mengurangkan pengetahuan","Menukar habitat"],"a":0,"e":"Pengelasan menyusun organisma berdasarkan ciri.","d":"Standard"},{"q":"Apakah kesan kehilangan biodiversiti?","o":["Ekosistem boleh menjadi kurang stabil","Semua habitat bertambah baik","Rantai makanan tidak berubah","Tiada kesan langsung"],"a":0,"e":"Kehilangan spesies boleh mengganggu hubungan ekologi.","d":"Sederhana"},{"q":"Pemuliharaan bertujuan untuk...","o":["melindungi spesies dan habitat","menghapuskan hutan","meningkatkan pencemaran","mengurangkan kepelbagaian"],"a":0,"e":"Pemuliharaan mengekalkan sumber biologi untuk masa depan.","d":"Sederhana"},{"q":"Dua habitat mempunyai bilangan spesies sama, tetapi satu habitat didominasi hampir sepenuhnya oleh satu spesies. Habitat manakah lebih biodiversiti?","o":["Habitat yang taburan spesiesnya lebih seimbang","Habitat yang didominasi satu spesies","Kedua-duanya pasti sama","Tidak boleh dinilai langsung"],"a":0,"e":"Biodiversiti mempertimbangkan kekayaan dan kesamarataan spesies.","d":"KBAT"},{"q":"Mengapakah pemuliharaan habitat biasanya lebih berkesan daripada melindungi satu spesies sahaja?","o":["Habitat menyokong banyak spesies dan interaksi ekologi","Satu spesies tidak memerlukan habitat","Habitat tidak berubah","Pemuliharaan spesies dilarang"],"a":0,"e":"Melindungi ekosistem menjaga sumber dan hubungan yang diperlukan banyak organisma.","d":"Sukar"}]},{"id":"2-sains-2","title":"Ekosistem","summary":"Ekosistem melibatkan organisma dan persekitaran.","points":["Rantai makanan menunjukkan pemindahan tenaga.","Pengeluar, pengguna dan pengurai mempunyai peranan.","Perubahan populasi memberi kesan kepada jaringan makanan."],"quiz":[{"q":"Dalam rantai makanan, tenaga biasanya bermula daripada...","o":["Matahari","pengurai","pemangsa","tanah sahaja"],"a":0,"e":"Pengeluar menangkap tenaga cahaya daripada Matahari.","d":"Standard"},{"q":"Apakah peranan pengeluar?","o":["Menghasilkan makanan sendiri","Memakan semua pengguna","Menguraikan plastik","Menghapuskan tenaga"],"a":0,"e":"Tumbuhan hijau menghasilkan makanan melalui fotosintesis.","d":"Standard"},{"q":"Jika populasi pemangsa berkurang, populasi mangsa mungkin...","o":["meningkat","hilang serta-merta","tidak pernah berubah","menjadi pengurai"],"a":0,"e":"Kurang pemangsa boleh menyebabkan lebih banyak mangsa hidup.","d":"Sederhana"},{"q":"Pengurai penting kerana...","o":["mengembalikan nutrien ke persekitaran","menghentikan pereputan","menghasilkan cahaya","menghapuskan tanah"],"a":0,"e":"Pengurai memecahkan bahan mati dan mengitar semula nutrien.","d":"Sederhana"},{"q":"Racun mengurangkan populasi serangga. Burung pemakan serangga kemudian berkurang. Ini menunjukkan...","o":["hubungan dalam jaringan makanan","burung tidak memerlukan tenaga","racun menambah biodiversiti","populasi tidak saling mempengaruhi"],"a":0,"e":"Perubahan satu aras trofik boleh memberi kesan kepada aras lain.","d":"Sukar"},{"q":"Mengapa tenaga berkurang pada setiap aras trofik?","o":["Sebahagian tenaga digunakan untuk aktiviti dan hilang sebagai haba","Tenaga dicipta oleh pemangsa","Semua tenaga disimpan","Pengeluar tidak mempunyai tenaga"],"a":0,"e":"Hanya sebahagian tenaga dipindahkan kepada organisma seterusnya.","d":"KBAT"}]},{"id":"2-sains-3","title":"Nutrisi","summary":"Makanan membekalkan tenaga dan bahan pertumbuhan.","points":["Diet seimbang mengandungi nutrien sesuai.","Pencernaan memecahkan makanan.","Nutrien diserap untuk kegunaan badan."],"quiz":[{"q":"Apakah fungsi utama karbohidrat?","o":["Membekalkan tenaga","Membina semua tulang sahaja","Menghasilkan oksigen","Menghapuskan air"],"a":0,"e":"Karbohidrat ialah sumber tenaga utama.","d":"Standard"},{"q":"Diet seimbang bermaksud...","o":["mengambil nutrien dalam kuantiti sesuai","makan satu jenis makanan sahaja","tidak minum air","mengelakkan semua lemak"],"a":0,"e":"Tubuh memerlukan pelbagai nutrien mengikut keperluan.","d":"Standard"},{"q":"Di manakah kebanyakan nutrien diserap?","o":["Usus kecil","Mulut","Esofagus","Usus besar sahaja"],"a":0,"e":"Dinding usus kecil sesuai untuk penyerapan nutrien.","d":"Sederhana"},{"q":"Apakah tujuan pencernaan?","o":["Memecahkan makanan kepada bahan lebih ringkas","Membesarkan makanan","Menghapuskan semua nutrien","Menukar makanan menjadi udara"],"a":0,"e":"Molekul makanan perlu dipecahkan supaya dapat diserap.","d":"Sederhana"},{"q":"Seorang murid makan cukup kalori tetapi sangat kurang protein. Kesan paling munasabah ialah...","o":["pertumbuhan dan pembaikan tisu terjejas","tenaga langsung sifar","semua vitamin meningkat","pencernaan berhenti serta-merta"],"a":0,"e":"Protein diperlukan untuk pertumbuhan dan pembaikan tisu.","d":"Sukar"},{"q":"Mengapakah vilus dalam usus kecil meningkatkan penyerapan?","o":["Menambah luas permukaan","Mengurangkan aliran darah","Menghasilkan asid kuat","Menutup dinding usus"],"a":0,"e":"Luas permukaan besar membolehkan lebih banyak nutrien diserap.","d":"KBAT"}]},{"id":"2-sains-4","title":"Asid dan Alkali","summary":"Asid dan alkali mempunyai nilai pH berbeza.","points":["Penunjuk menguji sifat larutan.","pH 7 adalah neutral.","Peneutralan menghasilkan garam dan air."],"quiz":[{"q":"Larutan neutral mempunyai pH...","o":["0","7","10","14"],"a":1,"e":"pH 7 menunjukkan larutan neutral.","d":"Standard"},{"q":"Kertas litmus biru bertukar merah dalam...","o":["asid","alkali","air tulen sahaja","garam pepejal"],"a":0,"e":"Asid menukarkan litmus biru kepada merah.","d":"Standard"},{"q":"Peneutralan antara asid dan alkali menghasilkan...","o":["garam dan air","oksigen sahaja","asid lebih kuat","logam sahaja"],"a":0,"e":"Tindak balas peneutralan menghasilkan garam dan air.","d":"Sederhana"},{"q":"Larutan dengan pH 12 bersifat...","o":["alkali","asid","neutral","tidak mempunyai sifat"],"a":0,"e":"Nilai pH melebihi 7 menunjukkan sifat alkali.","d":"Sederhana"},{"q":"Larutan pH 3 dicampur sedikit demi sedikit dengan alkali. Apakah perubahan yang dijangka sebelum melepasi neutral?","o":["pH meningkat menghampiri 7","pH menurun menghampiri 0","pH kekal 3","semua air menyejat"],"a":0,"e":"Alkali meneutralkan ion hidrogen, lalu pH meningkat.","d":"Sukar"},{"q":"Tanah terlalu berasid dirawat dengan kapur. Prinsip sains yang digunakan ialah...","o":["peneutralan","pembiasan","elektrolisis","kondensasi"],"a":0,"e":"Bahan beralkali meneutralkan keasidan tanah.","d":"KBAT"}]},{"id":"2-sains-5","title":"Keelektrikan dan Kemagnetan","summary":"Arus mengalir dalam litar lengkap.","points":["Voltan membekalkan tenaga kepada cas.","Rintangan mempengaruhi arus.","Arus dalam gegelung boleh menghasilkan elektromagnet."],"quiz":[{"q":"Arus elektrik hanya mengalir apabila litar...","o":["lengkap","terbuka","terputus","tiada sumber"],"a":0,"e":"Litar lengkap menyediakan laluan berterusan.","d":"Standard"},{"q":"Apakah fungsi bateri dalam litar?","o":["Membekalkan beza keupayaan","Memutuskan litar","Menyerap semua arus","Menghapuskan rintangan"],"a":0,"e":"Bateri membekalkan tenaga kepada cas elektrik.","d":"Standard"},{"q":"Apakah berlaku apabila rintangan meningkat pada voltan tetap?","o":["Arus berkurang","Arus meningkat tanpa had","Arus tidak berubah sentiasa","Bateri hilang"],"a":0,"e":"Rintangan lebih besar mengurangkan arus.","d":"Sederhana"},{"q":"Elektromagnet terhasil apabila...","o":["arus mengalir melalui gegelung","magnet disejukkan sahaja","litar dibuka","tiada wayar digunakan"],"a":0,"e":"Arus dalam gegelung menghasilkan medan magnet.","d":"Sederhana"},{"q":"Dua mentol sama disambung secara siri. Jika satu mentol terbakar, apa berlaku?","o":["Kedua-duanya padam kerana litar terputus","Satu lagi semakin terang","Arus terus melalui udara","Bateri dicas semula"],"a":0,"e":"Litar siri mempunyai satu laluan; putus di satu tempat menghentikan arus.","d":"Sukar"},{"q":"Mengapa teras besi lembut digunakan dalam elektromagnet?","o":["Mudah dimagnetkan dan dinyahmagnetkan","Kekal bermagnet sangat kuat","Tidak dipengaruhi arus","Mempunyai rintangan sifar"],"a":0,"e":"Elektromagnet perlu boleh dihidupkan dan dimatikan.","d":"KBAT"}]},{"id":"2-sains-6","title":"Daya, Gerakan dan Haba","summary":"Daya boleh mengubah gerakan atau bentuk.","points":["Geseran boleh membantu atau menghalang gerakan.","Haba mengalir dari suhu tinggi ke rendah.","Konduksi, perolakan dan sinaran memindahkan haba."],"quiz":[{"q":"Daya boleh menyebabkan objek...","o":["berubah gerakan atau bentuk","hilang jisim sepenuhnya","menjadi cahaya","tidak pernah bergerak"],"a":0,"e":"Daya boleh mempercepat, memperlahankan atau mengubah bentuk.","d":"Standard"},{"q":"Geseran membantu ketika berjalan kerana...","o":["mengelakkan kaki tergelincir","menghapuskan berat","meningkatkan suhu badan sahaja","menolak graviti"],"a":0,"e":"Geseran memberikan cengkaman antara kaki dan permukaan.","d":"Standard"},{"q":"Haba mengalir secara semula jadi dari...","o":["suhu tinggi ke suhu rendah","suhu rendah ke tinggi tanpa kerja","kedua-dua arah sama rata sentiasa","objek kecil ke besar"],"a":0,"e":"Pemindahan haba berlaku akibat perbezaan suhu.","d":"Sederhana"},{"q":"Perolakan berlaku terutamanya dalam...","o":["cecair dan gas","pepejal sahaja","vakum sahaja","cahaya sahaja"],"a":0,"e":"Perolakan melibatkan pergerakan bendalir.","d":"Sederhana"},{"q":"Jambatan mempunyai ruang kecil antara bahagian logam kerana...","o":["logam mengembang apabila panas","logam kehilangan jisim","haba tidak bergerak","ruang mengurangkan graviti"],"a":0,"e":"Ruang pengembangan mengelakkan struktur melengkung atau rosak.","d":"Sukar"},{"q":"Pemegang periuk diperbuat daripada bahan penebat kerana...","o":["mengurangkan pemindahan haba ke tangan","meningkatkan konduksi","menghasilkan haba","menambah jisim makanan"],"a":0,"e":"Penebat haba mengurangkan konduksi kepada pengguna.","d":"KBAT"}]}]}}};
+
+const AudioEngine=(()=>{
+let ctx=null, master=null, musicGain=null, sfxGain=null, started=false, muted=localStorage.az3Muted==="1", volume=Number(localStorage.az3Volume||35)/100, loopTimer=null, step=0;
+const scale=[220,246.94,293.66,329.63,293.66,246.94,261.63,329.63];
+function ensure(){
+ if(!ctx){ctx=new (window.AudioContext||window.webkitAudioContext)();master=ctx.createGain();musicGain=ctx.createGain();sfxGain=ctx.createGain();musicGain.connect(master);sfxGain.connect(master);master.connect(ctx.destination);musicGain.gain.value=.09;sfxGain.gain.value=.22;apply();}
+ if(ctx.state==="suspended")ctx.resume();
+}
+function apply(){if(master)master.gain.setTargetAtTime(muted?0:volume,ctx.currentTime,.03)}
+function tone(freq,dur=0.4,type="sine",gain=.12,when=0,dest=musicGain){
+ ensure();let o=ctx.createOscillator(),g=ctx.createGain();o.type=type;o.frequency.value=freq;g.gain.setValueAtTime(0,ctx.currentTime+when);g.gain.linearRampToValueAtTime(gain,ctx.currentTime+when+.03);g.gain.exponentialRampToValueAtTime(.001,ctx.currentTime+when+dur);o.connect(g);g.connect(dest);o.start(ctx.currentTime+when);o.stop(ctx.currentTime+when+dur+.05);
+}
+function chord(root,when=0){tone(root,2.4,"sine",.055,when,musicGain);tone(root*1.25,2.1,"sine",.035,when+.08,musicGain);tone(root*1.5,1.9,"sine",.028,when+.16,musicGain)}
+function musicStep(){if(muted)return;ensure();let f=scale[step%scale.length];tone(f,1.1,"sine",.028,0,musicGain);if(step%4===0)chord(f/2,.02);step++}
+function start(){ensure();if(started)return;started=true;musicStep();loopTimer=setInterval(musicStep,1300)}
+function setMuted(v){muted=v;localStorage.az3Muted=v?"1":"0";apply()}
+function toggle(){setMuted(!muted);if(!muted)start();return !muted}
+function setVolume(v){volume=v;localStorage.az3Volume=Math.round(v*100);apply()}
+function correct(){ensure();tone(523.25,.16,"sine",.16,0,sfxGain);tone(659.25,.18,"sine",.14,.12,sfxGain);tone(783.99,.3,"sine",.13,.25,sfxGain)}
+function wrong(){ensure();tone(220,.18,"triangle",.13,0,sfxGain);tone(185,.28,"triangle",.12,.14,sfxGain)}
+function tick(){ensure();tone(880,.08,"square",.045,0,sfxGain)}
+function next(){ensure();tone(392,.08,"sine",.055,0,sfxGain)}
+function finish(pct){ensure();if(pct>=80){correct();setTimeout(correct,420)}else{tone(329.63,.2,"sine",.11,0,sfxGain);tone(392,.3,"sine",.1,.18,sfxGain)}}
+return{start,toggle,setVolume,correct,wrong,tick,next,finish,isMuted:()=>muted,getVolume:()=>volume};
+})();
+
+
+let deferredInstallPrompt=null;
+window.addEventListener("beforeinstallprompt",e=>{
+  e.preventDefault();deferredInstallPrompt=e;
+  const b=document.getElementById("installAppBtn");if(b)b.style.display="inline-flex";
+});
+async function installAZApp(){
+  if(deferredInstallPrompt){deferredInstallPrompt.prompt();await deferredInstallPrompt.userChoice;deferredInstallPrompt=null}
+  else alert("Pada iPhone/iPad: tekan Share kemudian pilih Add to Home Screen. Pada Android: buka menu pelayar dan pilih Install app.");
+}
+window.addEventListener("appinstalled",()=>{const b=document.getElementById("installAppBtn");if(b)b.style.display="none"});
+
+const $=s=>document.querySelector(s),app=$("#app");
+let profiles=JSON.parse(localStorage.az3Profiles||'[{"id":"p1","name":"Pelajar","school":"","level":"1","avatar":"🧑‍🎓"}]');
+profiles=[{id:"p1",name:(profiles[0]&&profiles[0].name)||"Pelajar",school:(profiles[0]&&profiles[0].school)||"",level:(profiles[0]&&profiles[0].level)||"1",avatar:(profiles[0]&&profiles[0].avatar)||"🧑‍🎓"}];
+let active="p1";localStorage.az3Active="p1";
+let S={view:"home",subject:null,module:null,mode:"Sederhana",quiz:[],i:0,correct:0,answered:false,start:0,timer:null};
+const P=()=>profiles.find(x=>x.id===active)||profiles[0];
+const k=(t,id="")=>`az3-${active}-${t}-${id}`;
+const all=()=>Object.values(DATA[P().level]).flatMap(s=>s.modules);
+const done=id=>localStorage.getItem(k("done",id))==="1";
+const best=id=>Number(localStorage.getItem(k("best",id))||0);
+const xp=()=>Number(localStorage.getItem(k("xp"))||0);
+const streak=()=>Number(localStorage.getItem(k("streak"))||0);
+function toast(t){let e=$("#toast");e.textContent=t;e.classList.add("show");setTimeout(()=>e.classList.remove("show"),2100)}
+function nav(v){clearInterval(S.timer);S.view=v;document.querySelectorAll(".bottomnav button").forEach(b=>b.classList.toggle("active",b.dataset.v===v));render()}
+function shuffle(a){a=[...a];for(let i=a.length-1;i>0;i--){let j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]]}return a}
+function find(id){for(const [sk,s] of Object.entries(DATA[P().level])){let m=s.modules.find(x=>x.id===id);if(m)return{m,s,sk}}}
+function progress(){let ms=all(),d=ms.filter(m=>done(m.id)).length;return{d,total:ms.length,p:Math.round(d/ms.length*100)||0}}
+function addXP(n){localStorage.setItem(k("xp"),xp()+n)}
+function coins(){return Number(localStorage.getItem(k("coins"))||0)}
+function addCoins(n,show=true){localStorage.setItem(k("coins"),coins()+n);if(show)coinPop("+"+n+" 🪙")}
+function coinPop(text){let e=document.createElement("div");e.className="coin-pop";e.textContent=text;e.style.left=(window.innerWidth/2-35)+"px";e.style.top=(window.innerHeight*.55)+"px";document.body.appendChild(e);setTimeout(()=>e.remove(),1000)}
+function hearts(){return Number(localStorage.getItem(k("hearts"))||5)}
+function claimDaily(){
+ let today=new Date().toISOString().slice(0,10),last=localStorage.getItem(k("dailyReward"));
+ if(last===today){toast("Ganjaran hari ini sudah dituntut");return}
+ localStorage.setItem(k("dailyReward"),today);addCoins(50);addXP(20);toast("Ganjaran harian: +50 syiling dan +20 XP");home()
+}
+function dailyAvailable(){return localStorage.getItem(k("dailyReward"))!==new Date().toISOString().slice(0,10)}
+function updateStreak(){let today=new Date().toISOString().slice(0,10),last=localStorage.getItem(k("day"));if(last===today)return;let y=new Date(Date.now()-86400000).toISOString().slice(0,10);localStorage.setItem(k("streak"),last===y?streak()+1:1);localStorage.setItem(k("day"),today)}
+function home(){let p=P(),c=progress(),level=Math.floor(xp()/250)+1,remain=250-(xp()%250);
+let firstIncomplete=all().find(m=>!done(m.id))||all()[0];
+app.innerHTML=`<section class="hero">
+<div class="app-profile"><div class="avatar-main">${p.avatar||"🧑‍🎓"}</div><div><p style="margin:0;color:#cbd9f1;font-size:.8rem">Selamat datang kembali</p><h1 class="welcome-title">${p.name}</h1><div class="school-line">🏫 ${p.school||"Sekolah belum diisi"} • Tingkatan ${p.level}</div></div></div>
+<div class="reward-strip">
+ <div class="reward-card level-card"><b>⭐ ${level}</b><span>Level</span></div>
+ <div class="reward-card coin-card"><b>🪙 ${coins()}</b><span>Syiling</span></div>
+ <div class="reward-card heart-card"><b>❤️ ${hearts()}</b><span>Nyawa</span></div>
+</div>
+<div class="xpbar"><b>Lv ${level}</b><div class="bar"><i style="width:${xp()%250/2.5}%"></i></div><small>${remain} XP lagi</small></div>
+</section>
+${dailyAvailable()?`<div class="daily-claim"><div><b>🎁 Ganjaran Hari Ini</b><div style="font-size:.78rem;color:var(--muted);margin-top:3px">Dapatkan 50 syiling + 20 XP</div></div><button class="primary" onclick="claimDaily()">Tuntut</button></div>`:""}
+<div class="home-actions">
+ <button class="action-card action-main" onclick="openDirect('${firstIncomplete.id}')"><strong>📖 Sambung Belajar</strong><span>${firstIncomplete.title}</span></button>
+ <button class="action-card action-daily" onclick="daily()"><strong>🎯 Cabaran Hari Ini</strong><span>Uji kemahiran dan bina streak</span></button>
+</div>
+<div class="stats"><div class="stat"><b>${xp()}</b><span>Jumlah XP</span></div><div class="stat"><b>${streak()}</b><span>Streak</span></div><div class="stat"><b>${c.p}%</b><span>Selesai</span></div><div class="stat"><b>${coins()}</b><span>Syiling</span></div></div>
+<div class="sectionhead"><h2>Pilih subjek</h2><small>${c.d}/${c.t} modul selesai</small></div>
+<div class="cards">${Object.entries(DATA[p.level]).map(([key,s])=>{let d=s.modules.filter(m=>done(m.id)).length;return `<button class="card" onclick="openSubject('${key}')"><div class="subject-icon">${s.icon}</div><h3>${s.title}</h3><p>${d}/${s.modules.length} modul selesai</p><div class="bar"><i style="width:${d/s.modules.length*100}%"></i></div></button>`}).join("")}</div>`}
+function subject(){let s=DATA[P().level][S.subject];app.innerHTML=`<div class="toolbar"><button class="back" onclick="nav('home')">← Utama</button><b>${s.icon} ${s.title}</b></div><div class="panel"><h1>${s.title}</h1><p style="color:var(--muted)">${s.theme}</p><div class="modulelist">${s.modules.map((m,i)=>`<div class="module"><div><h3>${done(m.id)?"✅ ":""}${i+1}. ${m.title}</h3><p>${m.summary}</p><span class="pill">Terbaik ${best(m.id)}%</span></div><button class="primary" onclick="openModule('${m.id}')">${done(m.id)?"Ulang":"Buka"}</button></div>`).join("")}</div></div>`}
+function openModule(id){S.module=id;S.view="module";render()}
+function moduleView(){let {m,s}=find(S.module);app.innerHTML=`<div class="toolbar"><button class="back" onclick="openSubject('${S.subject}')">← Modul</button><b>${s.icon} ${s.title}</b></div><div class="panel"><span class="pill">Nota pantas</span><h1>${m.title}</h1>${m.points.map((x,i)=>`<div class="note"><b>${i+1}.</b> ${x}</div>`).join("")}<div class="actions"><button class="secondary" onclick="speak()">🔊 Dengar nota</button><button class="primary" onclick="chooseMode()">⚔️ Mula kuiz</button></div></div>`}
+function speak(){let {m}=find(S.module);speechSynthesis.cancel();let u=new SpeechSynthesisUtterance(m.title+". "+m.points.join(". "));u.lang="ms-MY";speechSynthesis.speak(u)}
+function chooseMode(){S.view="mode";render()}
+function modeView(){app.innerHTML=`<div class="toolbar"><button class="back" onclick="openModule('${S.module}')">← Nota</button><b>Pilih tahap</b></div><div class="panel"><h2>Bagaimana anda mahu dicabar?</h2><div class="modegrid">${[["Standard","Asas konsep • tanpa masa"],["Sederhana","Aplikasi • 45 saat"],["Sukar","Pelbagai langkah • 60 saat"],["KBAT","Analisis situasi • 75 saat"]].map(([a,b])=>`<button class="mode ${S.mode===a?'active':''}" onclick="S.mode='${a}';render()"><b>${a}</b><small>${b}</small></button>`).join("")}</div><div class="actions"><button class="primary" onclick="start()">Mula sekarang</button></div></div>`}
+function prepare(qs){return shuffle(qs).map(q=>{let arr=q.o.map((x,i)=>({x,ok:i===q.a}));arr=shuffle(arr);return{...q,o:arr.map(a=>a.x),a:arr.findIndex(a=>a.ok)}})}
+function start(){let {m}=find(S.module),levels=S.mode==="Standard"?["Standard"]:S.mode==="Sederhana"?["Sederhana","Standard"]:S.mode==="Sukar"?["Sukar","Sederhana"]:["KBAT","Sukar"];let qs=m.quiz.filter(q=>levels.includes(q.d));if(qs.length<4)qs=m.quiz;S.quiz=prepare(qs);S.i=0;S.correct=0;S.answered=false;S.view="quiz";updateStreak();render()}
+function daily(){let qs=all().flatMap(m=>m.quiz.map(q=>({...q,module:m.title}))).filter(q=>q.d!=="Standard");S.module=null;S.mode="Cabaran";S.quiz=prepare(shuffle(qs).slice(0,10));S.i=0;S.correct=0;S.answered=false;S.view="quiz";updateStreak();render()}
+function quiz(){let q=S.quiz[S.i];if(!q)return result();let secs=S.mode==="Standard"?0:S.mode==="Sederhana"?45:S.mode==="Sukar"?60:75;app.innerHTML=`<div class="quiztop"><button class="back" onclick="nav('home')">✕ Keluar</button><span class="pill">${q.d||S.mode}</span><b class="timer" id="timer">${secs?secs+"s":"∞"}</b></div><div class="panel"><small style="color:var(--muted)">Soalan ${S.i+1}/${S.quiz.length}${q.module?" • "+q.module:""}</small><h2 class="question">${q.q}</h2>${q.o.map((x,i)=>`<button class="option" onclick="answer(${i})"><b>${String.fromCharCode(65+i)}.</b> ${x}</button>`).join("")}<div id="feedback"></div><div id="next"></div></div>`;clearInterval(S.timer);if(secs){let t=secs;S.timer=setInterval(()=>{t--;let e=$("#timer");if(e)e.textContent=t+"s";if(t<=5&&t>0)AudioEngine.tick();if(t<=0){clearInterval(S.timer);answer(-1)}},1000)}}
+function answer(i){if(S.answered)return;AudioEngine.start();S.answered=true;clearInterval(S.timer);let q=S.quiz[S.i];document.querySelectorAll(".option").forEach((b,n)=>{b.disabled=true;if(n===q.a)b.classList.add("correct");else if(n===i)b.classList.add("wrong")});if(i===q.a){S.correct++;AudioEngine.correct();addCoins(10)}else{AudioEngine.wrong()}$("#feedback").innerHTML=`<div class="feedback"><b>${i===q.a?"✅ Tepat!":"❌ Belum tepat."}</b><br>${q.e}</div>`;$("#next").innerHTML=`<button class="primary" onclick="next()">Seterusnya</button>`}
+function next(){AudioEngine.next();S.i++;S.answered=false;render()}
+function result(){let pct=Math.round(S.correct/S.quiz.length*100),gain=Math.round(S.correct*15*(S.mode==="KBAT"?1.5:S.mode==="Sukar"?1.25:1));AudioEngine.finish(pct);addXP(gain);if(pct>=60)addCoins(100);if(S.module){let b=Math.max(best(S.module),pct);localStorage.setItem(k("best",S.module),b);if(pct>=60)localStorage.setItem(k("done",S.module),"1")}app.innerHTML=`<div class="panel"><div class="score">${pct}%</div><h2 style="text-align:center">${pct>=85?"Legend! 🔥":pct>=65?"Mantap! ⚡":"Belum kalah—cuba lagi 💪"}</h2><p style="text-align:center;color:var(--muted)">${S.correct}/${S.quiz.length} betul • +${gain} XP</p><div class="actions" style="justify-content:center"><button class="secondary" onclick="nav('home')">Utama</button>${S.module?`<button class="primary" onclick="chooseMode()">Cuba tahap lain</button>`:`<button class="primary" onclick="daily()">Cabaran baharu</button>`}</div></div>`}
+function progressView(){
+let ms=all(),c=progress(),scores=ms.map(m=>best(m.id)).filter(Boolean),avg=scores.length?Math.round(scores.reduce((a,b)=>a+b,0)/scores.length):0;
+let badges=[["🌱","Langkah Pertama",c.d>=1],["🔥","Streak 3 Hari",streak()>=3],["🧠","10 Modul",c.d>=10],["🏆","Purata 80%",avg>=80]];
+let subjectBlocks=Object.entries(DATA[P().level]).map(([sk,s])=>{
+ let mods=s.modules, completed=mods.filter(m=>done(m.id)).length;
+ let subScores=mods.map(m=>best(m.id)).filter(Boolean);
+ let subAvg=subScores.length?Math.round(subScores.reduce((a,b)=>a+b,0)/subScores.length):0;
+ let subPct=Math.round(completed/mods.length*100)||0;
+ return `<section class="subject-record">
+ <div class="subject-summary">
+   <div class="subject-icon">${s.icon}</div>
+   <div><h3>${s.title}</h3><p>${completed}/${mods.length} modul selesai</p><div class="subject-progress"><i style="width:${subPct}%"></i></div></div>
+   <div class="subject-score"><b>${subAvg}%</b><span>Purata subjek</span></div>
+ </div>
+ <div class="record-grid">${mods.map((m,i)=>{
+   let score=best(m.id), status=done(m.id)?"Selesai":score>0?"Sedang belajar":"Belum mula", cls=done(m.id)?"done":score>0?"started":"";
+   return `<div class="record-card ${cls}">
+    <div class="record-top"><h4>${i+1}. ${m.title}</h4><span class="record-status">${status}</span></div>
+    <div class="mini-bar"><i style="width:${score}%"></i></div>
+    <div class="record-meta"><span>Markah terbaik</span><b>${score}%</b></div>
+    <button class="secondary record-btn" onclick="openDirect('${m.id}')">Buka modul</button>
+   </div>`}).join("")}</div>
+ </section>`}).join("");
+app.innerHTML=`<div class="sectionhead"><h2>Prestasi ${P().name}</h2><small>Tingkatan ${P().level}${P().school?` • ${P().school}`:""}</small></div>
+<div class="stats"><div class="stat"><b>${xp()}</b><span>XP</span></div><div class="stat"><b>${streak()}</b><span>Streak</span></div><div class="stat"><b>${c.p}%</b><span>Selesai</span></div><div class="stat"><b>${avg}%</b><span>Purata</span></div></div>
+<div class="sectionhead"><h2>Lencana</h2></div><div class="badges">${badges.map(b=>`<div class="badge ${b[2]?'':'locked'}"><div style="font-size:2rem">${b[0]}</div><strong>${b[1]}</strong></div>`).join("")}</div>
+<div class="sectionhead"><h2>Rekod Modul Mengikut Subjek</h2><small>Infografik kemajuan</small></div>${subjectBlocks}`}
+function openDirect(id){let x=find(id);S.subject=x.sk;openModule(id)}
+function settings(){let p=P();app.innerHTML=`<div class="sectionhead"><h2>Tetapan keluarga</h2></div><div class="panel">
+<div class="formrow"><label>Nama pelajar</label><input id="studentName" value="${p.name||""}" placeholder="Contoh: Ahmad Danish"></div>
+<div class="formrow"><label>Sekolah</label><input id="studentSchool" value="${p.school||""}" placeholder="Contoh: SMK Raja Permaisuri Bainun"></div>
+<div class="formrow"><label>Tingkatan</label><select id="studentLevel"><option value="1" ${p.level==="1"?"selected":""}>Tingkatan 1</option><option value="2" ${p.level==="2"?"selected":""}>Tingkatan 2</option></select></div><div class="formrow"><label>Avatar</label><select id="studentAvatar">
+<option value="🧑‍🎓" ${p.avatar==="🧑‍🎓"?"selected":""}>🧑‍🎓 Pelajar</option>
+<option value="👦" ${p.avatar==="👦"?"selected":""}>👦 Lelaki</option>
+<option value="👧" ${p.avatar==="👧"?"selected":""}>👧 Perempuan</option>
+<option value="🧕" ${p.avatar==="🧕"?"selected":""}>🧕 Pelajar bertudung</option>
+<option value="🧑‍🚀" ${p.avatar==="🧑‍🚀"?"selected":""}>🧑‍🚀 Angkasawan</option>
+<option value="🦸" ${p.avatar==="🦸"?"selected":""}>🦸 Wira</option>
+<option value="🥷" ${p.avatar==="🥷"?"selected":""}>🥷 Ninja</option>
+<option value="🤓" ${p.avatar==="🤓"?"selected":""}>🤓 Bijak</option>
+</select></div>
+<button class="primary" onclick="saveP()">Simpan profil</button>
+<div class="sectionhead"><h2>Paparan</h2></div><button class="secondary" onclick="toggleTheme()">Tukar tema cerah/gelap</button>
+<div class="sectionhead"><h2>Data</h2></div><button class="danger" onclick="reset()">Padam kemajuan profil ini</button></div>`}
+function saveP(){profiles=[{id:"p1",name:$("#studentName").value.trim()||"Pelajar",school:$("#studentSchool").value.trim(),level:$("#studentLevel").value,avatar:$("#studentAvatar").value}];active="p1";localStorage.az3Active="p1";localStorage.az3Profiles=JSON.stringify(profiles);toast("Profil pelajar disimpan");render()}
+function toggleTheme(){document.body.classList.toggle("light");localStorage.az3Light=document.body.classList.contains("light")?"1":"0"}
+function reset(){if(confirm("Padam semua markah, XP dan kemajuan profil ini?")){Object.keys(localStorage).filter(x=>x.startsWith(`az3-${active}-`)).forEach(x=>localStorage.removeItem(x));toast("Kemajuan dipadam");render()}}
+function render(){if(S.view==="home")home();else if(S.view==="subject")subject();else if(S.view==="module")moduleView();else if(S.view==="mode")modeView();else if(S.view==="quiz")quiz();else if(S.view==="progress")progressView();else settings()}
+document.querySelectorAll(".bottomnav button").forEach(b=>b.onclick=()=>nav(b.dataset.v));
+$("#brand").onclick=()=>nav("home");
+$("#theme").onclick=toggleTheme;
+const audioBtn=$("#audioBtn"), volumeWrap=$("#volumeWrap"), volumeSlider=$("#volumeSlider");
+volumeSlider.value=Math.round(AudioEngine.getVolume()*100);
+function refreshAudioIcon(){audioBtn.textContent=AudioEngine.isMuted()?"🔇":"🔊"}
+refreshAudioIcon();
+audioBtn.onclick=()=>{AudioEngine.start();AudioEngine.toggle();refreshAudioIcon();volumeWrap.classList.toggle("show")};
+volumeSlider.oninput=e=>{AudioEngine.start();AudioEngine.setVolume(Number(e.target.value)/100)};
+document.addEventListener("click",e=>{if(!e.target.closest(".audio-panel"))volumeWrap.classList.remove("show")});
+document.addEventListener("pointerdown",()=>AudioEngine.start(),{once:true});
+
+let selectedAvatar="🧑‍🎓";
+function initV4(){
+ setTimeout(()=>document.getElementById("splashScreen").classList.add("hide"),1600);
+ document.querySelectorAll(".avatar-choice").forEach(b=>b.onclick=()=>{
+   document.querySelectorAll(".avatar-choice").forEach(x=>x.classList.remove("active"));
+   b.classList.add("active");selectedAvatar=b.dataset.avatar;
+ });
+ setTimeout(()=>{
+   if(localStorage.az4Onboarded!=="1" || !P().name || P().name==="Pelajar")document.getElementById("onboarding").classList.add("show");
+ },1750);
+}
+function completeOnboarding(){
+ let name=$("#onboardName").value.trim(),school=$("#onboardSchool").value.trim(),level=$("#onboardLevel").value;
+ if(!name){toast("Sila masukkan nama pelajar");return}
+ profiles=[{id:"p1",name,school,level,avatar:selectedAvatar}];
+ localStorage.az3Profiles=JSON.stringify(profiles);localStorage.az4Onboarded="1";
+ document.getElementById("onboarding").classList.remove("show");toast("Profil berjaya disediakan");home()
+}
+
+if(localStorage.az3Light==="1")document.body.classList.add("light");
+render();document.querySelector('[data-v="home"]').classList.add("active");initV4();
+</script><script>if("serviceWorker" in navigator)navigator.serviceWorker.register("sw.js");</script></body></html>
