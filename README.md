@@ -1,4 +1,4 @@
-# AZ EduSmart v5.1
+# AZ EduSmart v5.1.1
 
 Aplikasi pembelajaran interaktif untuk pelajar Tingkatan 1 dan Tingkatan 2.
 
@@ -25,3 +25,10 @@ Netlify yang telah disambungkan kepada GitHub akan melakukan deploy secara autom
 - Muzik latar kekal lebih lembut supaya tidak mengganggu pembelajaran.
 - Kelantangan asal untuk pengguna baharu dinaikkan.
 - Pepijat `undefined modul selesai` telah dibaiki.
+
+
+## Hotfix v5.1.1
+
+- Memulihkan fungsi `openSubject()`.
+- Kad Matematik, Sains dan Sejarah kini boleh ditekan semula.
+- Menambah semakan keselamatan jika data subjek tidak ditemui.

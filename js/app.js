@@ -86,6 +86,18 @@ ${dailyAvailable()?`<div class="daily-claim"><div><b>🎁 Ganjaran Hari Ini</b><
 <div class="stats"><div class="stat"><b>${xp()}</b><span>Jumlah XP</span></div><div class="stat"><b>${streak()}</b><span>Streak</span></div><div class="stat"><b>${c.p}%</b><span>Selesai</span></div><div class="stat"><b>${coins()}</b><span>Syiling</span></div></div>
 <div class="sectionhead"><h2>Pilih subjek</h2><small>${c.d}/${c.total} modul selesai</small></div>
 <div class="cards">${Object.entries(DATA[p.level]).map(([key,s])=>{let d=s.modules.filter(m=>done(m.id)).length;return `<button class="card" onclick="openSubject('${key}')"><div class="subject-icon">${s.icon}</div><h3>${s.title}</h3><p>${d}/${s.modules.length} modul selesai</p><div class="bar"><i style="width:${d/s.modules.length*100}%"></i></div></button>`}).join("")}</div>`}
+function openSubject(key){
+  const levelData = DATA[P().level];
+  if(!levelData || !levelData[key]){
+    toast("Subjek tidak dapat dibuka");
+    return;
+  }
+  clearInterval(S.timer);
+  S.subject = key;
+  S.module = null;
+  S.view = "subject";
+  render();
+}
 function subject(){let s=DATA[P().level][S.subject];app.innerHTML=`<div class="toolbar"><button class="back" onclick="nav('home')">← Utama</button><b>${s.icon} ${s.title}</b></div><div class="panel"><h1>${s.title}</h1><p style="color:var(--muted)">${s.theme}</p><div class="modulelist">${s.modules.map((m,i)=>`<div class="module"><div><h3>${done(m.id)?"✅ ":""}${i+1}. ${m.title}</h3><p>${m.summary}</p><span class="pill">Terbaik ${best(m.id)}%</span></div><button class="primary" onclick="openModule('${m.id}')">${done(m.id)?"Ulang":"Buka"}</button></div>`).join("")}</div></div>`}
 function openModule(id){S.module=id;S.view="module";render()}
 function moduleView(){let {m,s}=find(S.module);app.innerHTML=`<div class="toolbar"><button class="back" onclick="openSubject('${S.subject}')">← Modul</button><b>${s.icon} ${s.title}</b></div><div class="panel"><span class="pill">Nota pantas</span><h1>${m.title}</h1>${m.points.map((x,i)=>`<div class="note"><b>${i+1}.</b> ${x}</div>`).join("")}<div class="actions"><button class="secondary" onclick="speak()">🔊 Dengar nota</button><button class="primary" onclick="chooseMode()">⚔️ Mula kuiz</button></div></div>`}
