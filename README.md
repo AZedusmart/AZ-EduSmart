@@ -1,4 +1,4 @@
-# AZ EduSmart v5.1.1
+# AZ EduSmart v6.0
 
 Aplikasi pembelajaran interaktif untuk pelajar Tingkatan 1 dan Tingkatan 2.
 
@@ -32,3 +32,19 @@ Netlify yang telah disambungkan kepada GitHub akan melakukan deploy secara autom
 - Memulihkan fungsi `openSubject()`.
 - Kad Matematik, Sains dan Sejarah kini boleh ditekan semula.
 - Menambah semakan keselamatan jika data subjek tidak ditemui.
+
+
+## AZ EduSmart v6.0 — Smart Question Engine
+
+- Empat tahap baharu: Mudah, Sederhana, Sukar dan Pakar.
+- Setiap tahap menggunakan soalan daripada kategori kesukaran yang berasingan.
+- Soalan dan pilihan jawapan dipilih secara rawak.
+- Sistem menyimpan sejarah soalan terkini pada peranti.
+- Soalan yang baru dijawab tidak terus berulang pada sesi berikutnya.
+- Setiap sesi mengandungi sehingga lima soalan.
+- Beberapa variasi ayat disediakan bagi setiap item bank soalan asal.
+
+### Nota kandungan
+
+Versi ini membaiki enjin pemilihan dan pengulangan soalan. Bank soalan baharu yang lebih besar
+akan ditambah secara berperingkat supaya setiap variasi mempunyai kandungan akademik yang benar-benar unik.

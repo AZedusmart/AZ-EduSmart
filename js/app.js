@@ -103,14 +103,130 @@ function openModule(id){S.module=id;S.view="module";render()}
 function moduleView(){let {m,s}=find(S.module);app.innerHTML=`<div class="toolbar"><button class="back" onclick="openSubject('${S.subject}')">← Modul</button><b>${s.icon} ${s.title}</b></div><div class="panel"><span class="pill">Nota pantas</span><h1>${m.title}</h1>${m.points.map((x,i)=>`<div class="note"><b>${i+1}.</b> ${x}</div>`).join("")}<div class="actions"><button class="secondary" onclick="speak()">🔊 Dengar nota</button><button class="primary" onclick="chooseMode()">⚔️ Mula kuiz</button></div></div>`}
 function speak(){let {m}=find(S.module);speechSynthesis.cancel();let u=new SpeechSynthesisUtterance(m.title+". "+m.points.join(". "));u.lang="ms-MY";speechSynthesis.speak(u)}
 function chooseMode(){S.view="mode";render()}
-function modeView(){app.innerHTML=`<div class="toolbar"><button class="back" onclick="openModule('${S.module}')">← Nota</button><b>Pilih tahap</b></div><div class="panel"><h2>Bagaimana anda mahu dicabar?</h2><div class="modegrid">${[["Standard","Asas konsep • tanpa masa"],["Sederhana","Aplikasi • 45 saat"],["Sukar","Pelbagai langkah • 60 saat"],["KBAT","Analisis situasi • 75 saat"]].map(([a,b])=>`<button class="mode ${S.mode===a?'active':''}" onclick="S.mode='${a}';render()"><b>${a}</b><small>${b}</small></button>`).join("")}</div><div class="actions"><button class="primary" onclick="start()">Mula sekarang</button></div></div>`}
-function prepare(qs){return shuffle(qs).map(q=>{let arr=q.o.map((x,i)=>({x,ok:i===q.a}));arr=shuffle(arr);return{...q,o:arr.map(a=>a.x),a:arr.findIndex(a=>a.ok)}})}
-function start(){let {m}=find(S.module),levels=S.mode==="Standard"?["Standard"]:S.mode==="Sederhana"?["Sederhana","Standard"]:S.mode==="Sukar"?["Sukar","Sederhana"]:["KBAT","Sukar"];let qs=m.quiz.filter(q=>levels.includes(q.d));if(qs.length<4)qs=m.quiz;S.quiz=prepare(qs);S.i=0;S.correct=0;S.answered=false;S.view="quiz";updateStreak();render()}
-function daily(){let qs=all().flatMap(m=>m.quiz.map(q=>({...q,module:m.title}))).filter(q=>q.d!=="Standard");S.module=null;S.mode="Cabaran";S.quiz=prepare(shuffle(qs).slice(0,10));S.i=0;S.correct=0;S.answered=false;S.view="quiz";updateStreak();render()}
-function quiz(){let q=S.quiz[S.i];if(!q)return result();let secs=S.mode==="Standard"?0:S.mode==="Sederhana"?45:S.mode==="Sukar"?60:75;app.innerHTML=`<div class="quiztop"><button class="back" onclick="nav('home')">✕ Keluar</button><span class="pill">${q.d||S.mode}</span><b class="timer" id="timer">${secs?secs+"s":"∞"}</b></div><div class="panel"><small style="color:var(--muted)">Soalan ${S.i+1}/${S.quiz.length}${q.module?" • "+q.module:""}</small><h2 class="question">${q.q}</h2>${q.o.map((x,i)=>`<button class="option" onclick="answer(${i})"><b>${String.fromCharCode(65+i)}.</b> ${x}</button>`).join("")}<div id="feedback"></div><div id="next"></div></div>`;clearInterval(S.timer);if(secs){let t=secs;S.timer=setInterval(()=>{t--;let e=$("#timer");if(e)e.textContent=t+"s";if(t<=5&&t>0)AudioEngine.tick();if(t<=0){clearInterval(S.timer);answer(-1)}},1000)}}
+const LEVEL_MAP={
+ "Mudah":"Standard",
+ "Sederhana":"Sederhana",
+ "Sukar":"Sukar",
+ "Pakar":"KBAT"
+};
+const LEVEL_LABEL={
+ "Standard":"Mudah",
+ "Sederhana":"Sederhana",
+ "Sukar":"Sukar",
+ "KBAT":"Pakar"
+};
+
+function modeView(){
+ const modes=[
+  ["Mudah","Asas konsep • tanpa masa"],
+  ["Sederhana","Aplikasi konsep • 45 saat"],
+  ["Sukar","Analisis dan pelbagai langkah • 60 saat"],
+  ["Pakar","KBAT dan penyelesaian situasi • 75 saat"]
+ ];
+ if(!LEVEL_MAP[S.mode])S.mode="Mudah";
+ app.innerHTML=`<div class="toolbar"><button class="back" onclick="openModule('${S.module}')">← Nota</button><b>Pilih tahap</b></div>
+ <div class="panel"><h2>Bagaimana anda mahu dicabar?</h2>
+ <p style="color:var(--muted)">Setiap tahap kini menggunakan bank soalan yang berasingan.</p>
+ <div class="modegrid">${modes.map(([a,b])=>`<button class="mode ${S.mode===a?'active':''}" onclick="S.mode='${a}';render()"><b>${a}</b><small>${b}</small></button>`).join("")}</div>
+ <div class="actions"><button class="primary" onclick="start()">Mula sekarang</button></div></div>`
+}
+
+function questionKey(moduleId,level,index,variant){
+ return `${moduleId}-${level}-${index}-${variant}`;
+}
+
+function variantQuestion(q,level,index,variant,moduleId){
+ const openings={
+  Standard:[
+   "",
+   "Berdasarkan nota asas, ",
+   "Pilih jawapan yang paling tepat: ",
+   "Uji pemahaman asas anda. "
+  ],
+  Sederhana:[
+   "",
+   "Gunakan pengetahuan anda untuk menjawab: ",
+   "Dalam konteks pembelajaran modul ini, ",
+   "Pilih penerangan yang paling sesuai: "
+  ],
+  Sukar:[
+   "",
+   "Teliti setiap pilihan sebelum menjawab: ",
+   "Gunakan penaakulan yang tepat: ",
+   "Berdasarkan hubungan antara konsep, "
+  ],
+  KBAT:[
+   "",
+   "Fikir secara kritis sebelum menjawab: ",
+   "Nilai situasi berikut dengan teliti: ",
+   "Gunakan kemahiran analisis anda: "
+  ]
+ };
+ const prefix=openings[level][variant%openings[level].length];
+ return {...q,q:prefix+q.q,d:LEVEL_LABEL[level],qid:questionKey(moduleId,level,index,variant)};
+}
+
+function buildQuestionBank(m,internalLevel){
+ const originals=m.quiz
+  .map((q,index)=>({q,index}))
+  .filter(item=>item.q.d===internalLevel);
+
+ let bank=[];
+ originals.forEach(({q,index})=>{
+  const variants=internalLevel==="Standard"||internalLevel==="Sederhana"?4:6;
+  for(let v=0;v<variants;v++)bank.push(variantQuestion(q,internalLevel,index,v,m.id));
+ });
+ return bank;
+}
+
+function getRecentQuestionIds(moduleId,level){
+ try{return JSON.parse(localStorage.getItem(k("recentQuestions",moduleId+"-"+level))||"[]")}
+ catch(e){return[]}
+}
+
+function saveRecentQuestionIds(moduleId,level,ids){
+ localStorage.setItem(k("recentQuestions",moduleId+"-"+level),JSON.stringify(ids.slice(-12)));
+}
+
+function prepare(qs){
+ return shuffle(qs).map(q=>{
+  let arr=q.o.map((x,i)=>({x,ok:i===q.a}));
+  arr=shuffle(arr);
+  return{...q,o:arr.map(a=>a.x),a:arr.findIndex(a=>a.ok)}
+ })
+}
+
+function start(){
+ let {m}=find(S.module);
+ if(!LEVEL_MAP[S.mode])S.mode="Mudah";
+ const internalLevel=LEVEL_MAP[S.mode];
+ let bank=buildQuestionBank(m,internalLevel);
+
+ if(!bank.length){
+  toast("Bank soalan tahap ini sedang disediakan");
+  return;
+ }
+
+ const recent=getRecentQuestionIds(m.id,internalLevel);
+ let fresh=bank.filter(q=>!recent.includes(q.qid));
+ if(fresh.length<Math.min(5,bank.length))fresh=bank;
+
+ const selected=shuffle(fresh).slice(0,Math.min(5,fresh.length));
+ saveRecentQuestionIds(m.id,internalLevel,[...recent,...selected.map(q=>q.qid)]);
+
+ S.quiz=prepare(selected);
+ S.i=0;
+ S.correct=0;
+ S.answered=false;
+ S.view="quiz";
+ updateStreak();
+ render()
+}
+function daily(){let qs=all().flatMap(m=>m.quiz.map(q=>({...q,module:m.title}))).filter(q=>q.d!=="Standard");S.module=null;S.mode="Cabaran";S.quiz=prepare(shuffle(qs).slice(0,10).map(q=>({...q,d:LEVEL_LABEL[q.d]||q.d})));S.i=0;S.correct=0;S.answered=false;S.view="quiz";updateStreak();render()}
+function quiz(){let q=S.quiz[S.i];if(!q)return result();let secs=S.mode==="Mudah"?0:S.mode==="Sederhana"?45:S.mode==="Sukar"?60:75;app.innerHTML=`<div class="quiztop"><button class="back" onclick="nav('home')">✕ Keluar</button><span class="pill">${q.d||S.mode}</span><b class="timer" id="timer">${secs?secs+"s":"∞"}</b></div><div class="panel"><small style="color:var(--muted)">Soalan ${S.i+1}/${S.quiz.length}${q.module?" • "+q.module:""}</small><h2 class="question">${q.q}</h2>${q.o.map((x,i)=>`<button class="option" onclick="answer(${i})"><b>${String.fromCharCode(65+i)}.</b> ${x}</button>`).join("")}<div id="feedback"></div><div id="next"></div></div>`;clearInterval(S.timer);if(secs){let t=secs;S.timer=setInterval(()=>{t--;let e=$("#timer");if(e)e.textContent=t+"s";if(t<=5&&t>0)AudioEngine.tick();if(t<=0){clearInterval(S.timer);answer(-1)}},1000)}}
 function answer(i){if(S.answered)return;AudioEngine.start();S.answered=true;clearInterval(S.timer);let q=S.quiz[S.i];document.querySelectorAll(".option").forEach((b,n)=>{b.disabled=true;if(n===q.a)b.classList.add("correct");else if(n===i)b.classList.add("wrong")});if(i===q.a){S.correct++;AudioEngine.correct();addCoins(10)}else{AudioEngine.wrong()}$("#feedback").innerHTML=`<div class="feedback"><b>${i===q.a?"✅ Tepat!":"❌ Belum tepat."}</b><br>${q.e}</div>`;$("#next").innerHTML=`<button class="primary" onclick="next()">Seterusnya</button>`}
 function next(){AudioEngine.next();S.i++;S.answered=false;render()}
-function result(){let pct=Math.round(S.correct/S.quiz.length*100),gain=Math.round(S.correct*15*(S.mode==="KBAT"?1.5:S.mode==="Sukar"?1.25:1));AudioEngine.finish(pct);addXP(gain);if(pct>=60)addCoins(100);if(S.module){let b=Math.max(best(S.module),pct);localStorage.setItem(k("best",S.module),b);if(pct>=60)localStorage.setItem(k("done",S.module),"1")}app.innerHTML=`<div class="panel"><div class="score">${pct}%</div><h2 style="text-align:center">${pct>=85?"Legend! 🔥":pct>=65?"Mantap! ⚡":"Belum kalah—cuba lagi 💪"}</h2><p style="text-align:center;color:var(--muted)">${S.correct}/${S.quiz.length} betul • +${gain} XP</p><div class="actions" style="justify-content:center"><button class="secondary" onclick="nav('home')">Utama</button>${S.module?`<button class="primary" onclick="chooseMode()">Cuba tahap lain</button>`:`<button class="primary" onclick="daily()">Cabaran baharu</button>`}</div></div>`}
+function result(){let pct=Math.round(S.correct/S.quiz.length*100),gain=Math.round(S.correct*15*(S.mode==="Pakar"?1.5:S.mode==="Sukar"?1.25:1));AudioEngine.finish(pct);addXP(gain);if(pct>=60)addCoins(100);if(S.module){let b=Math.max(best(S.module),pct);localStorage.setItem(k("best",S.module),b);if(pct>=60)localStorage.setItem(k("done",S.module),"1")}app.innerHTML=`<div class="panel"><div class="score">${pct}%</div><h2 style="text-align:center">${pct>=85?"Legend! 🔥":pct>=65?"Mantap! ⚡":"Belum kalah—cuba lagi 💪"}</h2><p style="text-align:center;color:var(--muted)">${S.correct}/${S.quiz.length} betul • +${gain} XP</p><div class="actions" style="justify-content:center"><button class="secondary" onclick="nav('home')">Utama</button>${S.module?`<button class="primary" onclick="chooseMode()">Cuba tahap lain</button>`:`<button class="primary" onclick="daily()">Cabaran baharu</button>`}</div></div>`}
 function progressView(){
 let ms=all(),c=progress(),scores=ms.map(m=>best(m.id)).filter(Boolean),avg=scores.length?Math.round(scores.reduce((a,b)=>a+b,0)/scores.length):0;
 let badges=[["🌱","Langkah Pertama",c.d>=1],["🔥","Streak 3 Hari",streak()>=3],["🧠","10 Modul",c.d>=10],["🏆","Purata 80%",avg>=80]];

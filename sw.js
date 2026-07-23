@@ -1,4 +1,4 @@
-const CACHE_NAME = "az-edusmart-v5-1-1";
+const CACHE_NAME = "az-edusmart-v6-0";
 const APP_FILES = [
   "./",
   "index.html",
